@@ -1,3 +1,5 @@
 /.DS_Store
 /scraper/.DS_Store
-/.vscode/settings.json
+/scraper/__pycache__
+scss/.DS_Store
+prepros.config

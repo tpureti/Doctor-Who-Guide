@@ -1,0 +1,200 @@
+/* CSS DOCUMENT */
+@charset "UTF-8";
+
+@use 'base/colors';
+@use 'base/reset';
+
+/*
+  GENERAL STYLES
+*/
+body {
+  font-size: 1rem;
+  background-color: var(--dark-grey1);
+  color: var(--white);
+  line-height: 1.25;
+}
+
+h1 {
+  color: var(--light-blue);
+}
+
+/*
+  BASIC STYLES
+*/
+#container {
+  width: 100%;
+  display: grid;
+  justify-items: center;
+}
+
+.story {
+  background-color: var(--dark-grey2);
+  // padding: 1rem;
+  margin: 1.5rem 2rem;
+  width: min(45rem, 100%);
+
+  display: grid;
+  grid-template-columns: 1fr auto 2fr;
+  grid-template-rows: auto 1fr;
+
+  // &:first-child {
+  //   display: none;
+  // }
+}
+
+/*
+  DIFFERENT AREAS OF THE STORY CONTAINER
+*/
+
+// title_area contains: NUMBER, TITLE, ESSENTIAL STATUS
+.title_area {
+  // styling
+  padding: .75rem;
+  border-bottom: 1px solid var(--dark-grey1);
+  // positioning
+  grid-column: 3 / -1;
+  grid-row: 1 / 1;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.number {
+  // styling
+  color: var(--light-blue);
+  // background-color: var(--dark-grey1);
+  font-size: 1.5rem;
+  font-weight: bold;
+  margin: .25rem;
+  border-radius: 5px;
+  // positioning
+  align-self: flex-start;
+}
+
+.title {
+  // styling
+  font-size: 1.5rem;
+  // positioning
+  flex: 1 1 auto;
+  align-self: center;
+  margin: .25rem;
+}
+
+.essential {
+  display: none;
+}
+
+.doctor_area {
+  // styling
+  // positioning
+  display: flex;
+  flex: 0 1 auto;
+  align-self: center;
+}
+
+.doctor {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: .5rem;
+}
+
+.doctor span {
+  // styling
+  font-size: 1.15rem;
+  font-weight: bold;
+  background-color: var(--light-grey);
+  color: var(--dark-grey2);
+  border-radius: 5px;
+  // positioning
+  padding: .2rem .5rem;
+
+  &:first-child {
+    background-color: var(--dark-yellow);
+  }
+}
+
+.poster {
+  grid-column: 1 / 3;
+  grid-row: 1 / 3;
+  & img {
+    display: block;
+  }
+}
+
+// info_area contains: DOCTOR, COMPANIONS, SEASON, EPISODES, SUMMARY, FIRST AND LAST BROADCAST
+.info_area {
+  // styling
+  padding: 1rem;
+  // positioning
+  grid-column: 2 / -1;
+  grid-row: 2 / -1;
+}
+
+// production_info contains: SEASON, EPISODES, BROADCAST DATES
+.production_info {
+  // styling
+  border-bottom: 1px solid #646464;
+  // positioning
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  grid-template-rows: repeat(2, 2.5rem);
+  justify-items: center;
+  margin: 0 3rem 1rem;
+}
+
+.season, 
+.episode, 
+.broadcast, 
+.missing_eps, 
+.companion {
+  &_title {
+  // styling
+  font-size: 1.2rem;
+  font-weight: bold;
+  text-transform: uppercase;
+  }
+}
+
+.season, 
+.episode, 
+.broadcast,
+.missing_episodes,
+.companion {
+  &_area {
+  // styling
+  font-size: 1.2rem;
+  // positioning
+  display: flex;
+  align-items: center;
+  justify-items: center;
+  gap: .5rem;
+  }
+}
+
+.broadcast_area {
+  grid-column: 1 / 4;
+  justify-content: center;
+}
+
+.companion_area {
+  // display: flex;
+  // justify-content: center;
+}
+
+.companions {
+  display: flex;
+  flex-wrap: wrap;
+  flex: 0 1 auto;
+  gap: .25rem;
+}
+
+.companions span {
+  // styling
+  color: var(--light-purple);
+  // color: var(--dark-grey2);
+  border-radius: 5px;
+  // positioning
+  padding: 0rem .4rem;
+  // margin: 5px;
+}

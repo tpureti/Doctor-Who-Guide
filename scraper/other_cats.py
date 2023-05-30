@@ -1,12 +1,10 @@
-from wiki_info import getWikiInfo
-
-
 def getOtherInfo():
     """
     Returns:
         _Dictionary_: dictionary of misc categories that are manually added by myself
     """
     other_info = dict()
+    other_info.setdefault("Poster")
     other_info.setdefault("Favorite", False)  # boolean
     other_info.setdefault("Essential", False)  # boolean
     other_info.setdefault("Rating")  # num out of 10
