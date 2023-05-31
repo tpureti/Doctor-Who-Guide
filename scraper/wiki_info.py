@@ -27,8 +27,11 @@ def getWikiInfo(URL):
         number = info[0]
         # get story title
         title = info[1]
+        # remove any annotations
+        num = re.split("\[[0-9a-z]\]|\((uncredited)\)", number)
+        number = num[0]
         # add to dict
-        basic_info['Number'] = number[:3]
+        basic_info['Number'] = number
         basic_info['Title'] = title
 
     getBasicInfo()
@@ -36,8 +39,8 @@ def getWikiInfo(URL):
     # dictionary of cast list
     cast_info = dict()
     # cast categories
-    doc = 'Doctor(s)'
-    com = 'Companion(s)'
+    doc = 'Doctor'
+    com = 'Companion'
     ch = 'Characters'
     actors = 'Actors'
     # allow multiple entries
@@ -121,8 +124,6 @@ def getWikiInfo(URL):
     series = "Series"
     running_time = "Running time"
     missing_episodes = "Episode(s) missing"
-    first_broadcast = "First broadcast"
-    last_broadcast = "Last broadcast"
 
     # production info dictionary
     prod_info = dict()
@@ -141,6 +142,9 @@ def getWikiInfo(URL):
                     links = row.find_all("a")
                     br = row.find("br")
 
+                    # change keys so they have no spaces
+                    production_info = changeDictKeys(production_info)
+                    # set key to default
                     prod_info.setdefault(production_info, [])
 
                     if (lists or links):
@@ -176,7 +180,7 @@ def getWikiInfo(URL):
                     # episodes
                     if production.string == running_time:
                         episodes = data.contents
-                        num = int(basic_info["Number"])
+                        num = int(basic_info["Number"][:3])
                         # if story number is below 50 ignore
                         if num < 50:
                             episodes = re.split(
@@ -184,6 +188,25 @@ def getWikiInfo(URL):
                             episodes = episodes[0]
                             episodes = episodes.strip()
                             return episodes
+
+    def changeDictKeys(prod_info_key):
+        # changes keys so they don't have spaces
+        if prod_info_key == director:
+            prod_info_key = "Director"
+        elif prod_info_key == writer:
+            prod_info_key = "Writer"
+        elif prod_info_key == script_editor:
+            prod_info_key = "Script_Editor"
+        elif prod_info_key == producer:
+            prod_info_key = "Producer"
+        elif prod_info_key == composer:
+            prod_info_key = "Music"
+        elif prod_info_key == series:
+            prod_info_key = "Season"
+        elif prod_info_key == missing_episodes:
+            prod_info_key = "Missing_Episodes"
+
+        return prod_info_key
 
     # production info
     getProductionInfo(director)
@@ -193,66 +216,35 @@ def getWikiInfo(URL):
     getProductionInfo(composer)
     getProductionInfo(series)
     getProductionInfo(missing_episodes)
-    # getProductionInfo(first_broadcast)
-    # getProductionInfo(last_broadcast)
 
     def getEpsAndMissingEps():
         # get series number
         if (basic_info['Title'] == 'The Five Doctors'):
             # the five doctors exceptions
-            prod_info[series] = '20'
+            prod_info["Season"] = '20'
         else:
-            series_number = prod_info[series]
+            series_number = prod_info["Season"]
             series_num = series_number[0].split("Season ")
-            prod_info[series] = series_num[1]
+            prod_info["Season"] = series_num[1]
 
         # if there are missing episodes
         episodes = getProductionInfo(running_time)
-        if missing_episodes in prod_info:
+
+        if "Missing_Episodes" in prod_info:
+            missing_eps = prod_info["Missing_Episodes"]
             # remove superfluous text
-            missing_eps = prod_info[missing_episodes]
             missing_eps = re.split("episode|episodes", missing_eps)
             missing_eps = missing_eps[0].strip()
-            prod_info[missing_episodes] = missing_eps
+            prod_info["Missing_Episodes"] = missing_eps
             # if all eps are missing, remove "all"
-            if re.match("All", prod_info[missing_episodes]):
+            if re.match("All", prod_info["Missing_Episodes"]):
                 # all_eps_missing = missing_eps.split("All")
                 # all_eps = all_eps_missing[1].strip()
-                prod_info[missing_episodes] = episodes
-
-    def getISODates():
-        # strip extra info and get dates
-        first = prod_info[first_broadcast]
-        # if both dates are present
-        if last_broadcast in prod_info:
-            # get first date's ISO
-            first_date = re.split("[\(\)]", first)
-            prod_info[first_broadcast] = first_date[1]
-            # get last date's ISO
-            last = prod_info[last_broadcast]
-            last_date = re.split("[\(\)]", last)
-            prod_info[last_broadcast] = last_date[1]
-        else:  # if not
-            if re.match("–", first):
-                dates = re.split("–", first)
-                # split dates apart
-                first_date = dates[0].strip()
-                last_date = dates[1].strip()
-                # get last broadcast first
-                last = datetime.strptime(last_date, "%d %B %Y")
-                last = last.date()
-                # figure out year from it and concat with first broadcast date
-                first = first_date + str(last.year)
-                # get first date
-                first = datetime.strptime(first, "%d %B%Y")
-                first = first.date()
-                # add dates into dict
-                prod_info[first_broadcast] = first.isoformat()
-                prod_info[last_broadcast] = last.isoformat()
+                prod_info["Missing_Episodes"] = episodes
 
     getEpsAndMissingEps()
-    # getISODates()
 
+    # remove runtime
     prod_info.pop(running_time)
 
     wiki_info = {**basic_info, **cast_info, **prod_info}
@@ -260,6 +252,6 @@ def getWikiInfo(URL):
     return wiki_info
 
 
-# URL = "https://en.wikipedia.org/wiki/Robot_(Doctor_Who)"
+# URL = "https://en.wikipedia.org/wiki/Marco_Polo_(Doctor_Who)"
 # wiki = getWikiInfo(URL)
 # print(wiki)

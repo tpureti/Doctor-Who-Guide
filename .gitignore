@@ -3,3 +3,5 @@
 /scraper/__pycache__
 scss/.DS_Store
 prepros.config
+scraper/env/lib/python3.11/site-packages/.DS_Store
+scraper/env/lib/.DS_Store

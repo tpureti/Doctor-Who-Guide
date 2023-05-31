@@ -13,8 +13,8 @@ def getFandomInfo(URL):
     fandom = dict()
     summary = 'Summary'
     episodes = 'Episodes'
-    first_broadcast = 'First broadcast'
-    last_broadcast = 'Last broadcast'
+    first_broadcast = 'First_Broadcast'
+    last_broadcast = 'Last_Broadcast'
     fandom.setdefault(summary, [])
 
     def getEpisodeNumber():
@@ -43,21 +43,23 @@ def getFandomInfo(URL):
             last = last.date()
             # check how much info is given in first date
             intial_date = first_date.split(" ")
+
             # get first date
-            if len(intial_date) == 3:
-                # if day / month / year
-                first = datetime.strptime(first_date, "%d %B %Y")
-                first = first.date()
-            elif len(intial_date) == 2:
-                # if day / month
-                first = first_date + str(last.year)
-                first = datetime.strptime(first, "%d %B%Y")
-                first = first.date()
-            elif len(intial_date) == 1:
-                # if only day
-                first = first_date + str(last.month) + str(last.year)
-                first = datetime.strptime(first, "%d%m%Y")
-                first = first.date()
+            match len(intial_date):
+                case 1:
+                    # if only day
+                    first = first_date + str(last.month) + str(last.year)
+                    first = datetime.strptime(first, "%d%m%Y")
+                    first = first.date()
+                case 2:
+                    # if day / month
+                    first = first_date + str(last.year)
+                    first = datetime.strptime(first, "%d %B%Y")
+                    first = first.date()
+                case 3:
+                    # if day / month / year
+                    first = datetime.strptime(first_date, "%d %B %Y")
+                    first = first.date()
 
             # add to dictionary
             fandom[first_broadcast] = first.isoformat()

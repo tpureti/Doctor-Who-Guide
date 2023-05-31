@@ -3,15 +3,19 @@
 const container = document.querySelector("#container");
 const story = document.querySelector(".story");
 
+const essential = document.querySelector(".essential");
 const number = document.querySelector(".number");
 const title = document.querySelector(".title");
+const poster = document.querySelector(".poster");
+
 const doctor = document.querySelector(".doctor");
 const companions = document.querySelector(".companions");
+
 const season = document.querySelector(".season");
 const episodes = document.querySelector(".episodes");
 const missing = document.querySelector(".missing_eps");
 const summary = document.querySelector(".summary");
-const essential = document.querySelector(".essential");
+
 const first_date = document.querySelector(".first_broadcast");
 const last_date = document.querySelector(".last_broadcast");
 const villain = document.querySelector(".villain");
@@ -44,17 +48,18 @@ function postData(data) {
       // div.innerHTML = results[key];
 
       // key names
-      let story_number = results["Number"];
-      let story_title = results["Title"];
-      let story_doctor = results["Doctor(s)"];
-      let story_companion = results["Companion(s)"];
-      let story_season = results["Series"];
-      let story_eps = results["Episodes"];
-      let eps_missing = results["Episode(s) missing"];
-      let story_summary = results["Summary"];
-      let story_essential = results["Essential"];
-      let story_firstbroadcast = results["First broadcast"];
-      let story_lastbroadcast = results["Last broadcast"];
+      let story_poster = results.Poster;
+      let story_number = results.Number;
+      let story_title = results.Title;
+      let story_doctor = results.Doctor;
+      let story_companion = results.Companion;
+      let story_season = results.Season;
+      let story_eps = results.Episodes;
+      let eps_missing = results.Missing_Episodes;
+      let story_summary = results.Summary;
+      let story_essential = results.Essential;
+      let story_firstbroadcast = results.First_Broadcast;
+      let story_lastbroadcast = results.Last_Broadcast;
       
       /** 
        * add info to divs and display them 
@@ -64,13 +69,15 @@ function postData(data) {
       number.innerHTML = story_number;
       // set result to title div
       title.innerHTML = story_title;
+      // set result to essential div
+      essential.innerHTML = story_essential;
 
       //loop through array for doctor
       const doctor_item = loopThroughArray(story_doctor);
       // set result to doctor div
       doctor.innerHTML = doctor_item;
 
-
+      poster.src = story_poster
       // set result to season div
       season.innerHTML = story_season;
       // set result to episodes div
@@ -80,24 +87,23 @@ function postData(data) {
       const companion_item = loopThroughArray(story_companion);
       // set result to companions div
       companions.innerHTML = companion_item;
-
+      // set result to summary div
       summary.innerHTML = story_summary;
-      essential.innerHTML = story_essential;
-
-
-      // if (results.hasOwnProperty("Episode(s) missing")) {
-      //   missing.innerHTML = eps_missing;
-      // } 
-      // else {
-      //   missing.innerHTML = "";
-      // }
+  
+      // if there are missing episodes, set result to missing eps div
+      if (results.hasOwnProperty("Missing_Episodes")) {
+        missing.innerHTML = eps_missing;
+      } 
+      else {
+        missing.innerHTML = "";
+      }
 
       // format dates
       const first_dateaired = ISODateFormatter(story_firstbroadcast);
       // set result to first broadcast div
       first_date.innerHTML = first_dateaired;
       // check whether last broadcast exists
-      if (results.hasOwnProperty("Last broadcast")) {
+      if (results.hasOwnProperty("Last_Broadcast")) {
         const last_dateaired = ISODateFormatter(story_lastbroadcast);
         // set result to last broadcast div
         last_date.innerHTML = last_dateaired;
