@@ -8,35 +8,34 @@
   <title>Doctor Who Guide</title>
   <script async type="module" src="js/script.js"></script>
 </head>
-<body>
+<body class="preload">
   <!-- HEADER -->
   <div id="header">
-    <h1>Doctor Who Guide</h1>
+    <h1 class="title">Doctor Who Guide</h1>
+    <!-- FILTERS -->
+    <nav id="nav">
+      <section class="filter_area">
+        <!-- ESSENTIAL -->
+        <button class="filters filters_essential" data-filter="essential">Essential</button>
+        <!-- BY DOCTOR -->
+        <button class="filters filters_main" data-filter="doctor">Doctors</button>
+        <!-- BY SEASON -->
+        <button class="filters filters_main" data-filter="season">Seasons</button>
+        <!-- MORE FILTERS -->
+        <button class="filters filters_more"
+        data-filter="more_filters">Filters+</button>
+      </section>
+
+      <!-- EXTRA BUTTONS FOR MAIN FILTERS -->
+      <!-- <section class="extra_filters hide">
+      </section> -->
+    </nav>
   </div>
 
-  <!-- NAVIGATION -->
-  <nav id="nav">
-
-  </nav>
 
   <!-- MAIN -->
   <main id="container">
   <section class="story">
-
-    <div class="title_area">
-      <!-- ESSENTIAL -->
-      <div class="essential"></div>
-      <!-- NUMBER -->
-      <div class="number"></div>
-      <!-- TITLE -->
-      <div class="title"></div>
-
-      <!-- DOCTOR -->
-      <div class="doctor_area">
-        <div class="doctor_title"></div>
-        <div class="doctor"></div>
-      </div>
-    </div>
 
     <!-- POSTER -->
     <div class="poster_area">
@@ -44,40 +43,124 @@
     </div>
 
     <div class="info_area">
-      <div class="production_info">
-        <!-- SEASON -->
-        <div class="season_area">
-          <div class="season_title">Season</div>
-          <div class="season"></div>
+      <!-- TITLE AREA -->
+      <div class="title_area">
+        <!-- NUMBER -->
+        <div class="number"></div>
+        <!-- TITLE -->
+        <h2 class="story_title"></h2>
+  
+        <!-- DOCTOR -->
+        <div class="doctor_area">
+          <div class="doctor"></div>
         </div>
-        <!-- EPISODES -->
-        <div class="episode_area">
-          <div class="episode_title">Episodes</div>
-          <div class="episodes"></div>
-        </div>
-        <!-- MISSING EPISODES -->
-        <div class="missing_episodes_area">
-          <div class="missing_eps_title">STATUS</div>
-          <div class="missing_eps"></div>
-        </div>  
-        <!-- BROADCAST DATE(S) -->
-        <div class="broadcast_area">
-          <div class="broadcast_title">Aired</div>
-          <div class="first_broadcast"></div> -
-          <div class="last_broadcast"></div>
-        </div>
-
       </div>
 
-      <!-- COMPANIONS -->
-      <div class="companion_area">
-        <!-- <div class="companion_title">COMPANIONS</div> -->
-        <div class="companions"></div>
+      <div class="production_info" data-columns="">
+        <!-- BASIC INFO: SEASON/EPISODES/RUNTIME/AIRED/COMPANIONS -->
+
+        <div class="basic_info">
+          <div class="info_divs">
+            <!-- SEASON -->
+            <div class="season_area">
+              <h3 class="season_title">Season</h3>
+              <div class="season"></div>
+            </div>
+            <!-- EPISODES -->
+            <div class="episode_area">
+              <h3 class="episode_title">Episodes</h3>
+              <div class="episodes"></div>
+            </div>
+            <!-- RUNTIME -->
+            <div class="runtime_area">
+              <h3 class="runtime_title">Runtime</h3>
+              <div class="runtime_ep">25m/ep</div>
+              <div class="runtime_total">1h 30m</div>
+            </div>
+            <!-- STATUS -->
+            <div class="status_area">
+              <h3 class="status_title">Status</h3>
+              <div class="status"></div>
+              <h3 class="animated_title"></h3>
+              <div class="animated">Partially Animated</div>
+            </div>
+          </div>
+          <div class="info_divs">
+            <!-- BROADCAST DATE(S) -->
+            <div class="broadcast_area category">
+              <h3 class="broadcast_title">Aired</h3>
+              <div class="first_broadcast"></div>
+              <div class="last_broadcast"></div>
+            </div>
+            <!-- COMPANIONS -->
+            <div class="companion_area category">
+              <h3 class="companion_title">Companions</h3>
+              <div class="companions"></div>
+          </div>
+        </div>
+      <!-- END BASIC INFO  -->
       </div>
+
+      <!-- CAST & CREW INFO -->
+          <div class="castcrew_info">
+            <!-- CREW -->
+            <div class="info_divs">
+              <!-- DIRECTOR -->
+              <div class="director_area">
+                <h3 class="director_title">Director</h3>
+                <div class="director"></div>
+              </div>
+              <!-- WRITER -->
+              <div class="writer_area">
+                <h3 class="writer_title">Writer</h3>
+                <div class="writer"></div>
+              </div>
+              <!-- SCRIPT EDITOR -->
+              <div class="script_editor_area">
+                <h3 class="script_editor_title">Script Editor</h3>
+                <div class="script_editor"></div>
+              </div>
+              <!-- PRODUCER -->
+              <div class="producer_area">
+                <h3 class="producer_title">Producer</h3>
+                <div class="producer"></div>
+              </div>
+
+              <div class="composer_area">
+                <h3 class="composer_title">Music</h3>
+                <div class="composer"></div>
+              </div>
+            </div>
+
+            <!-- CAST -->
+            <div class="info_divs">
+              <div class="cast_area">
+                <h3 class="cast_title">Cast</h3>
+                <div class="cast"></div>
+              </div>
+            </div>
+          <!-- END CAST/CREW INFO -->
+          </div>
 
       <!-- SUMMARY -->
-      <div class="summary"></div>
+      <div class="summary_area">
+        <h3 class="summary_title">Summary</h3>
+        <div class="summary"></div>
+      </div>
+
+     <div class="button_area">
+      <button class="button button_essential">★</button>
+      <button class="button button_castcrew">Cast & Crew</button>
+      <button class="button button_summary">Summary</button>
+     </div> 
     </div>
+
+    </div>
+
+  <div class="essential_area">
+    <div class="arrow_area"><span class="arrow"></span></div>
+    <div class="essential_reason"></div>
+  </div>  
   </section>
 
   </main>
