@@ -59,7 +59,7 @@
     "Poster": "posters/001 An Unearthly Child.jpg",
     "Favorite": false,
     "Essential": true,
-    "Why_Essential": [],
+    "Why_Essential": ["As the very first Doctor Who story, <i>An Unearthly Child</i> is historically important. It serves as the introduction to the Doctor and his three initial companions. The first episode is mandatory, but the story as a whole demonstrates how different the Doctor was at his conception."],
     "Rating": null,
     "Villain": [],
     "Additional_Tags": []
@@ -163,7 +163,7 @@
     "Poster": "posters/002 The Daleks.jpg",
     "Favorite": true,
     "Essential": true,
-    "Why_Essential": [],
+    "Why_Essential": ["<i>The Daleks</i>, as the name suggests, is the first story to introduce Doctor Who's most iconic and most reoccuring villain of all time."],
     "Rating": null,
     "Villain": [],
     "Additional_Tags": []
@@ -192,7 +192,7 @@
     "Writer": [
         "David Whitaker"
     ],
-    "Script_Editor": "David Whitaker",
+    "Script_Editor": ["David Whitaker"],
     "Producer": [
         "Verity Lambert"
     ],
