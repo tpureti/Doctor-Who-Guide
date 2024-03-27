@@ -6,6 +6,7 @@
 @use 'base/fonts';
 
 :root {
+  --clr-text: var(--clr-white);
   --bg: var(--clr-dark-grey-2);
   --container-bg: var(--clr-dark-grey-1);
   //
@@ -66,7 +67,7 @@ h1.title {
   z-index: 1;
   margin-top: 2rem;
   display: grid;
-  grid-template-columns: 45rem;
+  grid-template-columns: 50rem;
   grid-template-rows: 1fr auto;
   justify-items: center;
   gap: 1rem;
@@ -75,9 +76,24 @@ h1.title {
 .filter_area {
   z-index: 1;
   display: flex;
+  flex-wrap: wrap;
+  flex: 1 1 auto;
   gap: 1rem;
   align-items: center;
-  justify-content: center;
+}
+
+.extra_categories {
+  z-index: 1;
+  display: flex;
+  flex-wrap: wrap;
+  flex: 1 1 auto;
+  gap: 1rem;
+  align-items: center;
+  justify-content: flex-start;
+  // 
+  width: 46rem;
+  padding: 1rem;
+  background-color: var(--clr-dark-grey-2);
 }
 
 .filters {
@@ -137,7 +153,7 @@ h1.title {
   // margin-top: -2rem;
   width: min(45rem, 100%);
   display: flex;
-  flex: 0 0 auto;
+  flex: 1 1 auto;
   flex-wrap: wrap;
   gap: .5rem;
   padding: 1rem;
@@ -146,8 +162,11 @@ h1.title {
 
   .filters {
     font-size: var(--fs-xl);
+    min-width: 4rem;
+    display: flex;
+    flex: 0 0.5 auto;
+    justify-content: center;
     font-weight: 600;
-    // background-color: var(--clr-pale-orange);
     text-transform: capitalize;
     padding: .5rem 1rem;
     transition: var(--button-transition);
@@ -159,18 +178,46 @@ h1.title {
 
   // &:is(.show) {
   //   opacity: 1;
-  //   visibility: visible;
+  //   display: flex;
   //   transition-property: opacity;
   //   transition: var(--transition);
-  //   // max-height: auto;
+  //   max-height: auto;
   // }
 
-  // &:is(.hide) {
-  //   visibility: hidden;
-  //   transition-property: opacity;
-  //   transition: var(--transition);
-  //   // max-height: 0;
-  // }
+  &:is(.hide) {
+    // visibility: hidden;
+    display: none;
+    // transition-property: opacity;
+    // transition: var(--transition);
+    max-height: 0;
+  }
+}
+
+.clicked_buttons {
+  display: none;
+  width: min(45rem, 100%);
+  // display: flex;
+  flex: 1 1 auto;
+  flex-wrap: wrap;
+  gap: .5rem;
+  padding: 1rem;
+  background-color: var(--clr-dark-grey-2);
+  
+  .filters {
+    font-size: var(--fs-xl);
+    min-width: 4rem;
+    display: flex;
+    flex: 0 0.5 auto;
+    justify-content: center;
+    font-weight: 600;
+    text-transform: capitalize;
+    padding: .5rem 1rem;
+    transition: var(--button-transition);
+
+    &:hover, &:active {
+      transition: var(--button-transition);
+    }
+}
 }
 
 #container {

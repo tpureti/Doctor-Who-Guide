@@ -92,17 +92,16 @@ def getFandomInfo(URL):
     # get number of episodes
     getEpisodeNumber()
     # get first and last dates UNLESS it's shada
-    if URL != "https://tardis.fandom.com/wiki/Shada_(TV_story)":
-        getDates()
-    else:
-        fandom[first_broadcast] = "2018-06-18"
+    # if URL != "https://tardis.fandom.com/wiki/Shada_(TV_story)":
+    #     getDates()
+    # else:
+    #     fandom[first_broadcast] = "2018-06-18"
     # get summary
     getSummary()
 
     return fandom
 
 
-# URL = "https://tardis.fandom.com/wiki/Warriors_of_the_Deep_(TV_story)"
-
+# URL = "https://tardis.fandom.com/wiki/An_Unearthly_Child_(TV_story)"
 # fandom = getFandomInfo(URL)
 # print(fandom)

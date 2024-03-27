@@ -1,10 +1,11 @@
 from wiki_info import getWikiInfo
 from fandom_info import getFandomInfo
-from other_cats import getOtherInfo, essential_stories, favorite_stories, animated, not_animated
+from other_cats import getVotes, getOtherInfo, scrapeImdbPages, setRecurringVillainStories, setAnimatedStories, setAdditionalTags, setEssentialStories, favorite_stories
 from links import links
 import json
 import glob
 import re
+import itertools
 
 
 def setPosterPaths(number, other_info):
@@ -23,31 +24,11 @@ def setPosterPaths(number, other_info):
             other_info["Poster"] = file
 
 
-def setEssentialStories(title, other_info):
-    # determine whether stories are essential viewing
-    for story in essential_stories:
-        if title == story:  # compare title of entry to title in my list
-            other_info["Essential"] = True
-
-
 def setFavoriteStories(title, other_info):
     # determine whether stories are my favorites
     for story in favorite_stories:
         if title == story:  # compare title of entry to title in my list
             other_info["Favorite"] = True
-
-
-def setAnimatedStories(title, other_info):
-    # determine whether stories with missing episodes are animated or not
-
-    # check list of animated stories
-    for story in animated:
-        if title == story:
-            other_info["Animated"] = True
-    # check list of not animated stories
-    for story in not_animated:
-        if title == story:
-            other_info["Animated"] = False
 
 
 def combineDictionaries():
@@ -57,6 +38,7 @@ def combineDictionaries():
         wiki_info = getWikiInfo(wiki)
         fandom_info = getFandomInfo(fandom)
         other_info = getOtherInfo()
+        getVotes(wiki_info)
 
         # keys
         title = wiki_info["Title"]
@@ -67,6 +49,11 @@ def combineDictionaries():
         setEssentialStories(title, other_info)  # set essential status
         setFavoriteStories(title, other_info)  # set fave status
         setAnimatedStories(title, other_info)  # set animated status
+        setRecurringVillainStories(title, other_info)  # set villains
+        setAdditionalTags(title, other_info)  # set misc tags
+
+        # print(other_info.items())
+
         # create dictionary of everything
         DW_STORIES = {**wiki_info, **fandom_info, **other_info}
         print(DW_STORIES)
@@ -78,7 +65,7 @@ def combineDictionaries():
 
 def createJSONFile():
     # write dictionaries into json file
-    with open("../json/stories.json", "w") as jsonfile:
+    with open("stories.json", "w") as jsonfile:
         # starting bracket
         jsonfile.write("[")
 
@@ -88,6 +75,7 @@ def createJSONFile():
             wiki_info = getWikiInfo(wiki)
             fandom_info = getFandomInfo(fandom)
             other_info = getOtherInfo()
+            getVotes(wiki_info)
 
             # keys
             title = wiki_info["Title"]
@@ -98,11 +86,13 @@ def createJSONFile():
             setEssentialStories(title, other_info)  # set essential status
             setFavoriteStories(title, other_info)  # set fave status
             setAnimatedStories(title, other_info)  # set animated status
+            setRecurringVillainStories(title, other_info)  # set villains
+            setAdditionalTags(title, other_info)  # set misc tags
 
             # create dictionary of everything
             DW_STORIES = {**wiki_info, **fandom_info, **other_info}
             # write dict to file
-            json.dump(DW_STORIES, jsonfile, indent=4)
+            json.dump(DW_STORIES, jsonfile, indent=5)
 
             # unless it's last entry insert comma between entries
             if index != len(links) - 1:
