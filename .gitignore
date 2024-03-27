@@ -1,7 +1,12 @@
 /.DS_Store
 /scraper/.DS_Store
-/scraper/__pycache__
+/scraper/__pycache__/*
 scss/.DS_Store
 prepros.config
 scraper/env/lib/python3.11/site-packages/.DS_Store
 scraper/env/lib/.DS_Store
+prepros.config
+.vscode
+.DS_Store
+scss/.DS_Store
+scraper/env/lib/python3.11/site-packages/_distutils_hack/__pycache__/__init__.cpython-311.pyc

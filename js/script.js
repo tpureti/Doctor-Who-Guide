@@ -14,6 +14,8 @@ const companions = document.querySelector(".companions");
 const production_info = document.querySelector(".production_info");
 const season = document.querySelector(".season");
 const episodes = document.querySelector(".episodes");
+const ep_length = document.querySelector(".runtime_ep");
+const runtime = document.querySelector(".runtime_total");
 
 const status_area = document.querySelector(".status_area");
 const missing_status = document.querySelector(".status");
@@ -73,14 +75,14 @@ async function getJSON() {
 getJSON()
   .then(data => {
     postData(data);
-    clickEssentialButton(data);
-    populateButtons(data, "Doctor", filter_doctors);
-    populateButtons(data, "Season", filter_seasons);
-    showFilters(filters_more, extra_filters);
-    populateButtons(data, "Companion", filter_companions);
-    populateButtons(data, "Producer", filter_producers);
-    populateButtons(data, "Writer", filter_writers);
-    populateButtons(data, "Script_Editor", filter_scripteditors);
+    // clickEssentialButton(data);
+    // populateButtons(data, "Doctor", filter_doctors);
+    // populateButtons(data, "Season", filter_seasons);
+    // showFilters(filters_more, extra_filters);
+    // populateButtons(data, "Companion", filter_companions);
+    // populateButtons(data, "Producer", filter_producers);
+    // populateButtons(data, "Writer", filter_writers);
+    // populateButtons(data, "Script_Editor", filter_scripteditors);
     addButtonClickEvents();
 })
   .catch(() => {
@@ -352,7 +354,8 @@ function postData(data) {
   for (let value in data) {
       // define result
       let results = data[value];
-      result.push(results);
+      // result.push(results);
+
       // key names
       let story_poster = results.Poster;
       let story_number = results.Number;
@@ -362,28 +365,29 @@ function postData(data) {
       let story_companion = results.Companion;
       let story_season = results.Season;
       let story_eps = results.Episodes;
-      let eps_missing = results.Missing_Episodes;
+      let eps_missing = results.MissingEpisodes;
       let story_summary = results.Summary;
       let story_essential = results.Essential;
-      let story_firstbroadcast = results.First_Broadcast;
-      let story_lastbroadcast = results.Last_Broadcast;
+      let story_firstbroadcast = results.FirstBroadcast;
+      let story_lastbroadcast = results.LastBroadcast;
+      let story_runtime = results.TotalRuntime;
       // 
       let story_director = results.Director;
       let story_writer = results.Writer;
-      let story_script_editor = results.Script_Editor;
+      let story_script_editor = results.ScriptEditor;
       let story_producer = results.Producer;
       let story_cast = results.Actors;
       // 
-      let essential_reason = results.Why_Essential;
+      let essential_reason = results.WhyEssential;
       
       /** 
        * add info to divs and display them 
        * */ 
 
       // set result to story number div
-      number.innerHTML = story_number;
+      number.textContent = story_number;
       // set result to title div
-      title.innerHTML = story_title;
+      title.textContent = story_title;
 
       // add essential class if essential story
       if (story_essential === true) {
@@ -412,9 +416,12 @@ function postData(data) {
 
       poster.src = story_poster;
       // set result to season div
-      season.innerHTML = story_season;
+      season.textContent = story_season;
       // set result to episodes div
-      episodes.innerHTML = story_eps;
+      episodes.textContent = story_eps;
+      // set result to runtime div
+      ep_length.textContent = "25m";
+      runtime.textContent = story_runtime;
 
       // loop through array for companions
       const companion_item = loopThroughArray(story_companion);
@@ -427,7 +434,7 @@ function postData(data) {
       summary.innerHTML = summary_paras;
   
       // if there are missing episodes, set result to missing eps div
-      if (results.hasOwnProperty("Missing_Episodes")) {
+      if (results.hasOwnProperty("MissingEpisodes")) {
         status_area.style.display = "block"; // display status div
         // displays number of episodes if there are any missing
         let missing_eps = parseInt(story_eps, 10) - parseInt(eps_missing, 10); // subtract missing eps from total eps
@@ -452,7 +459,7 @@ function postData(data) {
       // set result to first broadcast div
       first_date.innerHTML = first_dateaired;
       // check whether last broadcast exists
-      if (results.hasOwnProperty("Last_Broadcast")) {
+      if (results.hasOwnProperty("LastBroadcast")) {
         const last_dateaired = ISODateFormatter(story_lastbroadcast);
         // set result to last broadcast div
         last_date.innerHTML = last_dateaired;
@@ -469,18 +476,20 @@ function postData(data) {
       displayCastCrew(results, "Writer", story_writer, writer, writer_area);
 
       // set script editor to div
-      displayCastCrew(results, "Script_Editor", story_script_editor, script_editor, script_editor_area);
+      displayCastCrew(results, "ScriptEditor", story_script_editor, script_editor, script_editor_area);
 
       // set producer to div
       displayCastCrew(results, "Producer", story_producer, producer, producer_area);
 
       // set cast to div
       displayCastCrew(results, "Actors", story_cast, cast, cast_area);
+
+      console.log(results)
       
       // duplicate elements
       cloneStoryContainer();
     }
-    return result;
+    // return result;
 }
 
 function displayCastCrew(results, category, story, div, currentArea) {
