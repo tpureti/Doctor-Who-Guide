@@ -657,7 +657,7 @@ h1.title {
   color: var(--summary-button);
 }
 
-.summary_area {
+.summary_info {
   padding: 0 1rem;
   height: 0;
   visibility: hidden;

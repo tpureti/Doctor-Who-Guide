@@ -3,12 +3,12 @@
 const container = document.querySelector("#container");
 const story = document.querySelector(".story");
 const info = document.querySelector(".info_area");
-
+// basic info
 const number = document.querySelector(".number");
 const title = document.querySelector(".story_title");
 const poster = document.querySelector(".poster");
 const doctor = document.querySelector(".doctor");
-
+// pt. 2
 const info_divs = document.querySelectorAll(".info_divs");
 const companions = document.querySelector(".companions");
 const production_info = document.querySelector(".production_info");
@@ -16,36 +16,41 @@ const season = document.querySelector(".season");
 const episodes = document.querySelector(".episodes");
 const ep_length = document.querySelector(".runtime_ep");
 const runtime = document.querySelector(".runtime_total");
-
+// pt. 3
 const status_area = document.querySelector(".status_area");
 const missing_status = document.querySelector(".status");
 const animated = document.querySelector(".animated");
-const summary_area = document.querySelector(".summary_area");
+const summary_area = document.querySelector(".summary_info");
 const summary = document.querySelector(".summary");
-
 const first_date = document.querySelector(".first_broadcast");
 const last_date = document.querySelector(".last_broadcast");
-const villain = document.querySelector(".villain");
+// const villain = document.querySelector(".villain");
 
+// production information
+// director
 const director_area = document.querySelector(".director_area");
 const director = document.querySelector(".director");
-
+// writer(s)
 const writer_area = document.querySelector(".writer_area");
 const writer = document.querySelector(".writer");
-
+// script editor
 const script_editor_area = document.querySelector(".script_editor_area");
 const script_editor = document.querySelector(".script_editor");
-
+// producer
 const producer_area = document.querySelector(".producer_area");
 const producer = document.querySelector(".producer");
-
+// composer
+const composer_area = document.querySelector(".composer_area");
+const composer = document.querySelector(".composer");
+// cast
 const cast_area = document.querySelector(".cast_area");
 const cast = document.querySelector(".cast");
-
+// essential
 const essential_button = document.querySelector(".button_essential");
 const essential_area = document.querySelector(".essential_area");
 const essential = document.querySelector(".essential_reason");
 
+// buttons
 const filter_button = document.querySelectorAll(".filters");
 const filters_essential = document.querySelector(".filters_essential");
 const filters_main = document.querySelector(".filters_main");
@@ -82,12 +87,15 @@ getJSON()
     // populateButtons(data, "Companion", filter_companions);
     // populateButtons(data, "Producer", filter_producers);
     // populateButtons(data, "Writer", filter_writers);
-    // populateButtons(data, "Script_Editor", filter_scripteditors);
-    addButtonClickEvents();
+    // populateButtons(data, "ScriptEditor", filter_scripteditors);
+    // addButtonClickEvents();
 })
   .catch(() => {
     console.log("error: JSON not found")
   });
+
+getJSON()
+  .then(data => clickEssentialButton(data));
 
 function showFilters(filter, extra_area) {
   filter.addEventListener("click", () => {
@@ -324,6 +332,7 @@ function showFilteredStories(data, currentCategory, item) {
 function clickEssentialButton(data) {
   // get filter
   let filter = data.filter(data => data.Essential == true);
+  // console.log(filter);
 
   filter_button.forEach((button, index) => {
     button.addEventListener("click", () => {
@@ -349,9 +358,9 @@ function clickEssentialButton(data) {
 // function which loops through and displays json data
 function postData(data) {
   const result = new Array();
-
-  // loop through each item
+  // loop through ach item
   for (let value in data) {
+      // addButtonClickEvents();
       // define result
       let results = data[value];
       // result.push(results);
@@ -376,6 +385,7 @@ function postData(data) {
       let story_writer = results.Writer;
       let story_script_editor = results.ScriptEditor;
       let story_producer = results.Producer;
+      let story_composer = results.Music;
       let story_cast = results.Actors;
       // 
       let essential_reason = results.WhyEssential;
@@ -394,19 +404,20 @@ function postData(data) {
         info.classList.add("essential");
         essential_button.style.display = "block";
 
+        // check if anything is written for essential reason
+        if (essential_reason.length > 0) {
+          // set result to essential div
+          const essential_paras = loopThroughArray(essential_reason);
+          essential.innerHTML = essential_paras;
+      } 
+        else {
+        // if nothing, remove the whole div
+        essential_area.remove();
+      }
+
       } else {
         info.classList.remove("essential");
         essential_button.style.display = "none";
-      }
-
-      // check if anything is written for essential reason
-      if (essential_reason.length !== 0) {
-        // set result to essential div
-        const essential_paras = loopThroughArray(essential_reason);
-        essential.innerHTML = essential_paras;
-      } else {
-        // if nothing, remove the whole div
-        essential_area.remove();
       }
 
       //loop through array for doctor
@@ -420,7 +431,7 @@ function postData(data) {
       // set result to episodes div
       episodes.textContent = story_eps;
       // set result to runtime div
-      ep_length.textContent = "25m";
+      ep_length.textContent = "25m/ep";
       runtime.textContent = story_runtime;
 
       // loop through array for companions
@@ -484,8 +495,12 @@ function postData(data) {
       // set cast to div
       displayCastCrew(results, "Actors", story_cast, cast, cast_area);
 
-      console.log(results)
+      //set music to dix
+      displayCastCrew(results, "Music", story_composer, composer, composer_area);
       
+      // set up buttons
+      // addButtonClickEvents();
+
       // duplicate elements
       cloneStoryContainer();
     }
@@ -511,7 +526,7 @@ function displayCastCrew(results, category, story, div, currentArea) {
  * @return {string} - returns string that concats all elements
  */
 function loopThroughArray(array) {
-  if (array.length > 0) {
+  if (array.length) {
     // initialize item
     let item = '' 
     for (let i in array) {
@@ -540,6 +555,52 @@ function cloneStoryContainer() {
   container.append(createStory);
   // replace first story
   story.replaceWith(createStory);
+
+  // find buttons in story Node
+  let buttons = createStory.children.item(1).children.item(1).children.item(3).children;
+  // name buttons html
+  let castcrew_button = buttons.item(1);
+  let summary_button = buttons.item(2);
+  let essential_button = buttons.item(0);
+
+  // console.log(buttons);
+
+  // for (const button of buttons) {
+  //   if (button.classList.contains("button_castcrew")) {
+  //     console.log(button);
+  //   }
+  // }
+
+  let info = createStory.children.item(1).children.item(1).children;
+
+  addClick(castcrew_button, info);
+  // addClick(summary_button, info);
+}
+
+function addClick(button, info) {
+  let default_info = info[0];
+  let castcrew_info = info[1];
+  let summary_info = info[2];
+
+  let button_name = button.classList[1].replace("button_", "");
+  let area_name = castcrew_info.classList[0].replace("_info", "");
+
+  if (area_name.search(button_name) !== -1) {
+    console.log(button);
+  }
+
+  button.addEventListener("click", () => {
+    if (button.classList.contains("active_button")) {
+      default_info.classList.remove("hide");
+      castcrew_info.classList.remove("show");
+      button.classList.remove("active_button");
+    }
+    else {
+      default_info.classList.add("hide");
+      castcrew_info.classList.add("show");
+      button.classList.add("active_button");
+    }
+  });
 }
 
 function getButtons(button_class) {
@@ -552,6 +613,7 @@ function getInfoSummaryEssentialDivs() {
   const summary_area = document.querySelectorAll(".summary_area");
   const essential_area = document.querySelectorAll(".essential_area");
 
+
   return [castcrew_info, summary_area, essential_area]
 }
 
@@ -560,9 +622,9 @@ function addButtonClickEvents() {
   const essential_button = getButtons(".button_essential");
   const castcrew_button = getButtons(".button_castcrew");
   const summary_button = getButtons(".button_summary");
+
   // get all areas that need to be switched out
   const [castcrew_info, summary_area, essential_area] = getInfoSummaryEssentialDivs();
-
   // show summary
   showAdditionalInfo(summary_button, castcrew_info, summary_area, castcrew_button);
   // show cast & crew
@@ -577,7 +639,7 @@ function showAdditionalInfo(story_button, otherArea, currentArea, other_button) 
     
     // go through and replace basic info with summary/castcrew or show why the story is essential
       story_button.forEach((button, index) => {
-        button.addEventListener("click", () => {     
+        button.addEventListener("click", () => { 
         // checks whether button has the "active" classlist
         if (button.classList.contains("active_button")) {
           // show basic info
@@ -590,16 +652,16 @@ function showAdditionalInfo(story_button, otherArea, currentArea, other_button) 
         }
         // if it's not currently active
         else {
-          // add active button
-          button.classList.add("active_button");
-          // hide basic info
-          basic_info[index].classList.add("hide");
-          // show current area
-          currentArea[index].classList.add("show");
-          // hide other area
-          otherArea[index].classList.remove("show");
-          // remove active from other button
-          other_button[index].classList.remove("active_button");
+        // add active button
+        button.classList.add("active_button");
+        // hide basic info
+        basic_info[index].classList.add("hide");
+        // show current area
+        currentArea[index].classList.add("show");
+        // hide other area
+        otherArea[index].classList.remove("show");
+        // remove active from other button
+        other_button[index].classList.remove("active_button");
         }
     });
   });
