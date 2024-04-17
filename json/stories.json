@@ -3687,7 +3687,7 @@
           "Kit Pedler",
           "Gerry Davis"
      ],
-     "ScriptEditor": "Gerry Davis",
+     "ScriptEditor": ["Gerry Davis"],
      "Producer": [
           "Innes Lloyd"
      ],

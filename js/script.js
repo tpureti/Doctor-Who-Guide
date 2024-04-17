@@ -405,25 +405,28 @@ function postData(data) {
         essential_button.style.display = "block";
 
         // check if anything is written for essential reason
-        if (essential_reason.length > 0) {
+        if (essential_reason.length) {
           // set result to essential div
           const essential_paras = loopThroughArray(essential_reason);
           essential.innerHTML = essential_paras;
-      } 
+        } 
         else {
-        // if nothing, remove the whole div
-        essential_area.remove();
-      }
+          // if nothing, remove the whole div
+          essential.innerHTML = '';
+          // essential_area.remove();
+        }
 
       } else {
         info.classList.remove("essential");
         essential_button.style.display = "none";
       }
 
-      //loop through array for doctor
-      const doctor_item = loopThroughArray(story_doctor);
-      // set result to doctor div
-      doctor.innerHTML = doctor_item;
+      if (results.hasOwnProperty("Doctor")) {
+        //loop through array for doctor
+        const doctor_item = loopThroughArray(story_doctor);
+        // set result to doctor div
+        doctor.innerHTML = doctor_item;
+      }
 
       poster.src = story_poster;
       // set result to season div
@@ -434,10 +437,12 @@ function postData(data) {
       ep_length.textContent = "25m/ep";
       runtime.textContent = story_runtime;
 
-      // loop through array for companions
-      const companion_item = loopThroughArray(story_companion);
-      // set result to companions div
-      companions.innerHTML = companion_item;
+      if (results.hasOwnProperty("Companion")) {
+        // loop through array for companions
+        const companion_item = loopThroughArray(story_companion);
+        // set result to companions div
+        companions.innerHTML = companion_item;
+      }
 
       // set result to summary div
       const summary_paras = loopThroughArray(story_summary);
@@ -498,9 +503,6 @@ function postData(data) {
       //set music to dix
       displayCastCrew(results, "Music", story_composer, composer, composer_area);
       
-      // set up buttons
-      // addButtonClickEvents();
-
       // duplicate elements
       cloneStoryContainer();
     }
@@ -557,48 +559,125 @@ function cloneStoryContainer() {
   story.replaceWith(createStory);
 
   // find buttons in story Node
-  let buttons = createStory.children.item(1).children.item(1).children.item(3).children;
-  // name buttons html
-  let castcrew_button = buttons.item(1);
-  let summary_button = buttons.item(2);
-  let essential_button = buttons.item(0);
-
-  // console.log(buttons);
-
-  // for (const button of buttons) {
-  //   if (button.classList.contains("button_castcrew")) {
-  //     console.log(button);
-  //   }
-  // }
-
+  let btns = createStory.children.item(1).children.item(1).children.item(3).children;
+  // HTML collection of info areas
   let info = createStory.children.item(1).children.item(1).children;
+  let essential_info = createStory.children.item(2);
 
-  addClick(castcrew_button, info);
-  // addClick(summary_button, info);
+  // loop through all buttons
+  for (const button of btns) {
+    let button_name = button.classList[1].replace("button_", "");
+    // if button is essential
+    if (button_name.search("essential") !== -1) {
+      addEssentialClick(button, essential_info);
+    }
+    // if button is anything else
+    else {
+      // console.log(button);
+      addClick(button, info, btns);
+    }
+  }
 }
 
-function addClick(button, info) {
-  let default_info = info[0];
-  let castcrew_info = info[1];
-  let summary_info = info[2];
-
+function addClick(button, info, btns) {
   let button_name = button.classList[1].replace("button_", "");
-  let area_name = castcrew_info.classList[0].replace("_info", "");
-
-  if (area_name.search(button_name) !== -1) {
-    console.log(button);
-  }
 
   button.addEventListener("click", () => {
+    // if button is ACTIVE and CLICKED
     if (button.classList.contains("active_button")) {
-      default_info.classList.remove("hide");
-      castcrew_info.classList.remove("show");
-      button.classList.remove("active_button");
+      // go through areas
+      for (let area of info) {
+        let area_name = area.classList[0].replace("_info", "");
+        // if button and area are MATCHING
+        if (area_name.search(button_name) !== -1) {
+          // HIDE matching info to button
+          area.classList.remove("show");
+          }
+          // if button and area are DIFFERENT
+          else {
+            // SHOW default info
+            if (area_name.match("basic")) {
+              area.classList.remove("hide");
+            }
+            // HIDE other button's info
+            area.classList.remove("show");
+          }
+      }
+
+      // go through buttons
+      for (let btn of btns) {
+        let buttons = btn.classList[1].replace("button_", "");
+        // if button name MATCHES
+        if (buttons.search(button_name) !== -1) {
+          // remove "active button" css from all buttons
+          button.classList.remove("active_button");
+        }
+        else {
+          // remove "active button" css from all buttons
+          btn.classList.remove("active_button");
+        }
+      }
     }
+
+    // if button is INACTIVE and THEN CLICKED
     else {
-      default_info.classList.add("hide");
-      castcrew_info.classList.add("show");
+      // go through areas
+      for (let area of info) {
+        let area_name = area.classList[0].replace("_info", "");
+        // if button and area are MATCHING
+        if (area_name.search(button_name) !== -1) {
+          // SHOW matching info
+          area.classList.add("show");
+          }
+          // if button and area are DIFFERENT
+          else {
+            // HIDE default information
+            if (area_name.match("basic")) {
+              area.classList.add("hide");
+            }
+            // HIDE other button's info
+            area.classList.remove("show");
+            // console.log(info[i]);
+          }
+      }
+
+      // go through buttons
+      for (let btn of btns) {
+        let buttons = btn.classList[1].replace("button_", "");
+        // if button name MATCHES
+        if (buttons.search(button_name) !== -1) {
+          // add "active button" css to MATCHING button
+          button.classList.add("active_button");
+        }
+        else {
+          // remove "active button" css from other buttons
+          btn.classList.remove("active_button");
+        }
+      }
+    }
+  });
+}
+
+function addEssentialClick(button, info) {
+  button.addEventListener("click", () => {
+    // if button is ACTIVE
+    if (button.classList.contains("active_button")) {
+      // remove "active button" class
+      button.classList.remove("active_button");
+      // HIDE essential area
+      info.classList.remove("show");
+      info.style.maxHeight = 0;
+    }
+    // if button in INACTIVE
+    else {
+      // add "active button" class
       button.classList.add("active_button");
+      // SHOW essential area
+      // get height of area
+      let height = info.scrollHeight;
+      // set height of area
+      info.style.maxHeight = height + "px";
+      info.classList.add("show");
     }
   });
 }
