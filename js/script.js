@@ -8,6 +8,7 @@ const number = document.querySelector(".number");
 const title = document.querySelector(".story_title");
 const poster = document.querySelector(".poster");
 const doctor = document.querySelector(".doctor");
+const rating = document.querySelector(".rating");
 // pt. 2
 const info_divs = document.querySelectorAll(".info_divs");
 const companions = document.querySelector(".companions");
@@ -49,6 +50,9 @@ const cast = document.querySelector(".cast");
 const essential_button = document.querySelector(".button_essential");
 const essential_area = document.querySelector(".essential_area");
 const essential = document.querySelector(".essential_reason");
+// episode info
+const ep_area = document.querySelector(".eps_area");
+const ep_name = document.querySelector(".episode_name");
 
 // buttons
 const filter_button = document.querySelectorAll(".filters");
@@ -355,6 +359,8 @@ function clickEssentialButton(data) {
   });
 }
 
+let eps_name;
+
 // function which loops through and displays json data
 function postData(data) {
   const result = new Array();
@@ -370,11 +376,13 @@ function postData(data) {
       let story_number = results.Number;
       let story_title = results.Title;
       let story_doctor = results.Doctor;
+      let story_rating = results.IMDBRating;
       // 
       let story_companion = results.Companion;
       let story_season = results.Season;
       let story_eps = results.Episodes;
       let eps_missing = results.MissingEpisodes;
+      let story_animated = results.Animated;
       let story_summary = results.Summary;
       let story_essential = results.Essential;
       let story_firstbroadcast = results.FirstBroadcast;
@@ -387,6 +395,7 @@ function postData(data) {
       let story_producer = results.Producer;
       let story_composer = results.Music;
       let story_cast = results.Actors;
+      let story_episodes = results.EpisodeInfo;
       // 
       let essential_reason = results.WhyEssential;
       
@@ -421,7 +430,8 @@ function postData(data) {
         essential_button.style.display = "none";
       }
 
-      if (results.hasOwnProperty("Doctor")) {
+      // display Doctor
+      if ('Doctor' in results) {
         //loop through array for doctor
         const doctor_item = loopThroughArray(story_doctor);
         // set result to doctor div
@@ -436,12 +446,18 @@ function postData(data) {
       // set result to runtime div
       ep_length.textContent = "25m/ep";
       runtime.textContent = story_runtime;
+      // display rating
+      rating.innerHTML = story_rating;
 
-      if (results.hasOwnProperty("Companion")) {
+      // display companions
+      if ('Companion' in results) {
         // loop through array for companions
         const companion_item = loopThroughArray(story_companion);
         // set result to companions div
         companions.innerHTML = companion_item;
+      }
+      else {
+        companions.innerHTML = '';
       }
 
       // set result to summary div
@@ -450,19 +466,31 @@ function postData(data) {
       summary.innerHTML = summary_paras;
   
       // if there are missing episodes, set result to missing eps div
-      if (results.hasOwnProperty("MissingEpisodes")) {
-        status_area.style.display = "block"; // display status div
+      if ('MissingEpisodes' in results) {
+        // display status div
+        status_area.style.display = "block"; 
         // displays number of episodes if there are any missing
         let missing_eps = parseInt(story_eps, 10) - parseInt(eps_missing, 10); // subtract missing eps from total eps
-        // set episodes to missing eps/total eps
-        episodes.innerHTML = missing_eps + "/" + story_eps;
 
         // set status of story
+        // if ALL EPISODES are missing
         if (eps_missing == story_eps) {
-          missing_status.innerHTML = "Completely Missing"; // if all eps are missing
+          missing_status.innerHTML = "Completely Missing";
+          missing_status.style.color = "#FF7171";
+          // set episodes to missing eps/total eps
+          episodes.innerHTML = missing_eps + "/" + story_eps;
+        }
+        // if NO EPISODES are missing
+        else if (eps_missing == 0) {
+          missing_status.innerHTML = "Complete";
+          missing_status.style.color = "#fff";
         } 
+        // if SOME EPISODES are missing
         else {
-          missing_status.innerHTML = "Partially Missing"; // if only some eps are missing
+          missing_status.innerHTML = "Partially Missing";
+          missing_status.style.color = "#FFE76A";
+          // set episodes to missing eps/total eps
+          episodes.innerHTML = missing_eps + "/" + story_eps;
         }
       }
       // otherwise hide 
@@ -470,12 +498,23 @@ function postData(data) {
         status_area.style.display = "none";
       }
 
+      // if episodes are ANIMATED
+      if ('Animated' in results) {
+        // display animated status
+        animated.style.display = "block";
+        animated.textContent = story_animated;
+      }
+      else {
+        // hide animated status
+        animated.style.display = "none";
+      }
+
       // format dates
       const first_dateaired = ISODateFormatter(story_firstbroadcast);
       // set result to first broadcast div
       first_date.innerHTML = first_dateaired;
       // check whether last broadcast exists
-      if (results.hasOwnProperty("LastBroadcast")) {
+      if ('LastBroadcast' in results) {
         const last_dateaired = ISODateFormatter(story_lastbroadcast);
         // set result to last broadcast div
         last_date.innerHTML = last_dateaired;
@@ -502,11 +541,26 @@ function postData(data) {
 
       //set music to dix
       displayCastCrew(results, "Music", story_composer, composer, composer_area);
+
+      // get episode information
+      let ep_names = loopThroughEpisodes(story_episodes);
+      ep_area.innerHTML = ep_names;
       
       // duplicate elements
       cloneStoryContainer();
     }
     // return result;
+}
+
+function loopThroughEpisodes(story_episodes) {
+  let div = '';
+  story_episodes.forEach((info) => {
+    let name = info.EpisodeName;
+    ep_name.innerHTML = name;
+    let epn = ep_name.cloneNode(true);
+    div += epn.outerHTML;
+  });
+  return div;
 }
 
 function displayCastCrew(results, category, story, div, currentArea) {
@@ -559,12 +613,12 @@ function cloneStoryContainer() {
   story.replaceWith(createStory);
 
   // find buttons in story Node
-  let btns = createStory.children.item(1).children.item(1).children.item(3).children;
+  let btns = createStory.children.item(1).children.item(1).children.item(4).children;
   // HTML collection of info areas
   let info = createStory.children.item(1).children.item(1).children;
   let essential_info = createStory.children.item(2);
 
-  // loop through all buttons
+  // loop through all buttons and make sure they work
   for (const button of btns) {
     let button_name = button.classList[1].replace("button_", "");
     // if button is essential
@@ -585,6 +639,7 @@ function addClick(button, info, btns) {
   button.addEventListener("click", () => {
     // if button is ACTIVE and CLICKED
     if (button.classList.contains("active_button")) {
+
       // go through areas
       for (let area of info) {
         let area_name = area.classList[0].replace("_info", "");
@@ -679,91 +734,6 @@ function addEssentialClick(button, info) {
       info.style.maxHeight = height + "px";
       info.classList.add("show");
     }
-  });
-}
-
-function getButtons(button_class) {
-  const button = document.querySelectorAll(button_class);
-  return button
-}
-
-function getInfoSummaryEssentialDivs() {
-  const castcrew_info = document.querySelectorAll(".castcrew_info");
-  const summary_area = document.querySelectorAll(".summary_area");
-  const essential_area = document.querySelectorAll(".essential_area");
-
-
-  return [castcrew_info, summary_area, essential_area]
-}
-
-function addButtonClickEvents() {
-  // get all buttons
-  const essential_button = getButtons(".button_essential");
-  const castcrew_button = getButtons(".button_castcrew");
-  const summary_button = getButtons(".button_summary");
-
-  // get all areas that need to be switched out
-  const [castcrew_info, summary_area, essential_area] = getInfoSummaryEssentialDivs();
-  // show summary
-  showAdditionalInfo(summary_button, castcrew_info, summary_area, castcrew_button);
-  // show cast & crew
-  showAdditionalInfo(castcrew_button, summary_area, castcrew_info, summary_button);
-  // show essential
-  showEssential(essential_button, essential_area);
-}
-
-function showAdditionalInfo(story_button, otherArea, currentArea, other_button) {
-    // get basic info
-    const basic_info = document.querySelectorAll(".basic_info");
-    
-    // go through and replace basic info with summary/castcrew or show why the story is essential
-      story_button.forEach((button, index) => {
-        button.addEventListener("click", () => { 
-        // checks whether button has the "active" classlist
-        if (button.classList.contains("active_button")) {
-          // show basic info
-          basic_info[index].classList.remove("hide");
-          // hide current area
-          currentArea[index].classList.remove("show");
-          // remove active button on both buttons
-          button.classList.remove("active_button");
-          other_button[index].classList.remove("active_button");
-        }
-        // if it's not currently active
-        else {
-        // add active button
-        button.classList.add("active_button");
-        // hide basic info
-        basic_info[index].classList.add("hide");
-        // show current area
-        currentArea[index].classList.add("show");
-        // hide other area
-        otherArea[index].classList.remove("show");
-        // remove active from other button
-        other_button[index].classList.remove("active_button");
-        }
-    });
-  });
-}
-
-function showEssential(essential_button, essential_area) {
-  essential_button.forEach((button, index) => {
-    button.addEventListener("click", function() {
-      // check whether button has "active" classlist
-      if (button.classList.contains("active_button")) {
-        button.classList.remove("active_button");
-        // remove essential element
-        essential_area[index].classList.remove("show");
-        essential_area[index].style.maxHeight = 0;
-      } 
-      else {
-        button.classList.add("active_button");
-        // show essential element
-        let height = essential_area[index].scrollHeight;
-        essential_area[index].style.maxHeight = height + "px";
-        essential_area[index].classList.add("show");
-      }
-    });
   });
 }
 

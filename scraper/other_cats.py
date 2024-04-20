@@ -2,9 +2,10 @@ import requests
 from bs4 import BeautifulSoup
 from lxml import etree
 import re
-# from wiki_info import wiki_info
+from wiki_info import wiki_info
 from functools import reduce
 from itertools import zip_longest
+import json
 
 ratings_info = dict()
 ratings_info.setdefault("EpisodeNumber")
@@ -103,7 +104,7 @@ def getVotes(wiki_info):
             # ep_votes = episode.find(
             #     "div", class_="sc-d80c3c78-0 jPoaKS")
             ep_time = episode.find_all(
-                "span", class_="sc-b0691f29-8 ilsLEX dli-title-metadata-item")
+                "span", class_="dli-title-metadata-item")
 
             # name
             ep_name = ep_name.text
@@ -137,9 +138,9 @@ def getVotes(wiki_info):
                 if re.search(ep_name, info["EpisodeName"]):
 
                     # add story title to episode name
-                    if int(wiki_info["Number"]) < 26:
-                        title = wiki_info["Title"]
-                        extra_info["EpisodeName"] = title + ": " + ep_name
+                    # if int(wiki_info["Number"]) < 26:
+                    #     title = wiki_info["Title"]
+                    #     extra_info["EpisodeName"] = title + ": " + ep_name
                     info.update(extra_info)
 
                     # calculate average rating of each episode
@@ -316,13 +317,16 @@ def scrapeImdbPages(wiki):
 
 
 # create list of votes, runtime, and titles
-# getVotes()
+# getVotes(wiki_info)
 # print(imdb_votes)
 
 # scrapeImdbPages(wiki_info)
 
 # for entry, values in wiki_info.items():
 #     print(entry, values)
+
+json_fix = json.dumps(wiki_info, indent=4)
+print(json_fix)
 
 
 def getOtherInfo():

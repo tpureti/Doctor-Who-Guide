@@ -41,6 +41,7 @@ img {
   --black: #000;
   --clr-white: #fff;
   --clr-light-grey: #9a9a9a;
+  --clr-med-grey: #232323;
   --clr-dark-grey-1: #1a1a1a;
   --clr-dark-grey-2: #161616;
   --light-purple: #d9c4f1;
@@ -78,6 +79,7 @@ img {
   --essential-button: var(--clr-dark-yellow);
   --castcrew-button: var(--clr-bright-orange);
   --summary-button: var(--clr-pale-red);
+  --eps-button: #f674c2;
   --opacity-transition: opacity .5s ease-in-out;
   --button-transition: background-color .5s ease-in-out;
 }
@@ -389,19 +391,33 @@ h1.title {
 }
 
 .title_area {
-  padding: 2.25rem 1.5rem 1rem;
+  padding: 2.25rem 2rem 1.5rem;
   border-bottom: 1px solid var(--clr-med-grey);
+  background-color: #1d1c1c;
   grid-column: 3/-1;
   -ms-grid-row: 1;
   grid-row: 1/1;
+  display: -webkit-inline-box;
+  display: -ms-inline-flexbox;
+  display: inline-flex;
+  width: 100%;
+  -webkit-box-flex: 1;
+      -ms-flex: 1 1 auto;
+          flex: 1 1 auto;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+}
+
+.title_1 {
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
+  -webkit-box-flex: 1;
+      -ms-flex: 1 1 auto;
+          flex: 1 1 auto;
   -ms-flex-wrap: wrap;
       flex-wrap: wrap;
-  -webkit-box-pack: left;
-      -ms-flex-pack: left;
-          justify-content: left;
 }
 
 .number {
@@ -417,11 +433,6 @@ h1.title {
 
 .story_title {
   line-height: 1;
-  -webkit-box-flex: 1;
-      -ms-flex: 1 1 auto;
-          flex: 1 1 auto;
-  -ms-flex-item-align: end;
-      align-self: flex-end;
   margin: 0.25rem;
 }
 
@@ -447,18 +458,33 @@ h1.title {
   -webkit-box-pack: left;
       -ms-flex-pack: left;
           justify-content: left;
+  -webkit-box-align: baseline;
+      -ms-flex-align: baseline;
+          align-items: baseline;
 }
 
 .doctor span {
-  font-size: var(--fs-xl);
+  font-size: var(--fs-md);
   color: var(--clr-pale-red);
   font-weight: 600;
   border-radius: 5px;
-  margin: 0.2rem 0.5rem;
+  margin: 0.2rem 0.3rem;
 }
 .doctor span:first-child {
   color: var(--primary-doctor);
   font-size: var(--fs-2xl);
+}
+
+.rating {
+  font-size: var(--fs-xl);
+  font-weight: 700;
+  color: var(--clr-dark-grey-1);
+  background-color: var(--clr-bright-yellow);
+  padding: 0.25rem 0.75rem;
+  border-radius: 5px;
+  text-align: center;
+  -webkit-transition: var(--button-transition);
+  transition: var(--button-transition);
 }
 
 .info_area {
@@ -517,8 +543,8 @@ h1.title {
   -ms-grid-columns: 1fr 0.5rem 1fr;
   grid-template-columns: repeat(2, 1fr);
   gap: 0.5rem;
-  -ms-flex-line-pack: justify;
-      align-content: space-between;
+  -ms-flex-line-pack: stretch;
+      align-content: stretch;
   -webkit-box-align: start;
       -ms-flex-align: start;
           align-items: start;
@@ -533,6 +559,15 @@ h1.title {
   display: block;
 }
 
+.episodes_info {
+  opacity: 0;
+  height: 0;
+  -webkit-transition: var(--opacity-transition);
+  transition: var(--opacity-transition);
+  visibility: hidden;
+  overflow: auto;
+}
+
 .info_divs {
   margin: 1.5rem 2rem 0 1rem;
   display: -webkit-box;
@@ -543,9 +578,9 @@ h1.title {
   -webkit-box-direction: normal;
       -ms-flex-direction: column;
           flex-direction: column;
-  -webkit-box-pack: justify;
-      -ms-flex-pack: justify;
-          justify-content: space-between;
+  -webkit-box-pack: space-evenly;
+      -ms-flex-pack: space-evenly;
+          justify-content: space-evenly;
 }
 
 .season, .episodes {
@@ -585,6 +620,25 @@ h1.title {
   display: block;
 }
 
+.eps_area {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+  -webkit-box-flex: 1;
+      -ms-flex: 1 1 50%;
+          flex: 1 1 50%;
+}
+
+.episode_name {
+  font-size: var(--fs-lg);
+  font-weight: 500;
+  text-align: left;
+}
+
 .button_area {
   -ms-grid-column: 1;
   -ms-grid-column-span: 2;
@@ -608,7 +662,7 @@ h1.title {
 .button {
   padding: 0.6rem 1.25rem;
   font-family: var(--ff-sans);
-  font-size: var(--fs-xl);
+  font-size: var(--fs-lg);
   font-weight: 600;
   line-height: 1;
   color: var(--clr-dark-grey-2);
@@ -643,11 +697,19 @@ h1.title {
 .button_summary:hover, .button_summary:active {
   color: var(--summary-button);
 }
+.button_episodes {
+  background-color: var(--eps-button);
+  -webkit-transition: var(--button-transition);
+  transition: var(--button-transition);
+}
+.button_episodes:hover, .button_episodes:active {
+  color: var(--eps-button);
+}
 
 .active_button {
   background-color: var(--clr-dark-grey-2);
 }
-.active_button:is(.button_essential) {
+#f674c2 .active_button:is(.button_essential) {
   color: var(--essential-button);
 }
 .active_button:is(.button_castcrew) {
@@ -655,6 +717,9 @@ h1.title {
 }
 .active_button:is(.button_summary) {
   color: var(--summary-button);
+}
+.active_button:is(.button_episodes) {
+  color: var(--eps-button);
 }
 
 .summary_info {

@@ -44,6 +44,7 @@
           "Norman Kay"
      ],
      "Season": "1",
+     "MissingEpisodes": "0",
      "FirstBroadcast": "1963-11-23",
      "LastBroadcast": "1963-12-14",
      "EpisodeInfo": [
@@ -174,6 +175,7 @@
           "Tristram Cary"
      ],
      "Season": "1",
+     "MissingEpisodes": "0",
      "FirstBroadcast": "1963-12-21",
      "LastBroadcast": "1964-02-01",
      "EpisodeInfo": [
@@ -297,6 +299,7 @@
           "Verity Lambert"
      ],
      "Season": "1",
+     "MissingEpisodes":"0",
      "FirstBroadcast": "1964-02-08",
      "LastBroadcast": "1964-02-15",
      "EpisodeInfo": [
@@ -486,7 +489,7 @@
      "Rating": null,
      "Villain": [],
      "AdditionalTags": "Historical",
-     "Animated": "Not Animated"
+     "Animated": "None"
 },{
      "Number": "005",
      "Title": "The Keys of Marinus",
@@ -560,6 +563,7 @@
           "Norman Kay"
      ],
      "Season": "1",
+     "MissingEpisodes":"0",
      "FirstBroadcast": "1964-04-11",
      "LastBroadcast": "1964-05-16",
      "EpisodeInfo": [
@@ -688,6 +692,7 @@
           "Richard Rodney Bennett"
      ],
      "Season": "1",
+     "MissingEpisodes":"0",
      "FirstBroadcast": "1964-05-23",
      "LastBroadcast": "1964-06-13",
      "EpisodeInfo": [
@@ -813,6 +818,7 @@
           "Norman Kay"
      ],
      "Season": "1",
+     "MissingEpisodes":"0",
      "FirstBroadcast": "1964-06-20",
      "LastBroadcast": "1964-08-01",
      "EpisodeInfo": [
@@ -1096,6 +1102,7 @@
           "Dudley Simpson"
      ],
      "Season": "2",
+     "MissingEpisodes":"0",
      "FirstBroadcast": "1964-10-31",
      "LastBroadcast": "1964-11-14",
      "EpisodeInfo": [
@@ -1217,6 +1224,7 @@
           "Francis Chagrin"
      ],
      "Season": "2",
+     "MissingEpisodes":"0",
      "FirstBroadcast": "1964-11-21",
      "LastBroadcast": "1964-12-26",
      "EpisodeInfo": [
@@ -1341,6 +1349,7 @@
           "Tristram Cary"
      ],
      "Season": "2",
+     "MissingEpisodes":"0",
      "FirstBroadcast": "1965-01-02",
      "LastBroadcast": "1965-01-09",
      "EpisodeInfo": [
@@ -1448,6 +1457,7 @@
           "Raymond Jones"
      ],
      "Season": "2",
+     "MissingEpisodes":"0",
      "FirstBroadcast": "1965-01-16",
      "LastBroadcast": "1965-02-06",
      "EpisodeInfo": [
@@ -1566,6 +1576,7 @@
           "Fran\u00e7ois\u00a0Baschet"
      ],
      "Season": "2",
+     "MissingEpisodes":"0",
      "FirstBroadcast": "1965-02-13",
      "LastBroadcast": "1965-03-20",
      "EpisodeInfo": [
@@ -1788,7 +1799,7 @@
      "Rating": null,
      "Villain": [],
      "AdditionalTags": [],
-     "Animated": "Not Animated"
+     "Animated": "None"
 },{
      "Number": "015",
      "Title": "The Space Museum",
@@ -1850,6 +1861,7 @@
      ],
      "Music": [],
      "Season": "2",
+     "MissingEpisodes":"0",
      "FirstBroadcast": "1965-04-24",
      "LastBroadcast": "1965-05-15",
      "EpisodeInfo": [
@@ -1997,6 +2009,7 @@
           "Dudley Simpson"
      ],
      "Season": "2",
+     "MissingEpisodes":"0",
      "FirstBroadcast": "1965-05-22",
      "LastBroadcast": "1965-06-26",
      "EpisodeInfo": [
@@ -2127,6 +2140,7 @@
      ],
      "Music": [],
      "Season": "2",
+     "MissingEpisodes":"0",
      "FirstBroadcast": "1965-07-03",
      "LastBroadcast": "1965-07-24",
      "EpisodeInfo": [
@@ -2365,7 +2379,7 @@
           "Daleks"
      ],
      "AdditionalTags": [],
-     "Animated": "Not Animated"
+     "Animated": "None"
 },{
      "Number": "020",
      "Title": "The Myth Makers",
@@ -2486,7 +2500,7 @@
      "Rating": null,
      "Villain": [],
      "AdditionalTags": "Historical",
-     "Animated": "Not Animated"
+     "Animated": "None"
 },{
      "Number": "021",
      "Title": "The Daleks' Master Plan",
@@ -2758,7 +2772,7 @@
           "Daleks"
      ],
      "AdditionalTags": [],
-     "Animated": "Not Animated"
+     "Animated": "None"
 },{
      "Number": "022",
      "Title": "The Massacre",
@@ -2897,7 +2911,7 @@
      "Rating": null,
      "Villain": [],
      "AdditionalTags": "Historical",
-     "Animated": "Not Animated"
+     "Animated": "None"
 },{
      "Number": "023",
      "Title": "The Ark",
@@ -2964,6 +2978,7 @@
           "Tristram Cary"
      ],
      "Season": "3",
+     "MissingEpisodes":"0",
      "FirstBroadcast": "1966-03-05",
      "LastBroadcast": "1966-03-26",
      "EpisodeInfo": [
@@ -3136,7 +3151,7 @@
      "Rating": null,
      "Villain": [],
      "AdditionalTags": [],
-     "Animated": "Not Animated"
+     "Animated": "None"
 },{
      "Number": "025",
      "Title": "The Gunfighters",
@@ -3196,6 +3211,7 @@
           "Tristram Cary"
      ],
      "Season": "3",
+     "MissingEpisodes":"0",
      "FirstBroadcast": "1966-04-30",
      "LastBroadcast": "1966-05-21",
      "EpisodeInfo": [
@@ -3374,7 +3390,7 @@
      "Rating": null,
      "Villain": [],
      "AdditionalTags": [],
-     "Animated": "Not Animated"
+     "Animated": "None"
 },{
      "Number": "027",
      "Title": "The War Machines",
@@ -3453,6 +3469,7 @@
           "Stock music"
      ],
      "Season": "3",
+     "MissingEpisodes":"0",
      "FirstBroadcast": "1966-06-25",
      "LastBroadcast": "1966-07-16",
      "EpisodeInfo": [
@@ -3628,7 +3645,7 @@
      "Rating": null,
      "Villain": [],
      "AdditionalTags": [],
-     "Animated": "Not Animated"
+     "Animated": "None"
 },{
      "Number": "029",
      "Title": "The Tenth Planet",
@@ -4036,7 +4053,7 @@
      "Rating": null,
      "Villain": [],
      "AdditionalTags": "Historical",
-     "Animated": "Not Animated"
+     "Animated": "None"
 },{
      "Number": "032",
      "Title": "The Underwater Menace",
@@ -4800,6 +4817,7 @@
           "Stock music"
      ],
      "Season": "5",
+     "MissingEpisodes":"0",
      "FirstBroadcast": "1967-09-02",
      "LastBroadcast": "1967-09-23",
      "EpisodeInfo": [
@@ -5063,44 +5081,71 @@
      "LastBroadcast": "1967-12-16",
      "EpisodeInfo": [
           {
-               "EpisodeName": "The Ice Warriors: One",
-               "EpisodeRuntime": "24:21",
-               "EpisodeDate": "1967-11-11",
-               "EpisodeViewers": "6.7"
-          },
-          {
-               "EpisodeStatus": "Missing",
-               "EpisodeName": "The Ice Warriors: Two",
-               "EpisodeRuntime": "24:16",
-               "EpisodeDate": "1967-11-18",
-               "EpisodeViewers": "7.1"
-          },
-          {
-               "EpisodeStatus": "Missing",
-               "EpisodeName": "The Ice Warriors: Three",
-               "EpisodeRuntime": "23:58",
-               "EpisodeDate": "1967-11-25",
-               "EpisodeViewers": "7.4"
-          },
-          {
-               "EpisodeName": "The Ice Warriors: Four",
-               "EpisodeRuntime": "24:23",
-               "EpisodeDate": "1967-12-02",
-               "EpisodeViewers": "7.3"
-          },
-          {
-               "EpisodeName": "The Ice Warriors: Five",
-               "EpisodeRuntime": "24:25",
-               "EpisodeDate": "1967-12-09",
-               "EpisodeViewers": "8.0"
-          },
-          {
-               "EpisodeName": "The Ice Warriors: Six",
-               "EpisodeRuntime": "23:58",
-               "EpisodeDate": "1967-12-16",
-               "EpisodeViewers": "7.5"
-          }
+            "EpisodeName": "The Ice Warriors: One",
+            "EpisodeRuntime": "24:21",
+            "EpisodeDate": "1967-11-11",
+            "EpisodeViewers": "6.7",
+            "EpisodeNumber": 180,
+            "EpisodeSeason": "S05E11",
+            "EpisodeRating": "7.3",
+            "EpisodeTime": "24m"
+        },
+        {
+            "EpisodeStatus": "Missing",
+            "EpisodeName": "The Ice Warriors: Two",
+            "EpisodeRuntime": "24:16",
+            "EpisodeDate": "1967-11-18",
+            "EpisodeViewers": "7.1",
+            "EpisodeNumber": 181,
+            "EpisodeSeason": "S05E12",
+            "EpisodeRating": "7.2",
+            "EpisodeTime": "24m"
+        },
+        {
+            "EpisodeStatus": "Missing",
+            "EpisodeName": "The Ice Warriors: Three",
+            "EpisodeRuntime": "23:58",
+            "EpisodeDate": "1967-11-25",
+            "EpisodeViewers": "7.4",
+            "EpisodeNumber": 182,
+            "EpisodeSeason": "S05E13",
+            "EpisodeRating": "7.2",
+            "EpisodeTime": "24m"
+        },
+        {
+            "EpisodeName": "The Ice Warriors: Four",
+            "EpisodeRuntime": "24:23",
+            "EpisodeDate": "1967-12-02",
+            "EpisodeViewers": "7.3",
+            "EpisodeNumber": 183,
+            "EpisodeSeason": "S05E14",
+            "EpisodeRating": "7.3",
+            "EpisodeTime": "24m"
+        },
+        {
+            "EpisodeName": "The Ice Warriors: Five",
+            "EpisodeRuntime": "24:25",
+            "EpisodeDate": "1967-12-09",
+            "EpisodeViewers": "8.0",
+            "EpisodeNumber": 184,
+            "EpisodeSeason": "S05E15",
+            "EpisodeRating": "7.4",
+            "EpisodeTime": "24m"
+        },
+        {
+            "EpisodeName": "The Ice Warriors: Six",
+            "EpisodeRuntime": "23:58",
+            "EpisodeDate": "1967-12-16",
+            "EpisodeViewers": "7.5",
+            "EpisodeNumber": 185,
+            "EpisodeSeason": "S05E16",
+            "EpisodeRating": "7.4",
+            "EpisodeTime": "24m"
+        }
      ],
+     "IMDBRating": 7.3,
+     "TotalViewers": 44.0,
+     "TotalRuntime": "2h 24m",
      "Summary": [
           "The TARDIS arrives on Earth in a new ice age. The travellers make their way into a base where scientists, commanded by Leader Clent, are using an ioniser device to combat the advance of a glacier.\n",
           "A giant humanoid creature, called an Ice Warrior by one of the scientists, has been found buried in the nearby glacier. When thawed, it revives and is revealed to be Varga, captain of a Martian spacecraft that landed on Earth centuries ago and is still in the glacier. Varga sets about freeing his comrades and formulating a plan to conquer the Earth \u2014 Mars itself is now dead.\n",
@@ -5189,6 +5234,7 @@
           "B\u00e9la Bart\u00f3k"
      ],
      "Season": "5",
+     "MissingEpisodes":"0",
      "FirstBroadcast": "1967-12-23",
      "LastBroadcast": "1968-01-27",
      "EpisodeInfo": [
@@ -5786,6 +5832,7 @@
           "BBC Radiophonic Workshop"
      ],
      "Season": "6",
+     "MissingEpisodes":"0",
      "FirstBroadcast": "1968-08-10",
      "LastBroadcast": "1968-09-07",
      "EpisodeInfo": [
@@ -5919,6 +5966,7 @@
           "BBC Radiophonic Workshop"
      ],
      "Season": "6",
+     "MissingEpisodes":"0",
      "FirstBroadcast": "1968-09-14",
      "LastBroadcast": "1968-10-12",
      "EpisodeInfo": [
@@ -6231,6 +6279,7 @@
           "BBC Radiophonic Workshop"
      ],
      "Season": "6",
+     "MissingEpisodes":"0",
      "FirstBroadcast": "1968-12-28",
      "LastBroadcast": "1969-01-18",
      "EpisodeInfo": [
@@ -6354,6 +6403,7 @@
           "Dudley Simpson"
      ],
      "Season": "6",
+     "MissingEpisodes":"0",
      "FirstBroadcast": "1969-01-25",
      "LastBroadcast": "1969-03-01",
      "EpisodeInfo": [
@@ -6553,7 +6603,7 @@
      "Rating": null,
      "Villain": [],
      "AdditionalTags": [],
-     "Animated": "Not Animated"
+     "Animated": "None"
 },{
      "Number": "050",
      "Title": "The War Games",
@@ -6655,6 +6705,7 @@
           "Dudley Simpson"
      ],
      "Season": "6",
+     "MissingEpisodes":"0",
      "FirstBroadcast": "1969-04-19",
      "LastBroadcast": "1969-06-21",
      "EpisodeInfo": [
@@ -11713,9 +11764,6 @@
      "Doctor": [
           "Fourth Doctor"
      ],
-     "Companion": [
-
-     ],
      "Characters": [
           "The Master",
           "Borusa",
@@ -14223,6 +14271,8 @@
                "EpisodeViewers": "0"
           }
      ],
+     "IMDBRating": 7.1,
+     "TotalRuntime": "2h 18m",
      "Summary": [
           "Shada: a prison built by the Time Lords for defeated would-be conquerors of the universe. A scientist named Skagra needs the help of one of the prison's inmates. He finds nobody knows where Shada is anymore, except one aged Time Lord who has retired to Earth, where he is a professor at St Cedd's College. Luckily for the universe, Skagra's attempt to force the information out of Professor Chronotis coincides with a visit by the professor's old friend, the Fourth Doctor.\n"
      ],
@@ -16634,30 +16684,49 @@
      "LastBroadcast": "1984-01-13",
      "EpisodeInfo": [
           {
-               "EpisodeName": "Warriors of the Deep: Part One",
-               "EpisodeRuntime": "24:48",
-               "EpisodeDate": "1984-01-05",
-               "EpisodeViewers": "7.6"
-          },
-          {
-               "EpisodeName": "Warriors of the Deep: Part Two",
-               "EpisodeRuntime": "24:04",
-               "EpisodeDate": "1984-01-06",
-               "EpisodeViewers": "7.5"
-          },
-          {
-               "EpisodeName": "Warriors of the Deep: Part Three",
-               "EpisodeRuntime": "24:02",
-               "EpisodeDate": "1984-01-12",
-               "EpisodeViewers": "7.3"
-          },
-          {
-               "EpisodeName": "Warriors of the Deep: Part Four",
-               "EpisodeRuntime": "24:48",
-               "EpisodeDate": "1984-01-13",
-               "EpisodeViewers": "6.6"
-          }
+            "EpisodeName": "Warriors of the Deep: Part One",
+            "EpisodeRuntime": "24:48",
+            "EpisodeDate": "1984-01-05",
+            "EpisodeViewers": "7.6",
+            "EpisodeNumber": 603,
+            "EpisodeSeason": "S21E01",
+            "EpisodeRating": "6.3",
+            "EpisodeTime": "25m"
+        },
+        {
+            "EpisodeName": "Warriors of the Deep: Part Two",
+            "EpisodeRuntime": "24:04",
+            "EpisodeDate": "1984-01-06",
+            "EpisodeViewers": "7.5",
+            "EpisodeNumber": 604,
+            "EpisodeSeason": "S21E02",
+            "EpisodeRating": "6.2",
+            "EpisodeTime": "24m"
+        },
+        {
+            "EpisodeName": "Warriors of the Deep: Part Three",
+            "EpisodeRuntime": "24:02",
+            "EpisodeDate": "1984-01-12",
+            "EpisodeViewers": "7.3",
+            "EpisodeNumber": 605,
+            "EpisodeSeason": "S21E03",
+            "EpisodeRating": "6.1",
+            "EpisodeTime": "24m"
+        },
+        {
+            "EpisodeName": "Warriors of the Deep: Part Four",
+            "EpisodeRuntime": "24:48",
+            "EpisodeDate": "1984-01-13",
+            "EpisodeViewers": "6.6",
+            "EpisodeNumber": 606,
+            "EpisodeSeason": "S21E04",
+            "EpisodeRating": "6.4",
+            "EpisodeTime": "24m"
+        }
      ],
+     "IMDBRating": 6.2,
+     "TotalViewers": 29.0,
+    "TotalRuntime": "1h 37m",
      "Summary": [
           "Earth, 2084. Two global superpowers hover on the brink of war. When the TARDIS is forced to make an unplanned visit to Sea Base 4, the Fifth Doctor, Tegan and Turlough find themselves accused of being enemy agents. Quicky embroiled in a deadly game of paranoid intrigue, it becomes clear that others on the base have sabotage and murder in mind.\n",
           "However, there is a greater threat to Mankind: the Silurians and Sea Devils, prehistoric reptiles seeking to reclaim the Earth. Can the Doctor prevent them implementing their 'final solution' and triggering a war that could wipe out the entire human race?\n"
@@ -17589,18 +17658,29 @@
      "LastBroadcast": "1985-02-09",
      "EpisodeInfo": [
           {
-               "EpisodeName": "The Mark of The Rani: Part One",
-               "EpisodeRuntime": "45:01",
-               "EpisodeDate": "1985-02-02",
-               "EpisodeViewers": "6.3"
-          },
-          {
-               "EpisodeName": "The Mark of The Rani: Part Two",
-               "EpisodeRuntime": "44:32",
-               "EpisodeDate": "1985-02-09",
-               "EpisodeViewers": "7.3"
-          }
+            "EpisodeName": "The Mark of the Rani: Part Two",
+            "EpisodeRuntime": "45:01",
+            "EpisodeDate": "1985-02-02",
+            "EpisodeViewers": "6.3",
+            "EpisodeNumber": 632,
+            "EpisodeSeason": "S22E06",
+            "EpisodeRating": "6.7",
+            "EpisodeTime": "45m"
+        },
+        {
+            "EpisodeName": "The Mark of the Rani: Part Two",
+            "EpisodeRuntime": "44:32",
+            "EpisodeDate": "1985-02-09",
+            "EpisodeViewers": "7.3",
+            "EpisodeNumber": 632,
+            "EpisodeSeason": "S22E06",
+            "EpisodeRating": "6.7",
+            "EpisodeTime": "45m"
+        }
      ],
+     "IMDBRating": 6.7,
+     "TotalViewers": 27.2,
+     "TotalRuntime": "3h 0m",
      "Summary": [
           "In 19th century England, the Sixth Doctor finds himself facing two competing enemies: his old adversary, the Master, and the Rani, another Time Lord with a sinister plan. The local population is turning violent and unpredictable. With a major meeting of the brains of the Industrial Revolution due to happen in the village soon, the Doctor must work out what exactly is causing all the problems. Only the Doctor can stop the Master and the Rani's evil plans.\n"
      ],
@@ -17980,30 +18060,49 @@
      "LastBroadcast": "1986-09-27",
      "EpisodeInfo": [
           {
-               "EpisodeName": "The Trial of a Time Lord: The Mysterious Planet: Part One",
-               "EpisodeRuntime": "24:57",
-               "EpisodeDate": "1986-09-06",
-               "EpisodeViewers": "4.9"
-          },
-          {
-               "EpisodeName": "The Trial of a Time Lord: The Mysterious Planet: Part Two",
-               "EpisodeRuntime": "24:44",
-               "EpisodeDate": "1986-09-13",
-               "EpisodeViewers": "4.9"
-          },
-          {
-               "EpisodeName": "The Trial of a Time Lord: The Mysterious Planet: Part Three",
-               "EpisodeRuntime": "24:18",
-               "EpisodeDate": "1986-09-20",
-               "EpisodeViewers": "3.9"
-          },
-          {
-               "EpisodeName": "The Trial of a Time Lord: The Mysterious Planet: Part Four",
-               "EpisodeRuntime": "24:20",
-               "EpisodeDate": "1986-09-27",
-               "EpisodeViewers": "3.7"
-          }
+            "EpisodeName": "The Trial of a Time Lord: Part One",
+            "EpisodeRuntime": "24:57",
+            "EpisodeDate": "1986-09-06",
+            "EpisodeViewers": "4.9",
+            "EpisodeNumber": 640,
+            "EpisodeSeason": "S23E01",
+            "EpisodeRating": "7.1",
+            "EpisodeTime": "25m"
+        },
+        {
+            "EpisodeName": "The Trial of a Time Lord: Part Two",
+            "EpisodeRuntime": "24:44",
+            "EpisodeDate": "1986-09-13",
+            "EpisodeViewers": "4.9",
+            "EpisodeNumber": 641,
+            "EpisodeSeason": "S23E02",
+            "EpisodeRating": "6.8",
+            "EpisodeTime": "25m"
+        },
+        {
+            "EpisodeName": "The Trial of a Time Lord: Part Three",
+            "EpisodeRuntime": "24:18",
+            "EpisodeDate": "1986-09-20",
+            "EpisodeViewers": "3.9",
+            "EpisodeNumber": 642,
+            "EpisodeSeason": "S23E03",
+            "EpisodeRating": "6.8",
+            "EpisodeTime": "24m"
+        },
+        {
+            "EpisodeName": "The Trial of a Time Lord: Part Four",
+            "EpisodeRuntime": "24:20",
+            "EpisodeDate": "1986-09-27",
+            "EpisodeViewers": "3.7",
+            "EpisodeNumber": 643,
+            "EpisodeSeason": "S23E04",
+            "EpisodeRating": "6.8",
+            "EpisodeTime": "24m"
+        }
      ],
+     "IMDBRating": 6.9,
+     "TotalViewers": 17.4,
+     "TotalRuntime": "1hr 38m",
      "Summary": [
           "The Doctor is summoned before the High Council of Time Lords to stand trial for the charges of harmful interference to the course of events during his space-time excursions, which have threatened the sanctity of the universe. Indignant at these accusations, the Doctor pleads his case to the Inquisitor with the hope that she will see him as a source of hope and goodwill for existence. However, his prosecuting attorney, a sinister Time Lord known simply as the Valeyard, begins a crusade against the Doctor's life with the motive of painting him out to be a villainous renegade.\n",
           "The Valeyard's first movement against the Doctor is to review his past interactions on a familiar planet called Ravolox, where he and his-then companion Peri Brown met the morally grey Sabalom Glitz and a tyrannical robot stalking the world's desolated landscape. However, Ravolox holds a terrible truth in the far reaches of its ruins, while the Doctor's trial has its own fair share of startling twists and turns...\n"
@@ -18073,30 +18172,49 @@
      "LastBroadcast": "1986-10-25",
      "EpisodeInfo": [
           {
-               "EpisodeName": "The Trial of a Time Lord: Mindwarp: Part Five",
-               "EpisodeRuntime": "24:42",
-               "EpisodeDate": "1986-10-04",
-               "EpisodeViewers": "4.8"
-          },
-          {
-               "EpisodeName": "The Trial of a Time Lord: Mindwarp: Part Six",
-               "EpisodeRuntime": "24:45",
-               "EpisodeDate": "1986-10-11",
-               "EpisodeViewers": "4.6"
-          },
-          {
-               "EpisodeName": "The Trial of a Time Lord: Mindwarp: Part Seven",
-               "EpisodeRuntime": "24:33",
-               "EpisodeDate": "1986-10-18",
-               "EpisodeViewers": "5.1"
-          },
-          {
-               "EpisodeName": "The Trial of a Time Lord: Mindwarp: Part Eight",
-               "EpisodeRuntime": "24:44",
-               "EpisodeDate": "1986-10-25",
-               "EpisodeViewers": "5.0"
-          }
+            "EpisodeName": "The Trial of a Time Lord: Part Five",
+            "EpisodeRuntime": "24:42",
+            "EpisodeDate": "1986-10-04",
+            "EpisodeViewers": "4.8",
+            "EpisodeNumber": 644,
+            "EpisodeSeason": "S23E05",
+            "EpisodeRating": "7.0",
+            "EpisodeTime": "25m"
+        },
+        {
+            "EpisodeName": "The Trial of a Time Lord: Part Six",
+            "EpisodeRuntime": "24:45",
+            "EpisodeDate": "1986-10-11",
+            "EpisodeViewers": "4.6",
+            "EpisodeNumber": 645,
+            "EpisodeSeason": "S23E06",
+            "EpisodeRating": "6.9",
+            "EpisodeTime": "25m"
+        },
+        {
+            "EpisodeName": "The Trial of a Time Lord: Part Seven",
+            "EpisodeRuntime": "24:33",
+            "EpisodeDate": "1986-10-18",
+            "EpisodeViewers": "5.1",
+            "EpisodeNumber": 646,
+            "EpisodeSeason": "S23E07",
+            "EpisodeRating": "6.8",
+            "EpisodeTime": "25m"
+        },
+        {
+            "EpisodeName": "The Trial of a Time Lord: Part Eight",
+            "EpisodeRuntime": "24:44",
+            "EpisodeDate": "1986-10-25",
+            "EpisodeViewers": "5.0",
+            "EpisodeNumber": 647,
+            "EpisodeSeason": "S23E08",
+            "EpisodeRating": "7.3",
+            "EpisodeTime": "25m"
+        }
      ],
+     "IMDBRating": 7.0,
+     "TotalViewers": 19.5,
+     "TotalRuntime": "1hr 40m",
      "Summary": [
           "As the trial of the Doctor continues, evidence is presented showing his most recent adventure - where he faces an old adversary, Sil. As a scientist conducts his unethical experiments to prolong the life of Sil's boss Kiv, the Doctor's memory of the events begins to return... and an unpleasant surprise awaits him.\n"
      ],
@@ -18181,30 +18299,49 @@
      "LastBroadcast": "1986-11-22",
      "EpisodeInfo": [
           {
-               "EpisodeName": "The Trial of a Time Lord: Terror of the Vervoids: Part Nine",
-               "EpisodeRuntime": "24:56",
-               "EpisodeDate": "1986-11-01",
-               "EpisodeViewers": "5.2"
-          },
-          {
-               "EpisodeName": "The Trial of a Time Lord: Terror of the Vervoids: Part Ten",
-               "EpisodeRuntime": "24:18",
-               "EpisodeDate": "1986-11-08",
-               "EpisodeViewers": "4.6"
-          },
-          {
-               "EpisodeName": "The Trial of a Time Lord: Terror of the Vervoids: Part Eleven",
-               "EpisodeRuntime": "24:07",
-               "EpisodeDate": "1986-11-15",
-               "EpisodeViewers": "5.3"
-          },
-          {
-               "EpisodeName": "The Trial of a Time Lord: Terror of the Vervoids: Part Twelve",
-               "EpisodeRuntime": "24:45",
-               "EpisodeDate": "1986-11-22",
-               "EpisodeViewers": "5.2"
-          }
+            "EpisodeName": "The Trial of a Time Lord: Part Nine",
+            "EpisodeRuntime": "24:56",
+            "EpisodeDate": "1986-11-01",
+            "EpisodeViewers": "5.2",
+            "EpisodeNumber": 648,
+            "EpisodeSeason": "S23E09",
+            "EpisodeRating": "6.8",
+            "EpisodeTime": "25m"
+        },
+        {
+            "EpisodeName": "The Trial of a Time Lord: Part Ten",
+            "EpisodeRuntime": "24:18",
+            "EpisodeDate": "1986-11-08",
+            "EpisodeViewers": "4.6",
+            "EpisodeNumber": 649,
+            "EpisodeSeason": "S23E10",
+            "EpisodeRating": "6.7",
+            "EpisodeTime": "24m"
+        },
+        {
+            "EpisodeName": "The Trial of a Time Lord: Part Eleven",
+            "EpisodeRuntime": "24:07",
+            "EpisodeDate": "1986-11-15",
+            "EpisodeViewers": "5.3",
+            "EpisodeNumber": 650,
+            "EpisodeSeason": "S23E11",
+            "EpisodeRating": "6.8",
+            "EpisodeTime": "24m"
+        },
+        {
+            "EpisodeName": "The Trial of a Time Lord: Part Twelve",
+            "EpisodeRuntime": "24:45",
+            "EpisodeDate": "1986-11-22",
+            "EpisodeViewers": "5.2",
+            "EpisodeNumber": 651,
+            "EpisodeSeason": "S23E12",
+            "EpisodeRating": "6.8",
+            "EpisodeTime": "25m"
+        }
      ],
+     "IMDBRating": 6.8,
+     "TotalViewers": 20.3,
+     "TotalRuntime": "1h 38m",
      "Summary": [
           "The Time Lords have brought the Doctor to trial, accusing him of gross interference in the affairs of other planets. If he is found guilty he must forfeit all his remaining regenerations. In the hope of proving his innocence, Melanie Bush, an as-of-yet unmet companion from later in his life, is summoned to the court. Hopefully, through her help, the jurors will be reassured in letting the Doctor go free by seeing what good acts he stands to commit as opposed to destructive ones.\n",
           "In his defence, the Doctor tells of an adventure from his personal future - set on board the Hyperion III space liner in his future.\u00a0Answering a distress call, the Doctor and Mel arrive on the liner just as a series of grisly murders begins.\n"
@@ -18265,18 +18402,29 @@
      "LastBroadcast": "1986-12-06",
      "EpisodeInfo": [
           {
-               "EpisodeName": "The Trial of a Time Lord: The Ultimate Foe: Part Thirteen",
-               "EpisodeRuntime": "24:42",
-               "EpisodeDate": "1986-11-29",
-               "EpisodeViewers": "4.4"
-          },
-          {
-               "EpisodeName": "The Trial of a Time Lord: The Ultimate Foe: Part Fourteen",
-               "EpisodeRuntime": "29:30",
-               "EpisodeDate": "1986-12-06",
-               "EpisodeViewers": "5.6"
-          }
+            "EpisodeName": "The Trial of a Time Lord: Part Thirteen",
+            "EpisodeRuntime": "24:42",
+            "EpisodeDate": "1986-11-29",
+            "EpisodeViewers": "4.4",
+            "EpisodeNumber": 652,
+            "EpisodeSeason": "S23E13",
+            "EpisodeRating": "7.3",
+            "EpisodeTime": "25m"
+        },
+        {
+            "EpisodeName": "The Trial of a Time Lord: Part Four",
+            "EpisodeRuntime": "29:30",
+            "EpisodeDate": "1986-12-06",
+            "EpisodeViewers": "5.6",
+            "EpisodeNumber": 643,
+            "EpisodeSeason": "S23E04",
+            "EpisodeRating": "6.8",
+            "EpisodeTime": "24m"
+        }
      ],
+     "IMDBRating": 7.0,
+     "TotalViewers": 10.0,
+     "TotalRuntime": "0h 49m",
      "Summary": [
           "Charged with genocide by the treacherous Valeyard at his trial, the Doctor receives help from an unlikely source to turn the tide of the High Council's rulings in his favour and reveal the Valeyard as a wrongdoer - the Master. For the Valeyard's own crimes are so atrocious, even the Doctor's archenemy will help him to ensure that the villain won't see the light of day again. Cornered, the Valeyard flees to the Matrix, where he can be the Doctor's judge, jury and executioner...\n"
      ],
@@ -18337,30 +18485,49 @@
      "LastBroadcast": "1987-09-28",
      "EpisodeInfo": [
           {
-               "EpisodeName": "Time and the Rani: Part One",
-               "EpisodeRuntime": "24:44",
-               "EpisodeDate": "1987-09-07",
-               "EpisodeViewers": "5.1"
-          },
-          {
-               "EpisodeName": "Time and the Rani: Part Two",
-               "EpisodeRuntime": "24:36",
-               "EpisodeDate": "1987-09-14",
-               "EpisodeViewers": "4.2"
-          },
-          {
-               "EpisodeName": "Time and the Rani: Part Three",
-               "EpisodeRuntime": "24:23",
-               "EpisodeDate": "1987-09-21",
-               "EpisodeViewers": "4.3"
-          },
-          {
-               "EpisodeName": "Time and the Rani: Part Four",
-               "EpisodeRuntime": "24:38",
-               "EpisodeDate": "1987-09-28",
-               "EpisodeViewers": "4.9"
-          }
+            "EpisodeName": "Time and the Rani: Part One",
+            "EpisodeRuntime": "24:44",
+            "EpisodeDate": "1987-09-07",
+            "EpisodeViewers": "5.1",
+            "EpisodeNumber": 654,
+            "EpisodeSeason": "S24E01",
+            "EpisodeRating": "5.6",
+            "EpisodeTime": "25m"
+        },
+        {
+            "EpisodeName": "Time and the Rani: Part Two",
+            "EpisodeRuntime": "24:36",
+            "EpisodeDate": "1987-09-14",
+            "EpisodeViewers": "4.2",
+            "EpisodeNumber": 655,
+            "EpisodeSeason": "S24E02",
+            "EpisodeRating": "5.5",
+            "EpisodeTime": "24m"
+        },
+        {
+            "EpisodeName": "Time and the Rani: Part Three",
+            "EpisodeRuntime": "24:23",
+            "EpisodeDate": "1987-09-21",
+            "EpisodeViewers": "4.3",
+            "EpisodeNumber": 656,
+            "EpisodeSeason": "S24E03",
+            "EpisodeRating": "5.3",
+            "EpisodeTime": "24m"
+        },
+        {
+            "EpisodeName": "Time and the Rani: Part Four",
+            "EpisodeRuntime": "24:38",
+            "EpisodeDate": "1987-09-28",
+            "EpisodeViewers": "4.9",
+            "EpisodeNumber": 657,
+            "EpisodeSeason": "S24E04",
+            "EpisodeRating": "5.3",
+            "EpisodeTime": "24m"
+        }
      ],
+     "IMDBRating": 5.4,
+     "TotalViewers": 18.5,
+     "TotalRuntime": "1h 37m",
      "Summary": [
           "The First Rani has returned after her last encounter with the Doctor, with yet another malicious scientific scheme.\n",
           "Taking advantage of the post-regenerative trauma the recently regenerated and unstable Doctor is going through, the Rani hopes to achieve control of an approaching asteroid composed entirely of strange matter.\n",

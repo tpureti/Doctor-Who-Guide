@@ -288,7 +288,8 @@ def getWikiInfo(URL):
             # print(ep_date)
 
             if basic_info["Title"] != "Invasion of the Dinosaurs" or ep_name != "Part One":
-                info["EpisodeName"] = basic_info["Title"] + ": " + ep_name
+                info["EpisodeName"] = basic_info["Title"] + \
+                    ": " + ep_name
             else:
                 info["EpisodeName"] = "Invasion: " + ep_name
 
@@ -317,7 +318,7 @@ def getWikiInfo(URL):
     return wiki_info
 
 
-URL = "https://en.wikipedia.org/wiki/The_Five_Doctors"
+URL = "https://en.wikipedia.org/wiki/Time_and_the_Rani"
 wiki_info = getWikiInfo(URL)
 
 # for entry, values in wiki_info.items():

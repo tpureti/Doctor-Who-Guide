@@ -16,6 +16,7 @@
   --essential-button: var(--clr-dark-yellow);
   --castcrew-button: var(--clr-bright-orange);
   --summary-button: var(--clr-pale-red);
+  --eps-button: #f674c2;
   --opacity-transition: opacity .5s ease-in-out;
   --button-transition: background-color .5s ease-in-out;
 }
@@ -264,17 +265,25 @@ h1.title {
   margin-right: 10px;
 }
 
-// title_area contains: NUMBER, TITLE, ESSENTIAL STATUS
+// title_area contains: NUMBER, TITLE, DOCTOR, AND RATING
 .title_area {
   // styling
-  padding: 2.25rem 1.5rem 1rem;
+  padding: 2.25rem 2rem 1.5rem;
   border-bottom: 1px solid var(--clr-med-grey);
+  background-color: #1d1c1c;
   // positioning
   grid-column: 3 / -1;
   grid-row: 1 / 1;
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: left;
+  display: inline-flex;
+  width: 100%;
+  flex: 1 1 auto;
+  align-items: center;
+}
+
+.title_1 {
+    display: flex;
+    flex: 1 1 auto;
+    flex-wrap: wrap;
 }
 
 .number {
@@ -292,8 +301,9 @@ h1.title {
   // styling
   line-height: 1;
   // positioning
-  flex: 1 1 auto;
-  align-self: flex-end;
+  // flex: 1 1 auto;
+  // justify-self: flex-start;
+  // align-self: flex-end;
   margin: .25rem;
 }
 
@@ -312,21 +322,63 @@ h1.title {
   display: flex;
   flex-wrap: wrap;
   justify-content: left;
+  align-items: baseline;
 }
 
 .doctor span {
   // styling
-  font-size: var(--fs-xl);
+  font-size: var(--fs-md);
   color: var(--clr-pale-red);
   font-weight: 600;
   border-radius: 5px;
   // positioning
-  margin: .2rem .5rem;
+  margin: .2rem .3rem;
 
   &:first-child {
     color: var(--primary-doctor);
     font-size: var(--fs-2xl);
   }
+}
+
+.rating_area {
+  // styling
+  // background-color: #1d1c1c;
+  // positioning
+  // display: flex;
+  // flex: 0 0 100%;
+  // justify-content: flex-end;
+  // align-items: center;
+  // align-self: center;
+}
+
+.rating {
+  // styling
+  font-size: var(--fs-xl);
+  font-weight: 700;
+  color: var(--clr-dark-grey-1);
+  background-color: var(--clr-bright-yellow);
+  padding: .25rem .75rem;
+  border-radius: 5px;
+  text-align: center;
+  // positioning
+  transition: var(--button-transition);
+
+  // &:hover {
+  //   background-color: var(--clr-dark-grey-1);
+  //   color: var(--clr-bright-yellow);
+  //   transition: var(--button-transition);
+  // }
+
+  // &:hover span {
+  //   display: none;
+  //   transition: var(--button-transition);
+  // }
+
+  // &:hover:before {
+  //   font-size: var(--fs-xl);
+  //   content: "imdb";
+  //   transition: var(--button-transition);
+  // }
 }
 
 // info_area contains: DOCTOR, COMPANIONS, SEASON, EPISODES, SUMMARY, FIRST AND LAST BROADCAST
@@ -375,7 +427,7 @@ h1.title {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
   gap: .5rem;
-  align-content: space-between;
+  align-content: stretch;
   align-items: start;
   justify-items: start;
   justify-content: center;
@@ -387,12 +439,20 @@ h1.title {
   }
 }
 
+.episodes_info {
+  opacity: 0;
+  height: 0;
+  transition: var(--opacity-transition);
+  visibility: hidden;
+  overflow: auto;
+}
+
 .info_divs {
     margin: 1.5rem 2rem 0 1rem;
     display: flex;
     gap: .5rem;
     flex-direction: column;
-    justify-content: space-between;
+    justify-content: space-evenly;
 }
 
 .season, .episodes {
@@ -438,6 +498,20 @@ h1.title {
   display: block;
 }
 
+.eps_area {
+  display: flex;
+  flex-direction: column;
+  flex: 1 1 50%;
+}
+
+.episode_name {
+  // styling
+  font-size: var(--fs-lg);
+  font-weight: 500;
+  // positioning
+  text-align: left;
+}
+
 .button_area {
   grid-column: 1 / 3;
   width: 100%;
@@ -452,7 +526,7 @@ h1.title {
   // styling
   padding: .6rem 1.25rem;
   font-family: var(--ff-sans);
-  font-size: var(--fs-xl);
+  font-size: var(--fs-lg);
   font-weight: 600;
   line-height: 1;
   color: var(--clr-dark-grey-2);
@@ -486,11 +560,20 @@ h1.title {
       color: var(--summary-button);
     }
   }
+  
+  &_episodes {
+    background-color: var(--eps-button);
+    transition: var(--button-transition);
+
+    &:hover, &:active {
+      color: var(--eps-button);
+    }
+  }
 }
 
 .active_button {
   background-color: var(--clr-dark-grey-2);
-
+#f674c2
   &:is(.button_essential) {
     color: var(--essential-button);
   }
@@ -501,6 +584,9 @@ h1.title {
 
   &:is(.button_summary) {
     color: var(--summary-button);
+  }
+  &:is(.button_episodes) {
+    color: var(--eps-button);
   }
 }
 
