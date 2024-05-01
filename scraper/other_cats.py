@@ -135,12 +135,15 @@ def getVotes(wiki_info):
             imdb_votes.append(extra_info)
 
             for info in wiki_info["EpisodeInfo"]:
-                if re.search(ep_name, info["EpisodeName"]):
+                if re.search(": " + ep_name, info["EpisodeName"]):
+                    # print(info["EpisodeName"])
+                    # print(ep_name)
 
                     # add story title to episode name
-                    # if int(wiki_info["Number"]) < 26:
-                    #     title = wiki_info["Title"]
-                    #     extra_info["EpisodeName"] = title + ": " + ep_name
+                    if int(wiki_info["Number"]) < 26:
+                        title = wiki_info["Title"]
+                        extra_info["EpisodeName"] = title + ": " + ep_name
+                    # print(extra_info)
                     info.update(extra_info)
 
                     # calculate average rating of each episode
@@ -180,7 +183,7 @@ def getVotes(wiki_info):
                     # print(info)
 
 
-# getVotes(wiki_info)
+getVotes(wiki_info)
 
 
 def getRatings(URL, wiki):
