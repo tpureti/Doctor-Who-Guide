@@ -18,7 +18,7 @@
   --summary-button: var(--clr-pale-red);
   --eps-button: #f674c2;
   --opacity-transition: opacity .5s ease-in-out;
-  --button-transition: background-color .5s ease-in-out;
+  --button-transition: .5s ease-in-out;
 }
 
 /*
@@ -98,8 +98,10 @@ h1.title {
 }
 
 .filters {
+  --clr-main-filters: var(--clr-light-blue);
+
   font-family: var(--ff-sans);
-  background-color: var(--clr-light-blue);
+  background-color: var(--clr-main-filters);
   color: var(--clr-dark-grey-2);
   transition: var(--button-transition);
   line-height: 1;
@@ -108,11 +110,12 @@ h1.title {
   &:hover, &:active {
       transition: var(--button-transition);
       background-color: var(--clr-dark-grey-2);
-      color: var(--clr-light-blue);
+      color: var(--clr-main-filters);
     }
 
     &:is(.filters_essential) {
       transition: var(--button-transition);
+      color: var(--clr-dark-grey-2);
       background-color: var(--clr-dark-yellow);
 
       &:hover, &:active {
@@ -197,18 +200,16 @@ h1.title {
 .clicked_buttons {
   display: none;
   width: min(45rem, 100%);
-  // display: flex;
-  flex: 1 1 auto;
-  flex-wrap: wrap;
-  gap: .5rem;
   padding: 1rem;
-  background-color: var(--clr-dark-grey-2);
+  // background-color: var(--clr-dark-grey-2);
+  // display: flex;
+  align-items: center;
   
   .filters {
     font-size: var(--fs-xl);
     min-width: 4rem;
     display: flex;
-    flex: 0 0.5 auto;
+    flex: 0 0 auto;
     justify-content: center;
     font-weight: 600;
     text-transform: capitalize;
@@ -218,7 +219,48 @@ h1.title {
     &:hover, &:active {
       transition: var(--button-transition);
     }
+  }
 }
+
+.active_buttons {
+  gap: .5rem;
+  display: flex;
+  flex: 1 1 auto;
+  flex-wrap: wrap;
+
+  .filters {
+    display: flex;
+    align-items: center;
+  }
+
+  .filters::after {
+    font-weight: 700;
+    padding-left: 8px;
+    font-size: var(--fs-md);
+    color: var(--clr-bright-red);
+    content: "✕";
+  }
+}
+
+.clear_filters {
+  --background-color: var(--clr-med-grey);
+  // styling
+  font-size: var(--fs-lg);
+  font-weight: 600;
+  background-color: var(--background-color);
+
+  // positioning
+  display: inline-flex;
+  justify-content: flex-end;
+  align-items: center;
+  padding: .5rem .75rem;
+  margin-left: 1rem;
+  transition: var(--button-transition);
+
+  &:hover, &:active {
+    background-color: var(--clr-bright-red);
+    transition: var(--button-transition);
+  }
 }
 
 #container {
@@ -501,15 +543,39 @@ h1.title {
 .eps_area {
   display: flex;
   flex-direction: column;
-  flex: 1 1 50%;
+  flex: 1 1 auto;
+}
+
+.ep_info {
+  display: flex;
+  flex: 1 1 auto;
+  flex-wrap: wrap;
+  justify-content: space-evenly;
+  padding: .5rem;
+  margin: .75rem;
+  border: 1px solid var(--clr-med-grey);
 }
 
 .episode_name {
   // styling
-  font-size: var(--fs-lg);
-  font-weight: 500;
+  font-size: var(--fs-xl);
+  font-weight: 600;
+  color: var(--clr-dark-yellow);
   // positioning
-  text-align: left;
+  display: inline-flex;
+  justify-content: center;
+  width: 100%;
+  padding-bottom: .5rem;
+  border-bottom: 1px solid var(--clr-med-grey);
+}
+
+.ep_number, .ep_date, .ep_runtime, .ep_viewers, .ep_rating {
+  // styling
+  font-size: var(--fs-lg);
+  font-weight: 600;
+  // positioning
+  padding-top: .5rem;
+  display: inline-flex;
 }
 
 .button_area {

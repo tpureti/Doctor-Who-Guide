@@ -33,3 +33,36 @@ img {
 	max-width: 100%;
 	height: auto;
 }
+
+button {
+	font-size: 100%;
+	font-family: inherit;
+	line-height: inherit;
+	border: 0;
+	padding: 0;
+	color: inherit;
+	background: none;
+	white-space: nowrap;
+	cursor: pointer;
+}
+
+/**
+ * Remove the inheritance of text transform in Edge, Firefox, and IE.
+ * 1. Remove the inheritance of text transform in Firefox.
+ */
+
+button,
+select { /* 1 */
+  text-transform: none;
+}
+
+/**
+ * Correct the inability to style clickable types in iOS and Safari.
+ */
+
+button,
+[type="button"],
+[type="reset"],
+[type="submit"] {
+  -webkit-appearance: button;
+}

@@ -318,7 +318,7 @@ def getWikiInfo(URL):
     return wiki_info
 
 
-URL = "https://en.wikipedia.org/wiki/The_Daleks%27_Master_Plan"
+URL = "https://en.wikipedia.org/wiki/Invasion_of_the_Dinosaurs"
 wiki_info = getWikiInfo(URL)
 
 # for entry, values in wiki_info.items():

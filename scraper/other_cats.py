@@ -135,7 +135,7 @@ def getVotes(wiki_info):
             imdb_votes.append(extra_info)
 
             for info in wiki_info["EpisodeInfo"]:
-                if re.search(": " + ep_name, info["EpisodeName"]):
+                if re.match(info["EpisodeName"], ep_name):
                     # print(info["EpisodeName"])
                     # print(ep_name)
 

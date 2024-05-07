@@ -52,7 +52,13 @@ const essential_area = document.querySelector(".essential_area");
 const essential = document.querySelector(".essential_reason");
 // episode info
 const ep_area = document.querySelector(".eps_area");
+const ep_info = document.querySelector(".ep_info");
 const ep_name = document.querySelector(".episode_name");
+const ep_number = document.querySelector(".ep_number");
+const ep_date = document.querySelector(".ep_date");
+const ep_runtime = document.querySelector(".ep_runtime");
+const ep_viewers = document.querySelector(".ep_viewers");
+const ep_rating = document.querySelector(".ep_rating");
 
 // buttons
 const filter_button = document.querySelectorAll(".filters");
@@ -69,6 +75,8 @@ const filter_scripteditors = document.querySelector("[data-filter=script]");
 
 const nav_area = document.querySelector("#nav");
 const clicked_buttons = document.querySelector(".clicked_buttons");
+const active_buttons = document.querySelector(".active_buttons");
+const clear_filters = document.querySelector(".clear_filters");
 
 allowTransitions();
 
@@ -84,13 +92,14 @@ async function getJSON() {
 getJSON()
   .then(data => {
     postData(data);
-    // clickEssentialButton(data);
-    // populateButtons(data, "Doctor", filter_doctors);
-    // populateButtons(data, "Season", filter_seasons);
-    // showFilters(filters_more, extra_filters);
-    // populateButtons(data, "Companion", filter_companions);
+    clickEssentialButton(data);
+    populateButtons(data, "Doctor", filter_doctors);
+    populateButtons(data, "Season", filter_seasons);
+    clearFilters(data);
+    showFilters(filters_more, extra_filters);
+    populateButtons(data, "Companion", filter_companions);
     // populateButtons(data, "Producer", filter_producers);
-    // populateButtons(data, "Writer", filter_writers);
+    populateButtons(data, "Writer", filter_writers);
     // populateButtons(data, "ScriptEditor", filter_scripteditors);
     // addButtonClickEvents();
 })
@@ -98,8 +107,8 @@ getJSON()
     console.log("error: JSON not found")
   });
 
-getJSON()
-  .then(data => clickEssentialButton(data));
+// getJSON()
+//   .then(data => clickEssentialButton(data));
 
 function showFilters(filter, extra_area) {
   filter.addEventListener("click", () => {
@@ -134,8 +143,12 @@ function populateButtons(data, field, filter) {
   // create extra section which has all the new filters in it
   const extra = document.createElement("section");
   extra.classList.add("extra_filters", "hide");
+  extra.setAttribute("category", field);
   nav_area.appendChild(extra);
   // extra.style.display = none;
+
+  // counter
+  let i = 0;
 
   key.forEach((item) => {
     // checks if item exists and there are no empty strings
@@ -143,27 +156,67 @@ function populateButtons(data, field, filter) {
       // create the button and add to extra filters area
       const button = document.createElement("button");
       button.classList.add("filters");
+      button.setAttribute("category", field);
+      button.setAttribute("filter", item);
+
+      button.setAttribute("data-order", i);
+      i++;
+
       button.innerHTML = item;
       extra.appendChild(button);
       
       // get each story which matches the filter button
-      clickFilter(button, data, field, item);
+      clickFilter(button, data, field, item, extra);
     }
   });
   showFilters(filter, extra);
 }
 
-function clickFilter(filter_button, data, field, item) {
-  // clone button that was clicked
-  let button = filter_button.cloneNode(true);
+let categories = [];
+let categoriesActive = new Map();
+let filtersClicked = [];
+
+let i = 0;
+function clickFilter(filter_button, data, category, item) {
   // add eventlistener when clicked
   filter_button.addEventListener("click", ()=> {
     // if button has already been clicked
     if (filter_button.classList.contains("filter_button")) {
       filter_button.classList.remove("filter_button");
+      // remove button from filter bar and add it back to the extra_area
+      active_buttons.removeChild(filter_button);
+      // extra.appendChild(filter_button);
+
+      // if all buttons have been unclicked and area is empty
+      if (!active_buttons.hasChildNodes()) {
+        // hide area of clicked buttons
+        active_buttons.innerHTML = '';
+        clicked_buttons.style.display = "none";
+      }
+
+      // reset container
       container.innerHTML = '';
-      clicked_buttons.removeChild(button);
-      postData(data);
+      // reset order of buttons
+      resetButtonOrder(filter_button);
+
+      // keep track of category unpressed
+      categories = categories.filter(e => e !== item);
+
+      categoriesActive.forEach((value, key) =>
+      {
+        if (key === category) {
+          categoriesActive.set(category, value - 1);
+          if (value <= 0) {
+            categoriesActive.delete(key);
+          }
+        }
+      });
+      // console.log(categoriesActive);
+
+      // keep track of filters pressed
+      filtersClicked = filtersClicked.filter(e => e !== item);
+
+      showFilteredStories(data, category, item);
     }
     // if button hasn't been clicked
      else {
@@ -171,166 +224,163 @@ function clickFilter(filter_button, data, field, item) {
       container.innerHTML = '';
       clicked_buttons.style.display = "flex";
       clicked_buttons.style.maxHeight = "auto";
-      clicked_buttons.appendChild(button);
+      active_buttons.appendChild(filter_button);
+
+      // keep track of categories pressed
+      categories.push(category);
+      if (categoriesActive.has(category)) {
+        categoriesActive.set(category, i++);
+      }
+      else if (!categoriesActive.has(category)) {
+        i = 0;
+        categoriesActive.set(category, i++);
+      }
+      console.log(categoriesActive);
+      // keep track of filters pressed
+      filtersClicked.push(item);
+
       // show results from buttons
-      showFilteredStories(data, field, item);
+      showFilteredStories(data, category, item);
      }
   });
 }
 
-function addToFilterBar() {
+function clearFilters(data) {
+  clear_filters.addEventListener("click", ()=> {
+    let active_buttons = document.querySelector(".active_buttons");
+    active_buttons = Array.from(active_buttons.children);
 
-}
+    for (let button of active_buttons) {
+      resetButtonOrder(button);
+    }
 
-let filteredStories = [];
-let categories = [];
-let filteredResults = [];
-let filters = [];
-// let stories = [];
-
-function showFilteredStories(data, currentCategory, item) {
-  // keep track of categories pressed
-  if (categories.at(-1) !== currentCategory) {
-    categories.push(currentCategory);
-  }
-  // keep track of filters pressed
-  filters.push(item);
-  // console.log(categories);
-  // console.log(filters);
-
-  const stories = data.forEach(data => {
-    if (Array.isArray(data[currentCategory])) {
-      for (let filter of data[currentCategory]) {
-        if (filter === item) {
-          console.log(data);
-          return data;
-        }
+    // hide area of clicked buttons
+    active_buttons.innerHTML = '';
+    clicked_buttons.style.display = "none";
+    // remove "active" class from active buttons
+    const filter_button = document.querySelectorAll(".filter_button");
+    for (let button of filter_button) {
+      if (button.classList.contains("filter_button")) {
+        button.classList.remove("filter_button");
       }
     }
-    else {
-      if (data[currentCategory] === item) {
-          console.log(data);
-          return data;
-        }
+    // remove extra sections of buttons
+    const extra_filters = document.querySelectorAll(".extra_filters");
+    for (let area of extra_filters) {
+      if (area.classList.contains("show")) {
+        area.classList.remove("show");
+        area.classList.add("hide");
       }
-  });
+    }
+    // clear filters and categories clicked
+    categories = [];
+    categoriesActive.clear();
+    filtersClicked = [];
+    // post default page
+    container.innerHTML = '';
+    postData(data);
+  })
+}
 
-  console.log(stories);
+function resetButtonOrder(button) {
+    // get category of button clicked
+    let cat = button.getAttribute("category");
+    // grab buttons in extra_filters
+    const extra_buttons = document.querySelector(".extra_filters[category=" + cat + "]")
+    // add button back into area
+    extra_buttons.appendChild(button);    
+    let buttons = Array.from(extra_buttons.children);
+    // do a comparative sort
+    let sorted = buttons.sort(function(a, b) {
+      return +a.dataset.order - +b.dataset.order
+    });
+    // clear area and re-add buttons in order
+    extra_buttons.innerHTML = '';
+    sorted.forEach(button => extra_buttons.append(button));
+}
+
+function showFilteredStories(data, currentCategory, item) {
+  // console.log(categories);
+  console.log(filtersClicked);
+  // find previous category
+  let penultimateCategory = categories.at(-1);
+
   
-  let categoriesOrder = [...new Set(categories.concat(currentCategory))];
+  if (categories.length === 0 || filtersClicked.length === 0) {
+    postData(data);
+  }
 
-  // let lastCategory = categoriesOrder.at(-1);
-  let penultimateCategory = categories.at(-2);
+  let category = Array.from(categoriesActive.keys());
+  // console.log(cat);
 
-  filteredStories = [... new Set(filteredStories.concat(stories))];
-  // console.log(filteredStories);
+  console.log(category);
+  // cat.shift();
 
-  filters.some(filter => {
-    // console.log(filter);
-      filteredStories.filter(data => {
-        if (data[currentCategory].includes(filter)) {
-          let lastFilter = data[penultimateCategory][0];
-          // console.log(data[penultimateCategory]);
-          // console.log(data);
-          
-          if (!filters.includes(lastFilter)) {
-            // console.log(lastFilter); 
+
+  let filteredStories = [];
+  // filter stories
+  const stories = data.filter(data => {
+    // grab the latest category from activeCategories
+    let currentCategory = category.at(-1);
+    let filters = data[currentCategory];
+
+    //reverse the categories array 
+    let reverseCategories = category.reverse();
+    // let previous_filter;
+    // // go through categories in reverse
+    // for (let category of reverseCategories) {
+    //   previous_filter = data[category];
+    // }
+    let previousCategory = reverseCategories.at(-1);
+    let previous_filter = data[previousCategory];
+
+    // make sure filter exists and isn't empty
+    if (currentCategory in data && typeof filters !== 'undefined') { 
+      // create array if object is single item
+      if (!Array.isArray(filters)) {
+        filters = new Array(filters);
+      }
+
+      // goes through the matching categories and matches with the clicked filters
+      filters.forEach(filter => {
+        // console.log(filter);
+        filtersClicked.some(clickedFilter => {     
+        if (filter === clickedFilter) {
+          // checks if there's more than one category and matches it to previous categories
+          if (reverseCategories.length > 1) {
+            // create array if object is single item
+            if (!Array.isArray(previous_filter)) {
+              previous_filter = new Array(previous_filter);
+            }
+            // check if filter based on previous category is applied
+            previous_filter.forEach(prev_filter => {
+              console.log(prev_filter);
+              filtersClicked.some(filter => {
+                console.log(filter);
+              if (prev_filter === filter) {
+                console.log(true);
+                filteredStories.push(data);
+                // console.log(data);
+                }
+              });
+            });
           }
+          // checks if category is the same as the first one
           else {
-            // console.log(lastFilter);
-            // console.log(data);
+            // push data
+            filteredStories.push(data);
           }
         }
       });
+    });
+    }
   });
-
-  /**  */
-//   let pressedFilters = {};
-
-//   pressedFilters[currentCategory] = item;
-//   filteredStories.push(pressedFilters);
-   
-//  filteredStories.forEach(object => {
-//     // console.log(object);
-//     let keys = Object.keys(object);
-//     let values = Object.values(object);
-//     // console.log(keys);
-//     // console.log(values);
-
-//     filteredResults = data.filter(storyItem => {
-//       return keys.every(category => {
-//       let storyValue = storyItem[category][0];
-//         if (storyItem[category].includes(object[category])) {
-//         let item = new Map(Object.entries(storyItem));
-
-//         console.log(storyItem);
-//      }
-//     })
-//   });
-//   });
   
+  console.log(stories);
 
-
-  // let newData = [];
-  // // console.log(filteredStories);
-  // filteredStories.filter(data => {
-  //   //  console.log(data);
-  //     pressedFilters.forEach(filter => {
-  //       if (data[currentCategory].includes(filter)) {
-  //         console.log(data);
-  //       }
-  //   });
-  // });
-
-  // filteredResults = [...new Set(filteredResults)];
-  // console.log(filteredResults);
-
-
-  // // add together results only if first and last categories match
-  // if (categories.length < 2 || firstCategory === currentCategory && penultimateCategory === currentCategory) {
-  //   filteredStories = [... new Set(filteredStories.concat(stories))];
-  //   // post results
-  //   postData(filteredStories);
-  //   console.log(filteredStories);
-  // }
-  // else if (penultimateCategory !== currentCategory && firstCategory === currentCategory) {
-  //   // add new results to old filtered results
-  //   // filteredResults = [... new Set(filteredResults.concat(stories))];
-  //   // console.log(filteredResults);
-  //   console.log(pressedFilters);
-
-  //   pressedFilters.some(value => {
-  //     // console.log(value);
-  //     stories.filter(data => {
-  //       if (data[penultimateCategory].includes(value)) {
-  //         filteredResults.push(data);
-  //       }
-  //     });
-  //   });
-  //   postData(filteredResults);
-  //   console.log(filteredResults);
-  // }
-  // // if not, filter from combined results
-  //  else {
-  //   console.log(true);
-  //   console.log(stories);
-
-  //   pressedFilters.some(value => {
-  //     filteredStories.filter(data => {
-  //       // get values of each object
-  //       let storyValues = Object.values(data);
-  //       // if value includes selected filters
-  //       if (storyValues.includes(value) && data[currentCategory].includes(item)) {
-  //         filteredResults.push(data);
-  //       }
-
-  //     });
-  //     // console.log(value);
-  //   });
-  //   console.log(filteredResults);
-  //   // post filtered results
-  //   postData(filteredResults);
-  //  }
+  filteredStories = [... new Set(filteredStories.concat(stories))];
+  console.log(filteredStories);
+  postData(filteredStories);
 }
 
 function clickEssentialButton(data) {
@@ -555,9 +605,14 @@ function postData(data) {
 function loopThroughEpisodes(story_episodes) {
   let div = '';
   story_episodes.forEach((info) => {
-    let name = info.EpisodeName;
-    ep_name.innerHTML = name;
-    let epn = ep_name.cloneNode(true);
+    ep_name.textContent = info.EpisodeName;
+    ep_number.textContent = info.EpisodeSeason;
+    const date = new Date(info.EpisodeDate).toLocaleDateString({ year: 'numeric', month: '2-digit', day: '2-digit' });
+    ep_date.textContent = date;
+    ep_runtime.textContent = info.EpisodeRuntime;
+    ep_viewers.textContent = info.EpisodeViewers;
+    ep_rating.textContent = info.EpisodeRating;
+    let epn = ep_info.cloneNode(true);
     div += epn.outerHTML;
   });
   return div;
@@ -585,9 +640,9 @@ function loopThroughArray(array) {
   if (array.length) {
     // initialize item
     let item = '' 
-    for (let i in array) {
+    for (let i of array) {
       // wraps item in <span> tags
-        item += "<span>" + array[i] + "</span>";
+        item += "<span>" + i + "</span>";
     }
     return item;
   }
