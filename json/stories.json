@@ -4361,7 +4361,7 @@
           "Guards",
           "Cheerleaders"
      ],
-     "Director": "John Davies",
+     "Director": ["John Davies"],
      "Writer": [
           "Ian Stuart Black"
      ],
@@ -9994,7 +9994,7 @@
           "Sskel",
           "Vega Nexos"
      ],
-     "Director": "Lennie Mayne",
+     "Director": ["Lennie Mayne"],
      "Writer": [
           "Brian Hayles"
      ],
@@ -18467,7 +18467,7 @@
           "Lanisha",
           "Special Voices"
      ],
-     "Director": "Andrew Morgan",
+     "Director": ["Andrew Morgan"],
      "Writer": [
           "Pip and Jane Baker"
      ],
