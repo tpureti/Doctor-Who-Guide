@@ -84,7 +84,6 @@ allowTransitions();
 async function getJSON() {
   const response = await fetch("json/stories.json");
   let data = response.json();
-  
   return data;
 }
 
@@ -92,23 +91,26 @@ async function getJSON() {
 getJSON()
   .then(data => {
     postData(data);
-    clickEssentialButton(data);
-    populateButtons(data, "Doctor", filter_doctors);
-    populateButtons(data, "Season", filter_seasons);
-    clearFilters(data);
-    showFilters(filters_more, extra_filters);
-    populateButtons(data, "Companion", filter_companions);
-    // populateButtons(data, "Producer", filter_producers);
-    populateButtons(data, "Writer", filter_writers);
-    // populateButtons(data, "ScriptEditor", filter_scripteditors);
-    // addButtonClickEvents();
+    populateAllButtons(data);
 })
   .catch(() => {
     console.log("error: JSON not found")
   });
 
-// getJSON()
-//   .then(data => clickEssentialButton(data));
+function populateAllButtons(data) {
+
+    clickEssentialButton(data);
+
+    populateButtons(data, "Doctor", filter_doctors);
+    populateButtons(data, "Season", filter_seasons);
+    populateButtons(data, "Companion", filter_companions);
+    populateButtons(data, "Producer", filter_producers);
+    populateButtons(data, "Writer", filter_writers);
+    populateButtons(data, "ScriptEditor", filter_scripteditors);
+    
+    clearFilters(data);
+    showFilters(filters_more, extra_filters);
+}
 
 function showFilters(filter, extra_area) {
   filter.addEventListener("click", () => {
@@ -172,8 +174,6 @@ function populateButtons(data, field, filter) {
 
 let filtersAndCategories = new Map();
 let filters = [];
-
-let i = 0;
 function clickFilter(filter_button, data, category, item) {
   // add eventlistener when clicked
   filter_button.addEventListener("click", ()=> {
@@ -337,11 +337,11 @@ function showFilteredStories(data) {
           // return entries where at least one or more category is present in entry
           return entries.some(entry => {
             // flatten entry
-              entry = entry.flat();
-              // get key from entry
-              let key = entry[0];
-              // remove key, leaving only values
-              entry.shift();
+            entry = entry.flat();
+            // get key from entry
+            let key = entry[0];
+            // remove key, leaving only values
+            entry.shift();
 
               // if key and category match
               if (key === category) {
