@@ -137,8 +137,6 @@ function populateButtons(data, field, filter) {
     data.map((item) => item[field])
     .reduce((accumulator, currentValue) => accumulator.concat(currentValue), [])
   )
-
-  // console.log(key);
   
   // create extra section which has all the new filters in it
   const extra = document.createElement("section");
@@ -172,8 +170,6 @@ function populateButtons(data, field, filter) {
   showFilters(filter, extra);
 }
 
-let categoriesActive = new Map();
-let filtersClicked = [];
 let filtersAndCategories = new Map();
 let filters = [];
 
@@ -215,22 +211,7 @@ function clickFilter(filter_button, data, category, item) {
 
       console.log(filtersAndCategories);
 
-      // keep track of category unpressed
-      categoriesActive.forEach((value, key) =>
-      {
-        if (key === category) {
-          categoriesActive.set(category, value - 1);
-          if (value <= 0) {
-            categoriesActive.delete(key);
-          }
-        }
-      });
-      // console.log(categoriesActive);
-
-      // keep track of filters pressed
-      filtersClicked = filtersClicked.filter(e => e !== item);
-
-      showFilteredStories(data, category, item);
+      showFilteredStories(data);
     }
     // if button hasn't been clicked
      else {
@@ -257,20 +238,8 @@ function clickFilter(filter_button, data, category, item) {
 
       console.log(filtersAndCategories);
 
-      // keep track of categories pressed
-      if (categoriesActive.has(category)) {
-        categoriesActive.set(category, i++);
-      }
-      else if (!categoriesActive.has(category)) {
-        i = 0;
-        categoriesActive.set(category, i++);
-      }
-      // console.log(categoriesActive);
-      // keep track of filters pressed
-      filtersClicked.push(item);
-
       // show results from buttons
-      showFilteredStories(data, category, item);
+      showFilteredStories(data);
      }
   });
 }
@@ -303,8 +272,7 @@ function clearFilters(data) {
       }
     }
     // clear filters and categories clicked
-    categoriesActive.clear();
-    filtersClicked = [];
+    filtersAndCategories.clear();
     // post default page
     container.innerHTML = '';
     postData(data);
@@ -328,191 +296,78 @@ function resetButtonOrder(button) {
     sorted.forEach(button => extra_buttons.append(button));
 }
 
-function showFilteredStories(data, currentCategory, currentFilter) {
-  // console.log(categories);
-  // console.log(filtersClicked);
-
+function showFilteredStories(data) {
+  // create array of categories
   let categories = Array.from(filtersAndCategories.keys());
   
-  if (categories.length === 0 || filtersClicked.length === 0) {
+  // reset page if all filters are unclicked or cleared
+  if (categories.length === 0) {
     postData(data);
   }
 
-  // console.log(cat);
-
-  // console.log(categories);
-  // cat.shift();
-
-  // filtersAndCategories.every(f => {
-  //   console.log(f);
-  // });
-
+  // array of stories to be pushed
   let filteredStories = [];
 
   // filter stories
   const stories = data.filter(data => {
-    // grab the latest category from activeCategories
+    // get the latest category
     let currentCategory = categories.at(-1);
+    // get the filter from data
     let filters = data[currentCategory];
     // console.log(currentCategory);
 
     // make sure filter exists and isn't empty
     if (currentCategory in data && typeof filters !== 'undefined') { 
 
+      //turn data into array of entries 
+      let entries = Array.from(Object.entries(data));
+      // turn filters and categories clicked into array
+      let clickedFilters = Array.from(filtersAndCategories.entries());
 
-      // create array if object is single item
-      if (!Array.isArray(filters)) {
-        filters = new Array(filters);
+      // check whether all clicked filters are present in data
+      let checkFilters = function (entries, clickedFilters) {
+        return clickedFilters.every((filter) => {
+          // flatten each entry into one array
+          filter = filter.flat();
+          // get category from first entry
+          let category = filter[0];
+          // remove first entry, leaving only filters
+          filter.shift();
+
+          // return entries where at least one or more category is present in entry
+          return entries.some(entry => {
+            // flatten entry
+              entry = entry.flat();
+              // get key from entry
+              let key = entry[0];
+              // remove key, leaving only values
+              entry.shift();
+
+              // if key and category match
+              if (key === category) {
+                // make sure at least one filter is present in key's values
+                return filter.some(f => {
+                  // console.log(entry);
+                  if (entry.includes(f)) {
+                    return true;
+                  }
+                });
+              }
+            });
+          });
       }
 
-      // goes through the matching categories and matches with the clicked filters
-      filters.forEach(filter => {
-        // console.log(filter);
+      // if filters map is in entries, push to filteredStories
+      if (checkFilters(entries, clickedFilters)) {
+        filteredStories.push(data);
+      }
 
-        filtersClicked.filter(clickedFilter => { 
-        if (filter === clickedFilter) {
-
-        let values = Object.values(data).flat();
-        // console.log(values);
-        let entries = Array.from(Object.entries(data));
-        // console.log(entries);
-
-        let checkFilters = (values, filtersClicked) =>
-          filtersClicked.every((filter) => {
-            return values.includes(filter);
-        });
-
-        // if (checkFilters(values, filtersClicked)) {
-        //   console.log(data);
-        // }
-
-        let clickedFilters2 = Array.from(filtersAndCategories.entries());
-
-        let chkFilters = function (entries, clickedFilters2) {
-          return clickedFilters2.every((filter) => {
-            // flatten each entry into one array
-            filter = filter.flat();
-            // get category from first entry
-            let category = filter[0];
-            // remove first entry, leaving only filters
-            filter.shift();
-
-            // return entries where at least one or more category is present in entry
-            return entries.some(entry => {
-              // flatten entry
-                entry = entry.flat();
-                // get key from entry
-                let key = entry[0];
-
-                // if key and category match
-                if (key === category) {
-                  // make sure at least one filter is present in key's values
-                  return filter.some(f => {
-                    if (entry[1].includes(f)) {
-                      return true;
-                    }
-                  });
-                }
-              });
-            });
-        }
-
-        if (chkFilters(entries, clickedFilters2)) {
-          console.log(data);
-        }
-        
-
-          if (categories.length <= 1) {
-            filteredStories.push(data);
-          }
-          else {
-            searchThroughFilters(data, categories, filteredStories, currentFilter);
-          }
-
-          // if (data.values().includes(clickedFilter)) {
-          //   console.log(data);
-          // }
-          
-
-          // // checks if there's more than one category and matches it to previous categories
-          // if (categories.length > 1) {
-          //   // create array if object is single item
-          //   if (!Array.isArray(previous_filter)) {
-          //     previous_filter = new Array(previous_filter);
-          //   }
-          //   // check if filter based on previous category is applied
-          //   previous_filter.forEach(prev_filter => {
-          //     filtersClicked.some(filter => {
-          //       // console.log(filter);
-          //     if (prev_filter === filter) {
-          //       filteredStories.push(data);
-          //       // console.log(data);
-          //       }
-          //     });
-          //   });
-          // }
-          // // checks if category is the same as the first one
-          // else {
-          //   // push data
-          //   filteredStories.push(data);
-          // }
-        }
-      });
-    });
     }
   });
-  // console.log(stories);
 
   filteredStories = [... new Set(filteredStories.concat(stories))];
   console.log(filteredStories);
   postData(filteredStories);
-}
-
-function compareArrays(array1, array2) {
-  return array2.every(a => {
-    return array1.includes(a);
-  });
-}
-
-function searchFilteredStories(data, filteredStories, filter) {
-  // console.log(data);
-  filteredStories.forEach(story => {
-    console.log(story);
-  });
-}
-
-let previousFilters = [];
-
-function searchThroughFilters (data, categories, filteredStories, currentFilter) {
-  // console.log(data);
-  let previousCategory = categories.at(-2);
-  let previous_filter = data[previousCategory];
-
-  // let stories = [...new Set(filteredStories)];
-  // console.log(stories);
-
-  // checks if there's more than one category and matches it to previous categories
-  if (categories.length > 1) {
-    // create array if object is single item
-    if (!Array.isArray(previous_filter)) {
-      previous_filter = new Array(previous_filter);
-    }
-    // check if filter based on previous category is applied
-    previous_filter.forEach(prev_filter => {
-      filtersClicked.some(filter => {
-        // console.log(filter);
-      if (prev_filter === filter) {
-        filteredStories.push(data);
-        // console.log(data);
-        }
-      });
-    });
-  }
-  // checks if category is the same as the first one
-  else {
-    // push data
-    filteredStories.push(data);
-  }
 }
 
 function clickEssentialButton(data) {
@@ -540,8 +395,6 @@ function clickEssentialButton(data) {
       });
   });
 }
-
-let eps_name;
 
 // function which loops through and displays json data
 function postData(data) {
