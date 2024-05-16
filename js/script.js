@@ -242,8 +242,11 @@ function clickFilter(filter_button, data, category, item) {
 
       // keep track of filters + categories pressed
       if (filtersAndCategories.has(category)) {
-        filters.push(item);
-        filtersAndCategories.set(category, filters);
+        filtersAndCategories.forEach((value, key) => {
+          if (key === category) {
+            filtersAndCategories.get(key).push(item);
+          }
+        });
       }
       else {
         // create new filter array
@@ -385,25 +388,32 @@ function showFilteredStories(data, currentCategory, currentFilter) {
 
         let clickedFilters2 = Array.from(filtersAndCategories.entries());
 
-        let st = [];
-        st = [...new Set(st)];
-
         let chkFilters = function (entries, clickedFilters2) {
           return clickedFilters2.every((filter) => {
-            // console.log(filter.flat());
+            // flatten each entry into one array
             filter = filter.flat();
-            // console.log(filter);
+            // get category from first entry
+            let category = filter[0];
+            // remove first entry, leaving only filters
+            filter.shift();
 
-          return entries.some(entry => {
-              entry = entry.flat();
-              // console.log(entry);
-              return filter.every(f => {
-                if (entry.includes(f)) {
-                 return true;
+            // return entries where at least one or more category is present in entry
+            return entries.some(entry => {
+              // flatten entry
+                entry = entry.flat();
+                // get key from entry
+                let key = entry[0];
+
+                // if key and category match
+                if (key === category) {
+                  // make sure at least one filter is present in key's values
+                  return filter.some(f => {
+                    if (entry[1].includes(f)) {
+                      return true;
+                    }
+                  });
                 }
               });
-
-            });
             });
         }
 
