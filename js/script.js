@@ -98,21 +98,35 @@ getJSON()
   });
 
 function populateAllButtons(data) {
+    // get all buttons with filters that have multiple items
+    const filters_main = document.querySelectorAll(".filters_main");
+    // go through array of filter buttons
+    filters_main.forEach(button => 
+      {
+        // get category of button
+        let category = button.dataset.filter;
+        // populate button with filters
+        populateButtons(data, category, button);
 
-    clickEssentialButton(data);
+        // add click event to each button
+        button.addEventListener("click", () => {
+          if (button.classList.contains("filter_button")) {
+            button.classList.remove("filter_button")
+          }
+          else {
+            button.classList.add("filter_button");
+          }
+        });
+      });
+      
+      const filters_misc = document.querySelectorAll(".filters_misc");
 
-    populateButtons(data, "Doctor", filter_doctors);
-    populateButtons(data, "Season", filter_seasons);
-    populateButtons(data, "Companion", filter_companions);
-    populateButtons(data, "Producer", filter_producers);
-    populateButtons(data, "Writer", filter_writers);
-    populateButtons(data, "ScriptEditor", filter_scripteditors);
-    
     clearFilters(data);
-    showFilters(filters_more, extra_filters);
+    showExtraFilters(filters_more, extra_filters);
 }
 
-function showFilters(filter, extra_area) {
+function showExtraFilters(filter, extra_area) {
+  console.log(filter);
   filter.addEventListener("click", () => {
     // if area is hidden show area on click
     if (extra_area.classList.contains("hide")) {
@@ -133,19 +147,20 @@ function showFilters(filter, extra_area) {
   });
 }
 
-function populateButtons(data, field, filter) { 
+function populateButtons(data, category, filter) { 
   // create a new set based off the filter keys
   const key = new Set(
-    data.map((item) => item[field])
+    data.map((item) => item[category])
     .reduce((accumulator, currentValue) => accumulator.concat(currentValue), [])
   )
   
   // create extra section which has all the new filters in it
   const extra = document.createElement("section");
   extra.classList.add("extra_filters", "hide");
-  extra.setAttribute("category", field);
+  extra.setAttribute("category", category);
   nav_area.appendChild(extra);
-  // extra.style.display = none;
+  // show area when clicked
+  showExtraFilters(filter, extra);
 
   // counter
   let i = 0;
@@ -156,7 +171,7 @@ function populateButtons(data, field, filter) {
       // create the button and add to extra filters area
       const button = document.createElement("button");
       button.classList.add("filters");
-      button.setAttribute("category", field);
+      button.setAttribute("category", category);
       button.setAttribute("filter", item);
 
       button.setAttribute("data-order", i);
@@ -166,12 +181,12 @@ function populateButtons(data, field, filter) {
       extra.appendChild(button);
       
       // get each story which matches the filter button
-      clickFilter(button, data, field, item, extra);
+      clickFilter(button, data, category, item, extra);
     }
   });
-  showFilters(filter, extra);
 }
 
+// map that tracks which buttons are clicked
 let filtersAndCategories = new Map();
 let filters = [];
 function clickFilter(filter_button, data, category, item) {
@@ -245,7 +260,7 @@ function clickFilter(filter_button, data, category, item) {
 }
 
 function clearFilters(data) {
-  clear_filters.addEventListener("click", ()=> {
+  clear_filters.addEventListener("click", () => {
     let active_buttons = document.querySelector(".active_buttons");
     active_buttons = Array.from(active_buttons.children);
 
@@ -370,31 +385,6 @@ function showFilteredStories(data) {
   postData(filteredStories);
 }
 
-function clickEssentialButton(data) {
-  // get filter
-  let filter = data.filter(data => data.Essential == true);
-  // console.log(filter);
-
-  filter_button.forEach((button, index) => {
-    button.addEventListener("click", () => {
-        if (button.classList.contains("filter_button")) {
-          // remove active button
-          button.classList.remove("filter_button");
-          // clear default
-          container.innerHTML = '';
-          // show results
-          postData(data);
-        }
-        else {
-          button.classList.add("filter_button");
-          // clear default
-          container.innerHTML = '';
-          // show results
-          postData(filter);
-        }
-      });
-  });
-}
 
 // function which loops through and displays json data
 function postData(data) {

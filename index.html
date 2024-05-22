@@ -16,11 +16,21 @@
     <nav id="nav">
       <section class="filter_area">
         <!-- ESSENTIAL -->
-        <button class="filters filters_essential" data-filter="essential">Essential</button>
+        <button class="filters filters_misc filters_essential" data-filter="Essential">Essential</button>
         <!-- BY DOCTOR -->
-        <button class="filters filters_main" data-filter="doctor">Doctors</button>
+        <button class="filters filters_main" data-filter="Doctor">Doctors</button>
         <!-- BY SEASON -->
-        <button class="filters filters_main" data-filter="season">Seasons</button>
+        <button class="filters filters_main" data-filter="Season">Seasons</button>
+        <!-- BY COMPANION -->
+        <button class="filters filters_main" data-filter="Companion">Companions</button>
+        <!-- BY RATING -->
+        <button class="filters filters_misc">By Rating</button>
+        <!-- MISSING -->
+        <button class="filters filters_misc" data-filter="MissingEpisodes">Missing</button>
+        <!-- ANIMATED -->
+        <button class="filters filters_misc" data-filter="Animated">Animated</button>
+        <!-- FAVORITES -->
+        <button class="filters filters_misc" data-filter="Favorite">♡</button>
         <!-- MORE FILTERS -->
         <button class="filters filters_more"
         data-filter="more_filters">Filters+</button>
@@ -29,23 +39,17 @@
       <!-- BAR WHERE CLICKED BUTTONS SHOW UP -->
       <section class="clicked_buttons">
         <div class="active_buttons"></div>
-        <button class="clear_filters">clear filters ✕</button>
+        <button class="clear_filters">clear all ✕</button>
       </section>
 
       <!-- EXTRA BUTTONS FOR MORE CATEGORIES -->
       <section class="extra_categories hide">
-        <button class="filters filters_main">Sort By: Story/Date</button>
-        <button class="filters filters_main">Sort By: Alphabetical</button>
-
-        <button class="filters filters_main">Missing</button>
-        <button class="filters filters_main">Animated</button>
-        <button class="filters filters_main">Favorites</button>
-
-        <button class="filters filters_main" data-filter="companion">Companions</button>
-        <button class="filters filters_main" data-filter="producer">Producers</button>
-        <button class="filters filters_main" data-filter="writer">Writers</button>
-        <button class="filters filters_main" data-filter="script">Script Editors</button>
-        <button class="filters filters_main" data-filter="villain">Villains</button>
+        <button class="filters filters_main" data-filter="Producer">Producers</button>
+        <button class="filters filters_main" data-filter="Director">Directors</button>
+        <button class="filters filters_main" data-filter="Writer">Writers</button>
+        <button class="filters filters_main" data-filter="ScriptEditor">Script Editors</button>
+        <button class="filters filters_main" data-filter="Music">Composers</button>
+        <button class="filters filters_main" data-filter="Villain">Villains</button>
       </section>
     </nav>
   </div>

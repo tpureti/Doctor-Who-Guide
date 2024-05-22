@@ -246,7 +246,7 @@ h1.title {
   color: var(--clr-dark-yellow);
 }
 
-.filters_main, .filters_essential, .filters_more {
+.filters_main, .filters_misc, .filters_essential, .filters_more {
   z-index: 1;
   font-size: var(--fs-2xl);
   font-weight: 700;
