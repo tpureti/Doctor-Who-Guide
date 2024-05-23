@@ -111,14 +111,21 @@ function populateAllButtons(data) {
       filters_misc.forEach(button => {
         // get category of button
         let category = button.dataset.filter;
-        //
-        // clickMiscFilter(button, data, category);
         // add click event for each button
         button.addEventListener("click", () => {
           // toggle filter_button class
           button.classList.toggle("filter_button");
           // if button is INACTIVE
           if (!button.classList.contains("filter_button")) {
+            // remove button from filter bar and add it back to the extra_area
+             active_buttons.removeChild(button);
+
+            // if all buttons have been unclicked and area is empty
+            if (!active_buttons.hasChildNodes()) {
+              // hide area of clicked buttons
+              active_buttons.innerHTML = '';
+              clicked_buttons.style.display = "none";
+            }
             // delete category from tracker
             filtersAndCategories.delete(category);
             // clear default
@@ -128,11 +135,12 @@ function populateAllButtons(data) {
           }
           // if button is ACTIVE
           else {
-            let boolean = ["Essential", "MissingEpisodes", "Animated", "Favorite", "IMDBRating"];
+            // add to filter bar
+            clicked_buttons.style.display = "flex";
+            clicked_buttons.style.maxHeight = "auto";
+            active_buttons.appendChild(button);
             // ADD category to tracker
-            if (boolean.includes(category)) {
-              filtersAndCategories.set(category, true);
-            }
+            filtersAndCategories.set(category, true);
             // clear default
             container.innerHTML = '';
             // show filtered stories from clicking button
@@ -317,7 +325,6 @@ function clickFilter(filter_button, data, category, item) {
       filter_button.classList.remove("filter_button");
       // remove button from filter bar and add it back to the extra_area
       active_buttons.removeChild(filter_button);
-      // extra.appendChild(filter_button);
 
       // if all buttons have been unclicked and area is empty
       if (!active_buttons.hasChildNodes()) {
@@ -351,7 +358,6 @@ function clickFilter(filter_button, data, category, item) {
     // if button hasn't been clicked
      else {
       filter_button.classList.add("filter_button");
-      container.innerHTML = '';
       clicked_buttons.style.display = "flex";
       clicked_buttons.style.maxHeight = "auto";
       active_buttons.appendChild(filter_button);
@@ -374,6 +380,7 @@ function clickFilter(filter_button, data, category, item) {
       console.log(filtersAndCategories);
 
       // show results from buttons
+      container.innerHTML = '';
       showFilteredStories(data);
      }
   });
@@ -584,6 +591,12 @@ function showFilteredStories(data) {
   filteredStories = [... new Set(filteredStories.concat(stories))];
   console.log(filteredStories);
   postData(filteredStories);
+
+  // show number of results
+  const result_div = document.querySelector(".results");
+  // console.log(result_div);
+  // result_div.innerHTML = filteredStories.length;
+  console.log(filteredStories.length);
 }
 
 

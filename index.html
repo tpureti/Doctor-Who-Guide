@@ -23,8 +23,6 @@
         <button class="filters filters_main" data-filter="Season">Seasons</button>
         <!-- BY COMPANION -->
         <button class="filters filters_main" data-filter="Companion">Companions</button>
-        <!-- BY RATING -->
-        <!-- <button class="filters filters_misc" data-filter="IMDBRating">Highest Rated</button> -->
         <!-- MISSING -->
         <button class="filters filters_misc" data-filter="MissingEpisodes">Missing</button>
         <!-- ANIMATED -->
@@ -58,6 +56,7 @@
 
       <!-- BAR WHERE CLICKED BUTTONS SHOW UP -->
       <section class="clicked_buttons">
+        <h2>Filtered By</h2>
         <div class="active_buttons"></div>
         <button class="clear_filters">clear all ✕</button>
       </section>
@@ -70,14 +69,15 @@
         <button class="filters filters_main" data-filter="ScriptEditor">Script Editors</button>
         <button class="filters filters_main" data-filter="Music">Composers</button>
         <button class="filters filters_main" data-filter="Villain">Villains</button>
-        <button class="filters filters_misc" data-filter="TotalViewers">Most Popular</button>
       </section>
     </nav>
   </div>
 
 
   <!-- MAIN -->
+  <div class="results"></div>  
   <main id="container">
+
   <section class="story">
 
     <!-- POSTER -->

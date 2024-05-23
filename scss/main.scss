@@ -201,6 +201,7 @@ h1.title {
   position: absolute;
   margin-top: 1px;
   // positioning
+  z-index: 5;
   opacity: 0;
   visibility: hidden;
   transition: var(--button-transition);
@@ -271,11 +272,22 @@ h1.title {
 
 .clicked_buttons {
   display: none;
-  width: min(45rem, 100%);
+  width: min(65rem, 100%);
   padding: 1rem;
-  // background-color: var(--clr-dark-grey-2);
+  background-color: var(--clr-dark-grey-1);
   // display: flex;
+  flex-wrap: wrap;
   align-items: center;
+  position: sticky;
+  top: 0;
+  z-index: 2;
+
+  h2 {
+    width: 100%;
+    padding: .5rem 0;
+    margin-bottom: .5rem;
+    border-bottom: 1px solid var(--clr-white);
+  }
   
   .filters {
     font-size: var(--fs-xl);
@@ -746,7 +758,7 @@ h1.title {
     height: auto;
     opacity: 1;
     transition: var(--opacity-transition);
-    z-index: 1;
+    z-index: 0;
 }
 
 .hide {
