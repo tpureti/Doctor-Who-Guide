@@ -54,6 +54,11 @@ button {
 button,
 select { /* 1 */
   text-transform: none;
+	appearance: none;
+	border: none;
+  /* safari */
+  -webkit-appearance: none;
+  /* other styles for aesthetics */
 }
 
 /**

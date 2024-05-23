@@ -62,21 +62,17 @@ const ep_rating = document.querySelector(".ep_rating");
 
 // buttons
 const filter_button = document.querySelectorAll(".filters");
-const filters_essential = document.querySelector(".filters_essential");
-const filters_main = document.querySelector(".filters_main");
-const filter_doctors = document.querySelector("[data-filter=doctor]");
-const filter_seasons = document.querySelector("[data-filter=season]");
 const filters_more = document.querySelector("[data-filter=more_filters]");
 const extra_filters = document.querySelector(".extra_categories");
-const filter_companions = document.querySelector("[data-filter=companion]");
-const filter_producers = document.querySelector("[data-filter=producer]");
-const filter_writers = document.querySelector("[data-filter=writer]");
-const filter_scripteditors = document.querySelector("[data-filter=script]");
 
 const nav_area = document.querySelector("#nav");
 const clicked_buttons = document.querySelector(".clicked_buttons");
 const active_buttons = document.querySelector(".active_buttons");
 const clear_filters = document.querySelector(".clear_filters");
+
+// map that tracks which buttons are clicked
+let filtersAndCategories = new Map();
+let filters = [];
 
 allowTransitions();
 
@@ -98,7 +94,7 @@ getJSON()
   });
 
 function populateAllButtons(data) {
-    // get all buttons with filters that have multiple items
+    // get all buttons with multiple filters
     const filters_main = document.querySelectorAll(".filters_main");
     // go through array of filter buttons
     filters_main.forEach(button => 
@@ -107,27 +103,161 @@ function populateAllButtons(data) {
         let category = button.dataset.filter;
         // populate button with filters
         populateButtons(data, category, button);
+      });
 
-        // add click event to each button
+      // get buttons that are booleans
+      const filters_misc = document.querySelectorAll(".filters_misc");
+      // go through array of filter buttons
+      filters_misc.forEach(button => {
+        // get category of button
+        let category = button.dataset.filter;
+        //
+        // clickMiscFilter(button, data, category);
+        // add click event for each button
         button.addEventListener("click", () => {
-          if (button.classList.contains("filter_button")) {
-            button.classList.remove("filter_button")
+          // toggle filter_button class
+          button.classList.toggle("filter_button");
+          // if button is INACTIVE
+          if (!button.classList.contains("filter_button")) {
+            // delete category from tracker
+            filtersAndCategories.delete(category);
+            // clear default
+            container.innerHTML = '';
+            // show filtered stories from clicking button
+            showFilteredStories(data);
           }
+          // if button is ACTIVE
           else {
-            button.classList.add("filter_button");
+            let boolean = ["Essential", "MissingEpisodes", "Animated", "Favorite", "IMDBRating"];
+            // ADD category to tracker
+            if (boolean.includes(category)) {
+              filtersAndCategories.set(category, true);
+            }
+            // clear default
+            container.innerHTML = '';
+            // show filtered stories from clicking button
+            showFilteredStories(data);
           }
+          console.log(filtersAndCategories);
         });
       });
+    
+    // add functionality to sort buttons 
+    showSortButtons(data);
       
-      const filters_misc = document.querySelectorAll(".filters_misc");
-
+    // clear filters 
     clearFilters(data);
+    // show extra filters
     showExtraFilters(filters_more, extra_filters);
 }
 
+function showSortButtons(data) {
+  // get buttons that are sorting
+  const sort_select = document.querySelector(".sort_select");
+  const select_button = document.querySelector(".select_button");
+  // add click event
+  select_button.addEventListener("click", () => {
+    // toggle sort select to active/inactive
+    sort_select.classList.toggle("active");
+    // set button to active/inactive
+    select_button.classList.toggle("filter_button");
+    // set aria attribute to true or false
+    let aria = select_button.getAttribute("aria-expanded");
+    if (aria === "false") {
+      select_button.setAttribute("aria-expanded", "true");
+    }
+    else {
+      select_button.setAttribute("aria-expanded", "false");
+    }
+  });
+
+  // get buttons that are sorting
+   const selected_value = document.querySelector(".selected_value");
+   const filters_sort = document.querySelectorAll(".filters_sort");
+   
+   //add click event to each button  
+   filters_sort.forEach(button => {
+    button.addEventListener("click", () => {
+      // close select menu
+      sort_select.classList.remove("active");
+      select_button.classList.remove("filter_button");
+
+      // get category from button 
+      let category = button.dataset.filter;
+      let up = "up_arrow";
+      let down = "down_arrow"
+
+      let arrow = document.createElement("span");
+      arrow.textContent = "↑";
+
+      // if button is ACTIVE
+      if (button.classList.contains("filter_button")) {
+        // remove ACTIVE status from OTHER BUTTONS
+        filters_sort.forEach(btn => {
+          let cat = btn.dataset.filter;
+          // if buttons DO NOT MATCH clicked button
+          if (button !== btn) {
+            // console.log(btn);
+            btn.classList.remove("filter_button");
+            // remove key from tracked categories
+            filtersAndCategories.delete(cat);
+            btn.classList.remove(up);
+            btn.classList.remove(down);
+          }
+          // if button DOES MATCH clicked button and IS ACTIVE
+          else {
+            // add active class
+            button.classList.add("filter_button");
+
+            // if filter is ASCENDING set it to descending
+            if (filtersAndCategories.get(category) === "Ascending") {
+              filtersAndCategories.set(category, "Descending");
+              btn.classList.add(down);
+            } 
+            // if filter is DESCENDING set it to ascending
+            else {
+              filtersAndCategories.set(category, "Ascending");
+              btn.classList.add(up);
+              btn.classList.remove(down);
+            }
+          }
+        });
+      }
+      // if button is INACTIVE
+      else {
+        filters_sort.forEach(btn => {
+          if (button !== btn) {
+            let cat = btn.dataset.filter;
+            btn.classList.remove("filter_button");
+            // remove key from tracked categories
+            filtersAndCategories.delete(cat);
+            btn.classList.remove(up);
+            btn.classList.remove(down);
+          }
+           else {
+            // add active class
+            button.classList.add("filter_button");
+            // add filter to ascending by default
+            filtersAndCategories.set(category, "Ascending");
+            button.classList.add(up);
+           }
+          
+          });
+        }
+        // show title in main button
+        selected_value.innerHTML = button.innerHTML;
+        console.log(filtersAndCategories);
+
+        container.innerHTML = '';
+        showFilteredStories(data);
+    });
+   });
+}
+
 function showExtraFilters(filter, extra_area) {
-  console.log(filter);
   filter.addEventListener("click", () => {
+    // toggle filter button on and off
+    filter.classList.toggle("filter_button");
     // if area is hidden show area on click
     if (extra_area.classList.contains("hide")) {
       extra_area.classList.remove("hide");
@@ -136,13 +266,6 @@ function showExtraFilters(filter, extra_area) {
     else {
       extra_area.classList.add("hide");
       extra_area.classList.remove("show");
-    }
-    // add active class to pressed button
-    if (!filter.classList.contains("filter_button")) {
-      filter.classList.remove("filter_button");
-    }
-    else {
-      filter.classList.add("filter_button");
     }
   });
 }
@@ -186,9 +309,6 @@ function populateButtons(data, category, filter) {
   });
 }
 
-// map that tracks which buttons are clicked
-let filtersAndCategories = new Map();
-let filters = [];
 function clickFilter(filter_button, data, category, item) {
   // add eventlistener when clicked
   filter_button.addEventListener("click", ()=> {
@@ -346,6 +466,7 @@ function showFilteredStories(data) {
           filter = filter.flat();
           // get category from first entry
           let category = filter[0];
+          // console.log(category);
           // remove first entry, leaving only filters
           filter.shift();
 
@@ -358,12 +479,20 @@ function showFilteredStories(data) {
             // remove key, leaving only values
             entry.shift();
 
-              // if key and category match
+              // if key and category match and exist
               if (key === category) {
                 // make sure at least one filter is present in key's values
                 return filter.some(f => {
-                  // console.log(entry);
-                  if (entry.includes(f)) {
+                  // console.log(f);
+                  // if entry includes filter
+                  if (entry.includes(f) || category === "Number" || category === "Title" || category === "IMDBRating" || category === "TotalViewers") {
+                    return true;
+                  }
+                  // if there are missing episodes
+                  else if (category === "MissingEpisodes") {
+                    return true;
+                  }
+                  else if (category === "Animated" && !entry.includes("None")) {
                     return true;
                   }
                 });
@@ -377,8 +506,80 @@ function showFilteredStories(data) {
         filteredStories.push(data);
       }
 
+      
     }
   });
+
+  // if sorted by story number
+  if (filtersAndCategories.has("Number")) {
+    let value = filtersAndCategories.get("Number");
+    if (value === "Ascending") {
+      filteredStories.sort();
+    } 
+    else {
+      filteredStories.reverse();
+    }
+  }
+  // if sorted by title
+  if (filtersAndCategories.has("Title")) {
+    let value = filtersAndCategories.get("Title");
+    // sort in ascending order
+    if (value === "Ascending") {
+      filteredStories.sort((a, b) => {
+        let titleA = a.Title.toLowerCase();
+        let titleB = b.Title.toLowerCase();
+
+        // disregard articles when sorting
+        if (titleA.search("^a |^an |^the ") === 0 || titleB.search("^a |^an |^the ") === 0) {
+          titleA = titleA.replace("the ", "").replace("a ", "").replace("an ", "");
+          titleB = titleB.replace("the ", "").replace("a ", "").replace("an ", "");
+        }
+
+        if (titleA < titleB) {
+          return -1;
+        }
+
+        return 0;
+      });
+    }
+    // sort in descending order
+    else {
+      filteredStories.sort((a, b) => {
+        let titleA = a.Title.toLowerCase();
+        let titleB = b.Title.toLowerCase();
+
+        // disregard articles when sorting
+        if (titleA.search("^a |^an |^the ") === 0 || titleB.search("^a |^an |^the ") === 0) {
+          titleA = titleA.replace("the ", "").replace("a ", "").replace("an ", "");
+          titleB = titleB.replace("the ", "").replace("a ", "").replace("an ", "");
+        }
+        
+        if (titleA > titleB) {
+          return -1;
+        }
+
+        return 0;
+      });
+    }
+  }
+  // if sorted by rating
+  if (filtersAndCategories.has("IMDBRating")) {
+    let value = filtersAndCategories.get("IMDBRating");
+    // sort in ascending order
+    if (value === "Ascending") {
+      filteredStories.sort((a, b) => b.IMDBRating - a.IMDBRating);
+    }
+    // sort in descending order
+    else {
+      filteredStories.sort((a, b) => a.IMDBRating - b.IMDBRating);
+    }
+  }
+
+  // if sorted by viewership
+  if (filtersAndCategories.has("TotalViewers")) {
+    // sort in ascending order
+    filteredStories.sort((a, b) => b.TotalViewers - a.TotalViewers);
+  }
 
   filteredStories = [... new Set(filteredStories.concat(stories))];
   console.log(filteredStories);
@@ -518,6 +719,10 @@ function postData(data) {
           episodes.innerHTML = missing_eps + "/" + story_eps;
         }
       }
+      // else if (parseInt(story_number) < 51) {
+      //     missing_status.innerHTML = "Complete";
+      //     missing_status.style.color = "#fff";
+      // }
       // otherwise hide 
       else {
         status_area.style.display = "none";

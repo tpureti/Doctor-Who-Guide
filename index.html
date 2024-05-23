@@ -24,13 +24,33 @@
         <!-- BY COMPANION -->
         <button class="filters filters_main" data-filter="Companion">Companions</button>
         <!-- BY RATING -->
-        <button class="filters filters_misc">By Rating</button>
+        <!-- <button class="filters filters_misc" data-filter="IMDBRating">Highest Rated</button> -->
         <!-- MISSING -->
         <button class="filters filters_misc" data-filter="MissingEpisodes">Missing</button>
         <!-- ANIMATED -->
         <button class="filters filters_misc" data-filter="Animated">Animated</button>
         <!-- FAVORITES -->
         <button class="filters filters_misc" data-filter="Favorite">♡</button>
+        <!-- SORT ORDER -->
+        <div class="sort_select">
+          <button class="filters select_button" role="combobox"
+          aria-labelledby="select button"
+          aria-haspopup="listbox"
+          aria-expanded="false"
+          aria-controls="select_dropdown">
+
+            <span class="selected_value">Sort By</span>
+            <!-- <span class="arrow">▿</span> -->
+
+          </button>
+
+          <ul class="select_dropdown">
+            <button class="filters filters_sort" data-filter="Number">Default (Number)</button>
+            <button class="filters filters_sort" data-filter="Title">Title (A-Z)</button>
+            <button class="filters filters_sort" data-filter="IMDBRating">Rating (IMDB)</button>
+            <button class="filters filters_sort" data-filter="TotalViewers">Viewership (UK)</button>
+          </ul>
+        </div>
         <!-- MORE FILTERS -->
         <button class="filters filters_more"
         data-filter="more_filters">Filters+</button>
@@ -50,6 +70,7 @@
         <button class="filters filters_main" data-filter="ScriptEditor">Script Editors</button>
         <button class="filters filters_main" data-filter="Music">Composers</button>
         <button class="filters filters_main" data-filter="Villain">Villains</button>
+        <button class="filters filters_misc" data-filter="TotalViewers">Most Popular</button>
       </section>
     </nav>
   </div>
