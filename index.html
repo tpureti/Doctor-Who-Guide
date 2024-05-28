@@ -4,11 +4,17 @@
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link rel="stylesheet" href="css/main.css">
+  <!-- TITLE -->
   <title>Doctor Who Guide</title>
+  <!-- CSS -->
+  <link rel="stylesheet" href="css/main.css">
+  <!-- JAVASCRIPT -->
   <script async type="module" src="js/script.js"></script>
+  <!-- ICONS -->
+  <!-- <script src="https://kit.fontawesome.com/8487c2004b.js" crossorigin="anonymous"></script> -->
+
 </head>
-<body class="preload">
+<body class="preload wrapper">
   <!-- HEADER -->
   <div id="header">
     <h1 class="title">Doctor Who Guide</h1>
@@ -71,6 +77,25 @@
         <button class="filters filters_main" data-filter="Villain">Villains</button>
       </section>
     </nav>
+  </div>
+
+  <!-- SIDEBAR -->
+  <div class="sidebar">
+    <h2 class="filter_title">Filters</h2>
+    <div class="multi_filters">
+      <button class="filter multi_filter" data-filter="Doctor">
+        <span>Doctor</span>
+        <span class="arrow"><i class="fa-solid fa-angle-up"></i></span>
+      </button>
+      <button class="filter multi_filter" data-filter="Season">
+        <span>Season</span>
+        <span class="arrow"><i class="fa-solid fa-angle-up"></i></span>
+      </button>
+      <button class="filter multi_filter" data-filter="Companion">
+        <span>Companion</span>
+        <span class="arrow"><i class="fa-solid fa-angle-up"></i></span>
+      </button>
+    </div>
   </div>
 
 
@@ -242,8 +267,8 @@
 
   </main>
 
-  <!-- FOOTER -->
-  <footer id="footer"></footer>
+<!-- FOOTER -->
+<footer id="footer"></footer>
 
 </body>
 </html>

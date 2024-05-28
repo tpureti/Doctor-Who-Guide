@@ -88,10 +88,177 @@ getJSON()
   .then(data => {
     postData(data);
     populateAllButtons(data);
+    populateAllButtons2(data);
 })
   .catch(() => {
     console.log("error: JSON not found")
   });
+
+function populateAllButtons2(data) {
+  const multi_filters = document.querySelectorAll(".multi_filter");
+
+  multi_filters.forEach(button => {
+    let category = button.dataset.filter;
+    populateButtons2(data, category, button);
+  });
+}
+
+function populateButtons2(data, category, button) {
+  let filtered = data.filter(data => {
+    if (category in data) {
+      return data;
+    }
+  });
+  // turn each filter into a key
+  const keys = new Set(
+    filtered.map(data => data[category])
+    .reduce((accumulator, currentValue) =>
+    accumulator.concat(currentValue), [])
+  );
+
+  // create extra section which has all the new filters in it
+  const show_filters = document.createElement("div");
+  show_filters.classList.add("show_filters");
+  show_filters.setAttribute("category", category);
+  // place it after each button
+  button.after(show_filters);
+
+  // counter
+  let i = 0;
+
+  keys.forEach((filter) =>
+    {
+      // checks if item exists and there are no empty strings
+      if (filter) {
+        // create button
+        const button = document.createElement("button");
+        button.classList.add("filter");
+        button.setAttribute("data-category", category)
+        button.setAttribute("data-filter", filter);
+        // set them in order
+        button.setAttribute("data-order", i);
+        i++;
+        // set filter to button text
+        button.textContent = filter;
+        // add button to "show_filter" div
+        show_filters.appendChild(button);
+      }
+    });
+
+    // grab each filter button
+    const filter_buttons = document.querySelectorAll(".filter[data-category=" + category + "]");
+
+    // show filters when clicking button
+    button.addEventListener("click", () => {
+      // toggle main filter button to active or inactive
+      button.classList.toggle("active");
+      // toggle filters active or inactive
+      show_filters.classList.toggle("active");
+      // create "show more" button
+      let show_more = document.createElement("button");
+      show_more.classList.add("show_more");
+
+      // if "show filters" is ACTIVE 
+      if (!show_filters.classList.contains("active")) {
+        show_filters.style.maxHeight = 0;
+      }
+      // if "show filters" is INACTIVE
+      else {
+        let default_height;
+        // clear filter area
+        show_filters.innerHTML = '';
+        // decide on maximum amount of filters shown
+        let max_initial_filters = 8;
+
+        // get initial/default filters
+        let initial_filters = Array.from(filter_buttons).slice(0, max_initial_filters);
+        // get hidden filters
+        let hidden_filters = Array.from(filter_buttons).slice(max_initial_filters);
+
+        // if "show more" button is INACTIVE
+        if (!show_filters.classList.contains("show_all")) {
+          // display initial filters
+          initial_filters.forEach(button => {
+            show_filters.appendChild(button);
+          })
+        }
+        // if "show more" button is ACTIVE
+        else {
+          // display all filters
+          filter_buttons.forEach(button => {
+            show_filters.appendChild(button);
+          });
+        }
+
+        // if category has more than 7 entries, allow user to toggle a "show more" button
+        if (filter_buttons.length > max_initial_filters) {
+          show_more.textContent = "Show More";
+          // add show_more button to end of initial filters
+          show_filters.appendChild(show_more);
+          
+          // add click event which shows the rest of the filters
+          show_more.addEventListener("click", () => {
+            // toggle active class on "show more"
+            show_more.classList.toggle("active");
+
+            // if all hidden filters are shown
+            if (show_more.classList.contains("active")) {
+              // go through all hidden buttons and add them
+              hidden_filters.forEach(button => {
+                // add buttons before "show more"
+                show_more.before(button);
+              });
+              // add class to indicate "show all" is active
+              show_filters.classList.add("show_all");
+              // change "show more" to "show less"
+              show_more.textContent = "Show Less";
+              // transition to appropriate scrollheight
+              let max_height = show_filters.scrollHeight;
+              show_filters.style.maxHeight = max_height + "px";
+              // get last button of hidden filters
+              let last_button = hidden_filters.slice(-1);
+              last_button = last_button[0];
+              // add "show less" button after transition ends
+              show_filters.addEventListener("transitionend", (event) => {
+                // make sure it only applies to max-height transition on show-filters
+                if (event.propertyName === "max-height") {
+                  console.log(event);
+                  last_button.after(show_more);
+                }
+              });
+            }
+            // if hidden filters are hidden
+            else {
+              // remove class to indicate "show all" is inactive
+              show_filters.classList.remove("show_all");
+              // adjust height back to default height
+              show_filters.style.maxHeight = default_height + "px";
+              // change text back to "show more"
+              show_more.textContent = "Show More";
+              // get last button of initial filters
+              let last_button = initial_filters.slice(-1);
+              last_button = last_button[0];
+              // add "show more" button after transition ends
+              show_filters.addEventListener("transitionend", (event) => 
+                {
+                // make sure it only applies to max-height transition on show-filters
+                if (event.propertyName === "max-height") {
+                  console.log(event);
+                  last_button.after(show_more);
+                }
+                });
+            }
+          });
+        }
+        // show height smoothly
+        let max_height = show_filters.scrollHeight;
+        show_filters.style.maxHeight = max_height + "px";
+        // get default height
+        default_height = max_height;
+      }
+
+    });
+}
 
 function populateAllButtons(data) {
     // get all buttons with multiple filters
@@ -527,6 +694,7 @@ function showFilteredStories(data) {
       filteredStories.reverse();
     }
   }
+
   // if sorted by title
   if (filtersAndCategories.has("Title")) {
     let value = filtersAndCategories.get("Title");
@@ -569,6 +737,7 @@ function showFilteredStories(data) {
       });
     }
   }
+
   // if sorted by rating
   if (filtersAndCategories.has("IMDBRating")) {
     let value = filtersAndCategories.get("IMDBRating");
