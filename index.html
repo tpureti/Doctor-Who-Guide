@@ -61,11 +61,11 @@
       </section>
 
       <!-- BAR WHERE CLICKED BUTTONS SHOW UP -->
-      <section class="clicked_buttons">
+      <!-- <section class="clicked_buttons">
         <h2>Filtered By</h2>
         <div class="active_buttons"></div>
         <button class="clear_filters">clear all ✕</button>
-      </section>
+      </section> -->
 
       <!-- EXTRA BUTTONS FOR MORE CATEGORIES -->
       <section class="extra_categories hide">
@@ -82,27 +82,44 @@
   <!-- SIDEBAR -->
   <div class="sidebar">
     <h2 class="filter_title">Filters</h2>
+    <!-- BOOLEAN FILTERS -->
+    <div class="boolean_filters">
+
+    </div>
+    <!-- MULTI FILTERS -->
     <div class="multi_filters">
-      <button class="filter multi_filter" data-filter="Doctor">
-        <span>Doctor</span>
+      <button class="filter multi_filter" data-category="Doctor" aria-pressed="false">
+        <span class="category_name">Doctor<span class="current_filters_number"></span>
+        </span>
         <span class="arrow"><i class="fa-solid fa-angle-up"></i></span>
       </button>
-      <button class="filter multi_filter" data-filter="Season">
-        <span>Season</span>
+      <button class="filter multi_filter" data-category="Season" aria-pressed="false">
+        <span class="category_name">Season<span class="current_filters_number"></span>
+        </span>
         <span class="arrow"><i class="fa-solid fa-angle-up"></i></span>
       </button>
-      <button class="filter multi_filter" data-filter="Companion">
-        <span>Companion</span>
+      <button class="filter multi_filter" data-category="Companion" aria-pressed="false">
+        <span class="category_name">Companion<span class="current_filters_number"></span>
+        </span>
         <span class="arrow"><i class="fa-solid fa-angle-up"></i></span>
       </button>
     </div>
   </div>
 
+  <!-- SHOW CLICKED FILTERS -->
+  <div class="clicked_filters" aria-hidden="true">
+    <div class="container">
+      <div class="active_filters">
+        <span class="no_filters">No filters currently applied</span>
+      </div>
+      <button class="clear_filters" aria-disabled="true" disabled>clear all</button>
+    </div>
+    <div class="stories_displayed">Showing <span class="number_of_results"></span> Stories</div>
+  </div>
+  
 
-  <!-- MAIN -->
-  <div class="results"></div>  
+  <!-- MAIN -->  
   <main id="container">
-
   <section class="story">
 
     <!-- POSTER -->
