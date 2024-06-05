@@ -220,6 +220,37 @@ h1.title {
   text-align: center;
 }
 
+.boolean_filters {
+  position: relative;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+  margin: 0rem 2.5rem 0rem 4rem;
+  background-color: var(--clr-med-grey-2);
+  padding: 0.75rem 1rem;
+}
+
+.boolean_filter_wrapper {
+  width: 100%;
+}
+.boolean_filter_wrapper .boolean_filter {
+  font-family: var(--ff-sans);
+  font-size: var(--fs-2xl);
+  font-weight: 700;
+  -webkit-transition: var(--button-transition);
+  transition: var(--button-transition);
+}
+.boolean_filter_wrapper .boolean_filter:hover, .boolean_filter_wrapper .boolean_filter:focus, .boolean_filter_wrapper .boolean_filter:active, .boolean_filter_wrapper .boolean_filter.active {
+  -webkit-transition: var(--button-transition);
+  transition: var(--button-transition);
+  color: var(--clr-bright-yellow);
+  background-color: var(--clr-dark-grey-2);
+  border-radius: 10px;
+}
 .multi_filters {
   position: relative;
   display: -webkit-box;
@@ -258,12 +289,12 @@ h1.title {
   -webkit-transition: var(--button-transition);
   transition: var(--button-transition);
 }
-.multi_filter:hover, .multi_filter.active {
+.multi_filter:hover, .multi_filter:focus, .multi_filter.active {
   -webkit-transition: var(--button-transition);
   transition: var(--button-transition);
   border-bottom: 1px solid var(--main-filters);
 }
-.multi_filter:hover .arrow, .multi_filter.active .arrow {
+.multi_filter:hover .arrow, .multi_filter:focus .arrow, .multi_filter.active .arrow {
   -webkit-transform: rotate(180deg);
           transform: rotate(180deg);
 }
@@ -312,7 +343,7 @@ h1.title {
 .show_filters .filter {
   font-weight: 500;
   color: var(--clr-white);
-  background-color: var(--clr-dark-grey-1);
+  background-color: var(--clr-med-grey-2);
   width: 100%;
   text-align: left;
   padding: 0.5rem 1rem;
@@ -328,13 +359,13 @@ h1.title {
   -webkit-transition: var(--button-transition);
   transition: var(--button-transition);
 }
-.show_filters .filter:hover, .show_filters .filter:focus, .show_filters .filter.filter_button {
+.show_filters .filter:hover, .show_filters .filter:focus, .show_filters .filter.active {
   -webkit-transition: var(--button-transition);
   transition: var(--button-transition);
   color: var(--main-filters);
   background-color: var(--clr-dark-grey-2);
 }
-.show_filters .filter.filter_button::after {
+.show_filters .filter.active::after {
   content: "✕";
   font-size: var(--fs-md);
 }

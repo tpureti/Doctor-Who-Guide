@@ -110,6 +110,47 @@ h1.title {
   text-align: center;
 }
 
+.boolean_filters {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  // align-items: flex-end;
+  margin: 0rem 2.5rem 0rem 4rem;
+  background-color: var(--clr-med-grey-2);
+  padding: .75rem 1rem;
+}
+
+.boolean_filter_wrapper {
+  width: 100%;
+  // styling
+  // color: var(--main-filters);
+  // background-color: var(--clr-dark-grey-1);
+  // font-size: var(--fs-2xl);
+  // font-weight: 600;
+  // padding: .1rem 0;
+
+  .boolean_filter {
+    // styling
+    font-family: var(--ff-sans);
+    font-size: var(--fs-2xl);
+    font-weight: 700;
+    // color: var(--clr-light-blue);
+    // padding: .5rem;
+    transition: var(--button-transition);
+
+    &:hover, &:focus, &:active, &.active {
+      transition: var(--button-transition);
+      color: var(--clr-bright-yellow);
+      background-color: var(--clr-dark-grey-2);
+      border-radius: 10px;
+    }
+  }
+
+  &:first-of-type .boolean_filter {
+    // color: var(--main-filters);
+  }
+}
+
 .multi_filters {
   position: relative;
   display: flex;
@@ -139,7 +180,7 @@ h1.title {
   z-index: 2;
   transition: var(--button-transition);
 
-  &:hover, &.active {
+  &:hover, &:focus, &.active {
     transition: var(--button-transition);
     // background-color: var(--main-filters);
     // color: var(--clr-dark-grey-1);
@@ -197,7 +238,7 @@ h1.title {
   .filter {
     font-weight: 500;
     color: var(--clr-white);
-    background-color: var(--clr-dark-grey-1);
+    background-color: var(--clr-med-grey-2);
     width: 100%;
     text-align: left;
     padding: .5rem 1rem;
@@ -207,13 +248,13 @@ h1.title {
     justify-content: space-between;
     transition: var(--button-transition);
 
-    &:hover, &:focus, &.filter_button {
+    &:hover, &:focus, &.active {
       transition: var(--button-transition);
       color: var(--main-filters);
       background-color: var(--clr-dark-grey-2);
     }
 
-    &.filter_button {
+    &.active {
       &::after {
         content: "✕";
         font-size: var(--fs-md);

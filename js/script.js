@@ -97,8 +97,18 @@ getJSON()
   });
 
 function populateAllButtons(data) {
-  const multi_filters = document.querySelectorAll(".multi_filter");
+  // get boolean filters
+  const bool_filters = document.querySelectorAll(".boolean_filter");
+  let cloned_button;
+  // go through each and set functionality
+  bool_filters.forEach(button => {
+    // add button functionality
+    clickFilter(button, data);
+  });
 
+  // get multi filters
+  const multi_filters = document.querySelectorAll(".multi_filter");
+  // go through each and set functionality
   multi_filters.forEach(button => {
     let category = button.dataset.category;
     createFilters(data, category, button);
@@ -143,6 +153,7 @@ function createFilters(data, category, button) {
         // create button
         const button = document.createElement("button");
         button.classList.add("filter");
+        button.classList.add("multi");
         // 
         button.setAttribute("data-category", category)
         button.setAttribute("data-filter", filter);
@@ -522,15 +533,15 @@ function populateButtonsOld(data, category, filter) {
 
 function clickFilter(filter_button, data) {
   // get category and filter
-  let category = filter_button.dataset.category;
-  let filter = filter_button.dataset.filter;
+  // let category = filter_button.dataset.category;
+  // let filter = filter_button.dataset.filter;
   let cloned_button;
   // add eventlistener when clicked
   filter_button.addEventListener("click", (event) => {
     // toggle active status on button
-    filter_button.classList.toggle("filter_button");
+    filter_button.classList.toggle("active");
     // if button is INACTIVE
-    if (!filter_button.classList.contains("filter_button")) {
+    if (!filter_button.classList.contains("active")) {
       // accessibility
       filter_button.ariaPressed = false;
 
@@ -559,7 +570,7 @@ function clickFilter(filter_button, data) {
       console.log(filtersAndCategories);
       // clone button and place it in active filters
       cloned_button = filter_button.cloneNode(true);
-      cloned_button.textContent = category + ": " + filter; 
+      // cloned_button.textContent = category + ": " + filter; 
       active_filters.appendChild(cloned_button);
       // add functionality to cloned buttons
       removeClonedButtons(data, cloned_button, filter_button);
@@ -575,42 +586,64 @@ function clickFilter(filter_button, data) {
 }
 
 function addFilter(button) {
-// get category and filter
-let category = button.dataset.category;
-let filter = button.dataset.filter;
-// add filter to map 
-if (filtersAndCategories.has(category)) {
-        filtersAndCategories.forEach((value, key) => {
-          if (key === category) {
-            filtersAndCategories.get(key).push(filter);
+  // if filter is multi filter
+  if (button.classList.contains("multi")) {
+  console.log(button);
+  // get category and filter names
+  let category = button.dataset.category;
+  let filter = button.dataset.filter;
+  // add filter to map 
+  if (filtersAndCategories.has(category)) {
+    filtersAndCategories.forEach((value, key) => {
+      if (key === category) {
+        filtersAndCategories.get(key).push(filter);
 
-          }
-        });
       }
-      else {
-        // create new filter array
-        filters = [];
-        filters.push(filter);
-        filtersAndCategories.set(category, filters);
-      }
+    });
+  }
+  else {
+    // create new filter array
+    filters = [];
+    filters.push(filter);
+    filtersAndCategories.set(category, filters);
+  }
+}
+// if filter is boolean filter
+else if (button.classList.contains("boolean_filter")) {
+  console.log(button);
+  // get filter name
+  let filter = button.dataset.filter;
+  filtersAndCategories.set(filter, true);
+}
+
 }
 
 function removeFilter(button) {
-// get category and filter
-let category = button.dataset.category;
-let filter = button.dataset.filter;  
-// remove filter from map
-filtersAndCategories.forEach((values, key) => {
-  if (key === category) {
-    // remove value if filter matches
-    values = values.filter(value => value !== filter);
-    filtersAndCategories.set(category, values);
-    // if category's empty, delete key
-    if (values.length === 0) {
-      filtersAndCategories.delete(key);
-    }
+  // if filter is multi filter
+  if (button.classList.contains("multi")) {
+    console.log(button);
+    // get category and filter
+    let category = button.dataset.category;
+    let filter = button.dataset.filter;  
+
+    filtersAndCategories.forEach((values, key) => {
+      if (key === category) {
+        // remove value if filter matches
+        values = values.filter(value => value !== filter);
+        filtersAndCategories.set(category, values);
+        // if category's empty, delete key
+        if (values.length === 0) {
+          filtersAndCategories.delete(key);
+        }
+      }
+    });
   }
-});
+  // if filter is boolean filter
+  else if (button.classList.contains("boolean_filter")) {
+    console.log(button);
+    let filter = button.dataset.filter;
+    filtersAndCategories.delete(filter);
+  }
 }
 
 function removeClonedButtons(data, cloned_button, original_button) {
@@ -621,7 +654,7 @@ function removeClonedButtons(data, cloned_button, original_button) {
     // remove button
     cloned_button.remove();
     // remove active class on original button
-    original_button.classList.toggle("filter_button");
+    original_button.classList.toggle("active");
     // accessibility
     original_button.ariaPressed = false;
     // show results from buttons
@@ -682,20 +715,31 @@ function clearFilters(data) {
     // hide clicked filters div
     clicked_filters.classList.toggle("active");
     clicked_filters.style.maxHeight = null;
-    // get filters from sidebar
-    let show_filters = document.querySelectorAll(".show_filters");
+    // get multi-filters from sidebar
+    const show_filters = document.querySelectorAll(".show_filters");
     // clear active status on all buttons
     show_filters.forEach(div => {
       let filters = Array.from(div.children);
       filters.forEach(button => {
-        if (button.classList.contains("filter_button")) {
+        if (button.classList.contains("active")) {
           // toggle all active buttons off
-          button.classList.toggle("filter_button");
+          button.classList.toggle("active");
           // accessibility
           button.ariaPressed = false;
         }
       });
     });
+    // get boolean filters from sidebar
+    const bool_filters = document.querySelectorAll(".boolean_filter");
+    bool_filters.forEach(button => {
+      if (button.classList.contains("active")) {
+        // toggle all active buttons off
+        button.classList.toggle("active");
+        // accessibility
+        button.ariaPressed = false;
+      }
+    });
+
     // add back in text that indicates no filters are active
     showActiveFilters();
     showActiveMultiFilterButtons();
@@ -714,7 +758,6 @@ function showActiveMultiFilterButtons() {
   show_filters.forEach(div => {
     // get category
     let category = div.dataset.category;
-    console.log(category);
     // get matching multi-filter button
     const button = document.querySelector(".multi_filter[data-category=" + category + "]");
     const current_filters_number = button.children[0].children[0];
