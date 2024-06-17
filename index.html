@@ -11,7 +11,7 @@
   <!-- JAVASCRIPT -->
   <script async type="module" src="js/script.js"></script>
   <!-- ICONS -->
-  <!-- <script src="https://kit.fontawesome.com/8487c2004b.js" crossorigin="anonymous"></script> -->
+  <link rel="stylesheet" href="css/all.css">
 
 </head>
 <body class="preload wrapper">
@@ -82,34 +82,72 @@
   <!-- SIDEBAR -->
   <div class="sidebar">
     <h2 class="filter_title">Filters</h2>
+
+    <!-- SORTING FILTERS -->
+    <div class="sorting_filters">
+      <button id="sort_button" class="filter sort_button"
+      aria-labelledby="sort_button" 
+      aria-controls="sort_dropdown"
+      aria-pressed="false">
+        <span>Sort By</span>
+        <span id="selected_filter" class="selected_filter"></span>
+      </button>
+      <!-- SORT FILTERS DROP DOWN MENU -->
+      <ul id="sort_dropdown" class="sort_dropdown"
+      aria-expanded="false"
+      aria-hidden="true">
+          <button id="number-sort" class="filter sort_filter"
+          data-category="sort"
+          data-filter="Number" aria-pressed="false">Default (Number)<i></i></button>
+
+          <button id="title-sort" class="filter sort_filter"
+          data-category="sort"
+          data-filter="Title" aria-pressed="false">Title (A-Z) <i></i></button>
+
+          <button id="imdbrating-sort" class="filter sort_filter"
+          data-category="sort"
+          data-filter="IMDBRating" aria-pressed="false">Rating (IMDB) <i></i></button>
+
+          <button id="totalviewers-sort" class="filter sort_filter" data-category="sort" data-filter="TotalViewers" aria-pressed="false">Viewership (UK) <i></i></button>
+      </ul>
+    </div>
     <!-- BOOLEAN FILTERS -->
     <div class="boolean_filters">
       <div class="boolean_filter_wrapper">
-        <button class="filter boolean_filter" data-filter="Essential" aria-pressed="false">Essential</button>
+        <button class="filter boolean_filter" data-category="boolean" data-filter="Essential" aria-pressed="false">Essential</button>
       </div>
       <div class="boolean_filter_wrapper">
-        <button class="filter boolean_filter" data-filter="MissingEpisodes" aria-pressed="false">Missing</button>
+        <button class="filter boolean_filter" data-category="boolean" data-filter="MissingEpisodes" aria-pressed="false">Missing</button>
       </div>
       <div class="boolean_filter_wrapper">
-        <button class="filter boolean_filter" data-filter="Animated" aria-pressed="false">Animated</button>
+        <button class="filter boolean_filter" data-category="boolean" data-filter="Animated" aria-pressed="false">Animated</button>
       </div>
-      <div class="boolean_filter_wrapper">
-        <button class="filter boolean_filter" data-filter="Favorite" aria-pressed="false">Favorites</button>
-      </div>
+      <!-- <div class="boolean_filter_wrapper">
+        <button class="filter boolean_filter" data-category="boolean" data-filter="Favorite" aria-pressed="false">♡</button>
+      </div> -->
     </div>
     <!-- MULTI FILTERS -->
     <div class="multi_filters">
-      <button class="filter multi_filter" data-category="Doctor" aria-pressed="false">
+      <!-- MULTI FILTER BUTTONS -->
+      <button id="doctor-filters_button" class="filter multi_filter" data-category="Doctor" 
+      aria-pressed="false" aria-controls="doctor-filters" aria-label="Filter by Doctor">
         <span class="category_name">Doctor<span class="current_filters_number"></span>
         </span>
-        <span class="arrow"><i class="fa-solid fa-angle-up"></i></span>
+        <span class="arrow">
+          <i class="fa-solid fa-angle-up"></i>
+        </span>
       </button>
-      <button class="filter multi_filter" data-category="Season" aria-pressed="false">
+
+      <button id="season-filters_button" class="filter multi_filter" data-category="Season" 
+      aria-pressed="false" aria-controls="season-filters"
+      aria-label="Filter by season">
         <span class="category_name">Season<span class="current_filters_number"></span>
         </span>
         <span class="arrow"><i class="fa-solid fa-angle-up"></i></span>
       </button>
-      <button class="filter multi_filter" data-category="Companion" aria-pressed="false">
+
+      <button id="companion-filters_button" class="filter multi_filter" data-category="Companion" aria-pressed="false" aria-controls="companion-filters"
+      aria-label="Filter by companion">
         <span class="category_name">Companion<span class="current_filters_number"></span>
         </span>
         <span class="arrow"><i class="fa-solid fa-angle-up"></i></span>
@@ -118,21 +156,42 @@
   </div>
 
   <!-- SHOW CLICKED FILTERS -->
-  <div class="clicked_filters" aria-hidden="true">
+  <div class="clicked_filters">
     <div class="container">
       <div class="active_filters">
         <span class="no_filters">No filters currently applied</span>
       </div>
       <button class="clear_filters" aria-disabled="true" disabled>clear all</button>
     </div>
+    <!-- SHOWS NUMBER OF RESULTS -->
     <div class="stories_displayed">Showing <span class="number_of_results"></span> Stories</div>
+    <!-- BLURBS -->
+    <!-- ESSENTIAL BLURB -->
+    <div class="blurb" data-filter="Essential" aria-hidden="true">
+      <div class="blurb_description" data-filter="Essential">
+        <p>For those of you want to watch <b>Classic Who</b> without sitting through 600+ episodes, here are a selection of stories from each Doctor that I've personally deemed as "essential viewing."</p>
+        <p>These stories were chosen because they're either crucial to the lore (such as introducing Doctors, companions, and villains for the first time), have major cultural relevance, or are really well written, entertaining stories and showcase the best of Doctor Who.</p>
+        <p>Naturally, some of these picks are my opinion, but I tried to chose what would make a good breadth and variety of stories for first time viewers to experience.</p>
+      </div>
+    </div>
+
+    <!-- MISSING STORIES BLURB -->
+    <div class="blurb" data-filter="MissingEpisodes" aria-hidden="true">
+      <div class="blurb_description" data-filter="Missing">
+        <p>Due to an old BBC policy of junking master tapes after the episodes stopping airing, a number of Doctor Who stories — all from the First and Second Doctor's eras — no longer exist and can only be experienced in audio, telesnapped, and animated form.</p>
+        <p>It's only because of tapes given to other countries to air on their own networks and the efforts of dedicated fans to find them that we have as many stories from the early days of Doctor Who as we do.</p>
+        <p>It wasn't until 1978 (that's well into the Fourth Doctor's era) that the BBC officially stopped doing this. However, since every story from the Third Doctor era onward is preserved, I only keep track of missing stories up to <i>The War Games.</i></p> 
+        <p>(You can read more about <i>Doctor Who's</i> missing episodes on <a href="https://en.wikipedia.org/wiki/Doctor_Who_missing_episodes" target="_blank">wikipedia</a>.)</p>
+      </div>
+    </div>
   </div>
+
   
 
   <!-- MAIN -->  
   <main id="container">
+    <!-- STORY ENTRY -->
   <section class="story">
-
     <!-- POSTER -->
     <div class="poster_area">
       <img class="poster" src>
@@ -297,6 +356,5 @@
 
 <!-- FOOTER -->
 <footer id="footer"></footer>
-
 </body>
 </html>

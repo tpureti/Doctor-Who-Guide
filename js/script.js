@@ -65,6 +65,11 @@ const filter_button = document.querySelectorAll(".filters");
 const filters_more = document.querySelector("[data-filter=more_filters]");
 const extra_filters = document.querySelector(".extra_categories");
 
+// getting sorting filters
+const sorting_filters = document.querySelector(".sorting_filters");
+const sort_button = document.querySelector("#sort_button");
+const sort_dropdown = document.querySelector(".sort_dropdown");
+
 const nav_area = document.querySelector("#nav");
 const clicked_filters = document.querySelector(".clicked_filters");
 const active_filters = document.querySelector(".active_filters");
@@ -96,10 +101,23 @@ getJSON()
     console.log("error: JSON not found")
   });
 
+
 function populateAllButtons(data) {
+  // show sort buttons when pressed
+  sort_button.addEventListener("click", () => {
+    // toggle active status
+    sort_button.classList.toggle("active");
+    sorting_filters.classList.toggle("active");
+    sort_dropdown.classList.toggle("active");
+
+    toggleSortDropdown();
+  });
+
+  // add functionality to sort buttons
+  clickSort(data);
+
   // get boolean filters
   const bool_filters = document.querySelectorAll(".boolean_filter");
-  let cloned_button;
   // go through each and set functionality
   bool_filters.forEach(button => {
     // add button functionality
@@ -111,12 +129,143 @@ function populateAllButtons(data) {
   // go through each and set functionality
   multi_filters.forEach(button => {
     let category = button.dataset.category;
-    createFilters(data, category, button);
+    createMultiFilters(data, category, button);
   });
 }
 
+function clickSort(data) {
+  // get sort buttons
+  const sort_buttons = document.querySelectorAll(".sort_filter");
+  // get selected sort filter
+  const selected_filter = document.querySelector(".selected_filter");
+  
+  // add event listener for each sort button
+  sort_buttons.forEach(button => {
+    let filter = button.dataset.filter;
+    button.addEventListener("click", (event) => {
+      // remove active class from button and dropdown
+      sort_button.classList.toggle("active");
+      sort_dropdown.classList.remove("active");
+      // close sort dropdown
+      toggleSortDropdown();
+
+      let ascending = "fa-arrow-up-short-wide";
+      let descending = "fa-arrow-down-wide-short";
+
+      // get arrow
+      let arrow = button.children[0];
+      arrow.classList.add("fa-solid");
+
+      // if button is CURRENTLY ACTIVE
+      if (button.classList.contains("active")) {
+        // go through all buttons and set the others to inactive
+        sort_buttons.forEach(btn => {
+          if (button !== btn) {
+            let filter = btn.dataset.filter;
+            let arrow = btn.children[0];
+            
+            btn.classList.remove("active");
+            filtersAndCategories.delete(filter);
+
+            arrow.classList.add("fa-solid");
+            arrow.classList.remove(ascending);
+            arrow.classList.remove(descending);
+          }
+          // set currently pressed button to active
+          else {
+            // add active class
+            button.classList.add("active");
+            
+            // if button is ASCENDING
+            if (button.ariaLabel === "Ascending") {
+              // change arrow to descending
+              arrow.classList.remove(ascending);
+              arrow.classList.add(descending);
+              button.ariaLabel = "Descending";
+              // change filter to descending
+              filtersAndCategories.set(filter, "Descending");
+            }
+            // if button is DESCENDING
+            else if (button.ariaLabel === "Descending") {
+              // change arrow back to ascending
+              arrow.classList.remove(descending);
+              arrow.classList.add(ascending);
+              button.ariaLabel = "Ascending";
+              // change filter back to ascending
+              filtersAndCategories.set(filter, "Ascending");
+            }
+          }
+        });
+      }
+      // if button is CURRENTLY INACTIVE
+      else {
+        // add active class
+        sort_buttons.forEach(btn => {
+          let filter = btn.dataset.filter;
+
+          if (button === btn) {
+            console.log(button);
+            // add active class
+            button.classList.add("active");
+            // accessibility
+            button.ariaPressed = true;
+            button.setAttribute("aria-label", "Ascending");
+            // set ascending arrow
+            arrow.classList.add(ascending);
+            // add to filters clicked and set to ascending by default
+            filtersAndCategories.set(filter, "Ascending");
+          }
+           else {
+            // accessibility
+            btn.ariaPressed = false;
+
+            let filter = btn.dataset.filter;
+            let arrow = btn.children[0];
+            
+            btn.classList.remove("active");
+            filtersAndCategories.delete(filter);
+
+            arrow.classList.add("fa-solid");
+            arrow.classList.remove(ascending);
+            arrow.classList.remove(descending);
+           }
+        });
+      }
+      
+      console.log(filtersAndCategories);
+      // set selected filter to whatever was chosen
+      let text = button.innerHTML;
+      selected_filter.innerHTML = text;
+      selected_filter.style.paddingTop = ".5rem";
+      // reset container and show sort
+      container.innerHTML = '';
+      showFilteredStories(data);
+    });
+  });
+}
+
+function toggleSortDropdown() {
+  // if sort button is ACTIVE
+  if (sort_dropdown.classList.contains("active")) {      
+    sort_dropdown.style.maxHeight = sort_dropdown.scrollHeight + "px";
+
+    // accessibility
+    sort_button.ariaPressed = true;
+    sort_dropdown.ariaExpanded = true;
+    sort_dropdown.ariaHidden = false;
+  }
+  // if sort button is INACTIVE
+  else {
+    sort_dropdown.style.maxHeight = 0;
+    // accessibility
+    sort_button.ariaPressed = false;
+    sort_dropdown.ariaExpanded = false;
+    sort_dropdown.ariaHidden = true;
+  }
+}
+
 let data_map = new Map();
-function createFilters(data, category, button) {
+function createMultiFilters(data, category, button) {
   let filtered = data.filter(data => {
     if (category in data) {
       let filter = data[category];
@@ -133,11 +282,15 @@ function createFilters(data, category, button) {
 
 
   // create extra section which has all the new filters in it
-  const show_filters = document.createElement("div");
+  const show_filters = document.createElement("ol");
   show_filters.classList.add("show_filters");
+  show_filters.id = category.toLowerCase() + "_filters";
   show_filters.setAttribute("data-category", category);
   // accessibility
-  show_filters.setAttribute("aria-expanded", false)
+  show_filters.setAttribute("aria-labelledby", category.toLowerCase() + "-filters_button");
+  show_filters.setAttribute("aria-expanded", false);
+  show_filters.setAttribute("aria-haspopup", "menu");
+
   // place it after each button
   button.after(show_filters);
 
@@ -180,6 +333,18 @@ function showMultiFilterButtons(button, filter_buttons, show_filters) {
   let show_more = document.createElement("button");
   show_more.classList.add("show_more");
 
+  // create search bar
+  let search_bar = document.createElement("input");
+  search_bar.setAttribute("type", "text");
+  search_bar.classList.add("search");
+  search_bar.setAttribute("placeholder", "");
+  // create clear button
+  let clear = document.createElement("button");
+  clear.classList.add("clear_search");
+  clear.innerHTML = '<i class="fa-solid fa-xmark"></i>';
+  
+  // console.log(clear);
+
   // show filters when clicking button
   button.addEventListener("click", (event) => {
     // toggle main filter button to active or inactive
@@ -215,9 +380,7 @@ function showMultiFilterButtons(button, filter_buttons, show_filters) {
 
       // display initial filters
       if (filter_buttons.length < max_initial_filters) {
-        initial_filters.forEach(button => {
-          show_filters.appendChild(button);
-        });
+        initial_filters.forEach(button => show_filters.appendChild(button));
       }
       // if "show more" button is ACTIVE
       else if (show_filters.classList.contains("show_all")) {
@@ -228,6 +391,41 @@ function showMultiFilterButtons(button, filter_buttons, show_filters) {
       }
       // if category has more than 7 entries, allow user to toggle a "show more" button
       if (filter_buttons.length > max_initial_filters && !show_filters.classList.contains("show_all")) {
+        show_filters.before(search_bar);
+
+        search_bar.addEventListener("input", (event) => {
+          let results = [];
+          let input = event.target.value;
+          // console.log(input);
+          // make sure input exists and isn't 0
+          if (input && input.trim().length > 0) {
+            // sanitize input, remove whitespace
+            input = input.trim().toLowerCase();
+
+           filter_buttons.filter(button => {
+              // get filter and sanitize it
+              let filter = button.dataset.filter;
+              filter = filter.toLowerCase();
+              // console.log(filter);
+              if (filter.includes(input)) {
+                show_filters.innerHTML = '';
+                results.push(button);
+              }
+            });
+          }
+          else {
+            console.log(input);
+            show_filters.innerHTML = '';
+
+            initial_filters.forEach(button => {
+              show_filters.appendChild(button);
+            });
+          }
+
+          // show results
+          results.forEach(result => show_filters.appendChild(result));
+        });
+
         initial_filters.forEach(button => {
           show_filters.appendChild(button);
         });
@@ -304,73 +502,6 @@ function showMultiFilterButtons(button, filter_buttons, show_filters) {
       } 
     }
   });
-}
-
-function populateAllButtonsOld(data) {
-    // get all buttons with multiple filters
-    const filters_main = document.querySelectorAll(".filters_main");
-    // go through array of filter buttons
-    filters_main.forEach(button => 
-      {
-        // get category of button
-        let category = button.dataset.filter;
-        // populate button with filters
-        populateButtonsOld(data, category, button);
-      });
-
-      // get buttons that are booleans
-      const filters_misc = document.querySelectorAll(".filters_misc");
-      // go through array of filter buttons
-      filters_misc.forEach(button => {
-        // get category of button
-        let category = button.dataset.filter;
-        // add click event for each button
-        button.addEventListener("click", () => {
-          // toggle filter_button class
-          button.classList.toggle("filter_button");
-          // if button is INACTIVE
-          if (!button.classList.contains("filter_button")) {
-            // remove button from filter bar and add it back to the extra_area
-             active_filters.removeChild(button);
-
-            // if all buttons have been unclicked and area is empty
-            if (!active_filters.hasChildNodes()) {
-              // hide area of clicked buttons
-              active_filters.innerHTML = '';
-              clicked_buttons.style.display = "none";
-            }
-            // delete category from tracker
-            filtersAndCategories.delete(category);
-            // clear default
-            container.innerHTML = '';
-            // show filtered stories from clicking button
-            showFilteredStories(data);
-          }
-          // if button is ACTIVE
-          else {
-            // add to filter bar
-            clicked_buttons.style.display = "flex";
-            clicked_buttons.style.maxHeight = "auto";
-            active_filters.appendChild(button);
-            // ADD category to tracker
-            filtersAndCategories.set(category, true);
-            // clear default
-            container.innerHTML = '';
-            // show filtered stories from clicking button
-            showFilteredStories(data);
-          }
-          console.log(filtersAndCategories);
-        });
-      });
-    
-    // add functionality to sort buttons 
-    showSortButtons(data);
-      
-    // clear filters 
-    clearFilters(data);
-
-    // show extra filters
-    showExtraFilters(filters_more, extra_filters);
 }
 
 function showSortButtons(data) {
@@ -476,75 +607,20 @@ function showSortButtons(data) {
    });
 }
 
-function showExtraFilters(filter, extra_area) {
-  filter.addEventListener("click", () => {
-    // toggle filter button on and off
-    filter.classList.toggle("filter_button");
-    // if area is hidden show area on click
-    if (extra_area.classList.contains("hide")) {
-      extra_area.classList.remove("hide");
-      extra_area.classList.add("show");
-    }
-    else {
-      extra_area.classList.add("hide");
-      extra_area.classList.remove("show");
-    }
-  });
-}
-
-function populateButtonsOld(data, category, filter) { 
-  // create a new set based off the filter keys
-  const key = new Set(
-    data.map((item) => item[category])
-    .reduce((accumulator, currentValue) => accumulator.concat(currentValue), [])
-  )
-  
-  // create extra section which has all the new filters in it
-  const extra = document.createElement("section");
-  extra.classList.add("extra_filters", "hide");
-  extra.setAttribute("category", category);
-  nav_area.appendChild(extra);
-  // show area when clicked
-  showExtraFilters(filter, extra);
-
-  // counter
-  let i = 0;
-
-  key.forEach((item) => {
-    // checks if item exists and there are no empty strings
-    if (item) {
-      // create the button and add to extra filters area
-      const button = document.createElement("button");
-      button.classList.add("filters");
-      button.setAttribute("category", category);
-      button.setAttribute("filter", item);
-
-      button.setAttribute("data-order", i);
-      i++;
-
-      button.innerHTML = item;
-      extra.appendChild(button);
-      
-      // get each story which matches the filter button
-      clickFilter(button, data, category, item);
-    }
-  });
-}
-
 function clickFilter(filter_button, data) {
   // get category and filter
   // let category = filter_button.dataset.category;
   // let filter = filter_button.dataset.filter;
-  let cloned_button;
+  // let cloned_button;
+
+  let cloned_button = filter_button.cloneNode(true);
+  
   // add eventlistener when clicked
   filter_button.addEventListener("click", (event) => {
     // toggle active status on button
     filter_button.classList.toggle("active");
     // if button is INACTIVE
     if (!filter_button.classList.contains("active")) {
-      // accessibility
-      filter_button.ariaPressed = false;
-
       // keep track of filters and categories
       removeFilter(filter_button);
       // print map
@@ -561,9 +637,6 @@ function clickFilter(filter_button, data) {
     }
     // if button is ACTIVE
      else {
-      // accessibility
-      filter_button.ariaPressed = true;
-
       // keep track of filters and categories pressed
       addFilter(filter_button);
       // print map
@@ -586,12 +659,16 @@ function clickFilter(filter_button, data) {
 }
 
 function addFilter(button) {
+  // accessibility
+  button.ariaPressed = true;
+
   // if filter is multi filter
   if (button.classList.contains("multi")) {
   console.log(button);
   // get category and filter names
   let category = button.dataset.category;
   let filter = button.dataset.filter;
+
   // add filter to map 
   if (filtersAndCategories.has(category)) {
     filtersAndCategories.forEach((value, key) => {
@@ -610,15 +687,26 @@ function addFilter(button) {
 }
 // if filter is boolean filter
 else if (button.classList.contains("boolean_filter")) {
-  console.log(button);
-  // get filter name
+  // get add to filters clicked
   let filter = button.dataset.filter;
   filtersAndCategories.set(filter, true);
-}
 
+  // show blurb
+  const blurb = document.querySelector(".blurb[data-filter=" + filter + "]");
+  if (blurb) {
+    // add active class
+    blurb.classList.add("active");
+  
+    // accessibility
+    blurb.ariaHidden = false;
+  }
+  }
 }
 
 function removeFilter(button) {
+  // accessibility
+  button.ariaPressed = false;
+
   // if filter is multi filter
   if (button.classList.contains("multi")) {
     console.log(button);
@@ -641,8 +729,17 @@ function removeFilter(button) {
   // if filter is boolean filter
   else if (button.classList.contains("boolean_filter")) {
     console.log(button);
+    // remove from filters clicked
     let filter = button.dataset.filter;
     filtersAndCategories.delete(filter);
+
+    // hide blurb
+    const blurb = document.querySelector(".blurb[data-filter=" + filter + "]");
+    if (blurb) {
+      blurb.classList.remove("active");
+      // accessibility
+      blurb.ariaHidden = true;
+    }
   }
 }
 
@@ -715,6 +812,30 @@ function clearFilters(data) {
     // hide clicked filters div
     clicked_filters.classList.toggle("active");
     clicked_filters.style.maxHeight = null;
+
+    // get sort filters
+    const sort_filters = document.querySelectorAll(".sort_filter");
+    const selected_filter = document.querySelector(".selected_filter");
+
+    // clear selected filter
+    selected_filter.style.paddingTop = "0rem";
+    selected_filter.innerHTML = "";
+
+    sort_filters.forEach(btn => {
+      // accessibility
+      btn.ariaPressed = false;
+
+      let filter = btn.dataset.filter;
+      let arrow = btn.children[0];
+      
+      btn.classList.remove("active");
+      filtersAndCategories.delete(filter);
+
+      arrow.classList.add("fa-solid");
+      arrow.classList.remove("fa-arrow-up-short-wide");
+      arrow.classList.remove("fa-arrow-down-wide-short");
+    });
+
     // get multi-filters from sidebar
     const show_filters = document.querySelectorAll(".show_filters");
     // clear active status on all buttons
@@ -735,8 +856,8 @@ function clearFilters(data) {
       if (button.classList.contains("active")) {
         // toggle all active buttons off
         button.classList.toggle("active");
-        // accessibility
-        button.ariaPressed = false;
+        // remove filters
+        removeFilter(button);
       }
     });
 
@@ -1343,4 +1464,126 @@ function allowTransitions() {
       document.querySelector(".preload").classList.remove("preload");
     }
   }
+}
+
+function showExtraFilters(filter, extra_area) {
+  filter.addEventListener("click", () => {
+    // toggle filter button on and off
+    filter.classList.toggle("filter_button");
+    // if area is hidden show area on click
+    if (extra_area.classList.contains("hide")) {
+      extra_area.classList.remove("hide");
+      extra_area.classList.add("show");
+    }
+    else {
+      extra_area.classList.add("hide");
+      extra_area.classList.remove("show");
+    }
+  });
+}
+
+function populateButtonsOld(data, category, filter) { 
+  // create a new set based off the filter keys
+  const key = new Set(
+    data.map((item) => item[category])
+    .reduce((accumulator, currentValue) => accumulator.concat(currentValue), [])
+  )
+  
+  // create extra section which has all the new filters in it
+  const extra = document.createElement("section");
+  extra.classList.add("extra_filters", "hide");
+  extra.setAttribute("category", category);
+  nav_area.appendChild(extra);
+  // show area when clicked
+  showExtraFilters(filter, extra);
+
+  // counter
+  let i = 0;
+
+  key.forEach((item) => {
+    // checks if item exists and there are no empty strings
+    if (item) {
+      // create the button and add to extra filters area
+      const button = document.createElement("button");
+      button.classList.add("filters");
+      button.setAttribute("category", category);
+      button.setAttribute("filter", item);
+
+      button.setAttribute("data-order", i);
+      i++;
+
+      button.innerHTML = item;
+      extra.appendChild(button);
+      
+      // get each story which matches the filter button
+      clickFilter(button, data, category, item);
+    }
+  });
+}
+
+function populateAllButtonsOld(data) {
+    // get all buttons with multiple filters
+    const filters_main = document.querySelectorAll(".filters_main");
+    // go through array of filter buttons
+    filters_main.forEach(button => 
+      {
+        // get category of button
+        let category = button.dataset.filter;
+        // populate button with filters
+        populateButtonsOld(data, category, button);
+      });
+
+      // get buttons that are booleans
+      const filters_misc = document.querySelectorAll(".filters_misc");
+      // go through array of filter buttons
+      filters_misc.forEach(button => {
+        // get category of button
+        let category = button.dataset.filter;
+        // add click event for each button
+        button.addEventListener("click", () => {
+          // toggle filter_button class
+          button.classList.toggle("filter_button");
+          // if button is INACTIVE
+          if (!button.classList.contains("filter_button")) {
+            // remove button from filter bar and add it back to the extra_area
+             active_filters.removeChild(button);
+
+            // if all buttons have been unclicked and area is empty
+            if (!active_filters.hasChildNodes()) {
+              // hide area of clicked buttons
+              active_filters.innerHTML = '';
+              clicked_buttons.style.display = "none";
+            }
+            // delete category from tracker
+            filtersAndCategories.delete(category);
+            // clear default
+            container.innerHTML = '';
+            // show filtered stories from clicking button
+            showFilteredStories(data);
+          }
+          // if button is ACTIVE
+          else {
+            // add to filter bar
+            clicked_buttons.style.display = "flex";
+            clicked_buttons.style.maxHeight = "auto";
+            active_filters.appendChild(button);
+            // ADD category to tracker
+            filtersAndCategories.set(category, true);
+            // clear default
+            container.innerHTML = '';
+            // show filtered stories from clicking button
+            showFilteredStories(data);
+          }
+          console.log(filtersAndCategories);
+        });
+      });
+    
+    // add functionality to sort buttons 
+    showSortButtons(data);
+      
+    // clear filters 
+    clearFilters(data);
+
+    // show extra filters
+    showExtraFilters(filters_more, extra_filters);
 }
