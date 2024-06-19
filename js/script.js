@@ -329,33 +329,64 @@ function createMultiFilters(data, category, button) {
 }
 
 function showMultiFilterButtons(button, filter_buttons, show_filters) {
+  // get button category
+  let category = button.dataset.category; 
+
   // create "show more" button
-  let show_more = document.createElement("button");
+  const show_more = document.createElement("button");
   show_more.classList.add("show_more");
 
+  // create search bar container
+  const search = document.createElement("div");
+  search.classList.add("search_container");
   // create search bar
-  let search_bar = document.createElement("input");
+  const search_bar = document.createElement("input");
   search_bar.setAttribute("type", "text");
   search_bar.classList.add("search");
-  search_bar.setAttribute("placeholder", "");
+  search_bar.setAttribute("placeholder", "search " + category.toLowerCase() + "s");
   // create clear button
-  let clear = document.createElement("button");
-  clear.classList.add("clear_search");
-  clear.innerHTML = '<i class="fa-solid fa-xmark"></i>';
+  const clear_button = document.createElement("button");
+  clear_button.classList.add("clear_search");
+  clear_button.innerHTML = '<i class="fa-solid fa-xmark"></i>';
+  // add search bar and clear button to search container
+  search.appendChild(search_bar);
+  search.appendChild(clear_button);
+
+  // create filters div to show filter buttons
+  const filters_list = document.createElement("div");
+  filters_list.classList.add("filters_default");
+  // create filters div for hidden filters
+  const filters_hidden = document.createElement("div");
+  filters_hidden.classList.add("filters_hidden");
+
+  // add filters to show_filters div
+  show_filters.appendChild(filters_list);
+  show_filters.appendChild(filters_hidden);
   
-  // console.log(clear);
+  // decide on maximum amount of filters shown
+  let max_initial_filters = 8;
+
+  // get initial/default filters
+  let initial_filters = filter_buttons.slice(0, max_initial_filters);
+  // get hidden filters
+  let hidden_filters = filter_buttons.slice(max_initial_filters);
+  
+  let scroll_height;
+  let search_results = [];
 
   // show filters when clicking button
-  button.addEventListener("click", (event) => {
+  button.addEventListener("click", () => {
     // toggle main filter button to active or inactive
     button.classList.toggle("active");
     // toggle show_filters div to active or inactive
     show_filters.classList.toggle("active");
 
+    // let scroll_height;
+
     // if "show filters" is ACTIVE 
     if (!show_filters.classList.contains("active")) {
       // accessibility
-      show_filters.ariaExpanded = false;
+      button.ariaExpanded = false;
       button.ariaPressed = false;
       // close div
       show_filters.style.maxHeight = 0;
@@ -363,144 +394,222 @@ function showMultiFilterButtons(button, filter_buttons, show_filters) {
     // if "show filters" is INACTIVE
     else {
       // accessibility
-      show_filters.ariaExpanded = true;
+      button.ariaExpanded = true;
       button.ariaPressed = true;
-      // 
-      let default_height;
-      let max_height;
-      // clear filter area
-      show_filters.replaceChildren();
-      // decide on maximum amount of filters shown
-      let max_initial_filters = 8;
 
-      // get initial/default filters
-      let initial_filters = filter_buttons.slice(0, max_initial_filters);
-      // get hidden filters
-      let hidden_filters = filter_buttons.slice(max_initial_filters);
+      // add search bar to beginning of filter list
+      show_filters.prepend(search);
 
-      // display initial filters
-      if (filter_buttons.length < max_initial_filters) {
-        initial_filters.forEach(button => show_filters.appendChild(button));
+      // get search term
+      let search_term = search_bar.value;
+
+      // if search term exists, display results even if user opens and closes filters
+      if (search_term.trim().length > 0) {
+        console.log(search_results);
+        // display results
+        search_results.forEach(result => filters_list.appendChild(result));
+        // remove "show more" button
+        show_more.remove();
+
+        // smooth scroll animation
+        show_filters.style.maxHeight = show_filters.scrollHeight + "px";
+
+        console.log(show_more);
       }
-      // if "show more" button is ACTIVE
-      else if (show_filters.classList.contains("show_all")) {
-        // display all filters
-        filter_buttons.forEach(button => {
-          show_filters.appendChild(button);
-        });
-      }
-      // if category has more than 7 entries, allow user to toggle a "show more" button
-      if (filter_buttons.length > max_initial_filters && !show_filters.classList.contains("show_all")) {
-        show_filters.before(search_bar);
-
-        search_bar.addEventListener("input", (event) => {
-          let results = [];
-          let input = event.target.value;
-          // console.log(input);
-          // make sure input exists and isn't 0
-          if (input && input.trim().length > 0) {
-            // sanitize input, remove whitespace
-            input = input.trim().toLowerCase();
-
-           filter_buttons.filter(button => {
-              // get filter and sanitize it
-              let filter = button.dataset.filter;
-              filter = filter.toLowerCase();
-              // console.log(filter);
-              if (filter.includes(input)) {
-                show_filters.innerHTML = '';
-                results.push(button);
-              }
-            });
-          }
-          else {
-            console.log(input);
-            show_filters.innerHTML = '';
-
-            initial_filters.forEach(button => {
-              show_filters.appendChild(button);
-            });
-          }
-
-          // show results
-          results.forEach(result => show_filters.appendChild(result));
-        });
-
-        initial_filters.forEach(button => {
-          show_filters.appendChild(button);
-        });
-        // set "show more" button text
-        show_more.textContent = "Show More";
-        // add show_more button to end of initial filters
-        show_filters.appendChild(show_more);
-
-        // add click event which shows the rest of the filters
-        show_more.addEventListener("click", () => {
-          // toggle active class on "show more"
-          show_more.classList.toggle("active");
-
-          // if all hidden filters are shown
-          if (show_more.classList.contains("active")) {
-            // go through all hidden buttons and add them
-            hidden_filters.forEach(button => {
-              // add buttons before "show more"
-              show_more.before(button);
-            });
-            // add class to indicate "show all" is active
-            show_filters.classList.add("show_all");
-            // change "show more" to "show less"
-            show_more.textContent = "Show Less";
-            // transition to appropriate scrollheight
-            max_height = show_filters.scrollHeight;
-            show_filters.style.maxHeight = max_height + "px";
-            // get last button of hidden filters
-            let last_button = hidden_filters.slice(-1);
-            last_button = last_button[0];
-            // add "show less" button after transition ends
-            show_filters.addEventListener("transitionend", (event) => {
-              // make sure it only applies to max-height transition on show_filters
-              if (event.propertyName === "max-height") {
-                last_button.after(show_more);
-              }
-            });
-          }
-          // if hidden filters are hidden
-          else {
-            // remove class to indicate "show all" is inactive
-            show_filters.classList.remove("show_all");
-            // adjust height back to default height
-            show_filters.style.maxHeight = default_height + "px";
-            // change text back to "show more"
-            show_more.textContent = "Show More";
-            // get last button of initial filters
-            let last_button = initial_filters.slice(-1);
-            last_button = last_button[0];
-            // add "show more" button after transition ends
-            show_filters.addEventListener("transitionend", (event) => 
-              {
-              // make sure it only applies to max-height transition on show-filters
-              if (event.propertyName === "max-height") {
-                // console.log(event);
-                last_button.after(show_more);
-              }
-              });
-          }
-        });
-      }
+      
+      // if category has less than max amount of shown filters
       else if (filter_buttons.length < max_initial_filters) {
-      }
-      // show height smoothly
-      let scroll_height = show_filters.scrollHeight;
-      show_filters.style.maxHeight = scroll_height + "px";
-      // get default height
-      default_height = scroll_height;
+        // display initial filters for every category
+        filter_buttons.forEach(button => filters_list.appendChild(button));
 
-      if (show_filters.classList.contains("show_all")) {
-        let height = show_filters.scrollHeight;
-        height = height + 25;
-        show_filters.style.maxHeight = height + "px";
-      } 
+        // show_filters.style.maxHeight = show_filters.scrollHeight + "px";
+      }
+
+      // if category has more than max amount of shown filters, allow user to toggle a "show more" button that shows the rest of them
+      else if (filter_buttons.length > max_initial_filters) {
+        // if "show all" is ACTIVE
+        if (show_filters.classList.contains("show_all")) {
+          // display all filters
+          initial_filters.forEach(button => filters_list.appendChild(button));
+          hidden_filters.forEach(button => filters_hidden.appendChild(button));
+        }
+        // if "show all" is INACTIVE
+        else {
+          // remove hidden filters
+          filters_hidden.innerHTML = '';
+          // display initial filters
+          initial_filters.forEach(button => filters_list.appendChild(button));
+            
+          // set "show more" button to default
+          show_more.textContent = "Show More";
+          // add show_more button after filters list
+          show_filters.append(show_more);
+          // get default maxheight
+          scroll_height = show_filters.scrollHeight;
+        }
+        
+        // smoothly scroll
+        show_filters.style.maxHeight = show_filters.scrollHeight + "px";
+      }
     }
+  });
+
+  // add event listener to show more button
+  show_more.addEventListener("click", () => {
+    // get parent element
+    let show_filters = show_more.parentNode;
+    // toggle active class on "show more"
+    show_more.classList.toggle("active");
+
+    // if show_more is clicked
+    if (show_more.classList.contains("active")) {
+      // go through all hidden buttons and add them
+      hidden_filters.forEach(button => {
+        // add buttons after current ones in filter list
+        filters_hidden.appendChild(button);
+      });
+
+      // set show_filters to "show all" 
+      show_filters.classList.add("show_all");
+      // change "show more" to "show less"
+      show_more.textContent = "Show Less";
+
+      // transition to appropriate scrollheight
+      show_filters.style.maxHeight = show_filters.scrollHeight + "px";
+
+      // remove show more button temporarily
+      show_more.remove();
+    }
+    else {
+      // remove class to indicate "show all" is inactive
+      show_filters.classList.remove("show_all");
+    
+      // adjust height back to default height
+      show_filters.style.maxHeight = scroll_height + "px";
+      console.log(scroll_height);
+      // change text back to "show more"
+      show_more.textContent = "Show More";
+
+      // remove show more button temporarily
+      show_more.remove();
+    }
+  });
+
+  // add "show more" button after transition ends
+  show_filters.addEventListener("transitionend", (event) => {
+    if (event.propertyName === "max-height") {
+      let div = event.target;
+      // if all filters are shown
+      if (div.classList.contains("show_all")) {
+        filters_hidden.after(show_more);
+      }
+      // if default filters are shown
+      else 
+        {
+        filters_list.after(show_more);
+      }
+    }
+  });
+
+  // add functionality to search bar
+  search_bar.addEventListener("input", (event) => {
+    let results = [];
+    let input = event.target.value;
+    // console.log(input);
+    // make sure input exists and isn't 0
+    if (input && input.trim().length > 0) {
+      // sanitize input, remove whitespace
+      input = input.trim().toLowerCase();
+
+      // go through filters
+      filter_buttons.filter(button => {
+        // get filter and sanitize it
+        let filter = button.dataset.filter;
+        filter = filter.toLowerCase();
+        // console.log(filter);
+        if (filter.includes(input)) {
+          // clear filter list div
+          filters_list.innerHTML = '';
+          filters_hidden.innerHTML = '';
+          show_more.remove();
+          // push matching filters to array
+          results.push(button);
+
+          clear_button.classList.add("active");
+        }
+      });
+    }
+    // if input is EMPTY
+    else {
+      // clear filter list div
+      filters_list.innerHTML = '';
+
+      // if "show all" is INACTIVE
+      if (!show_filters.classList.contains("show_all")) {
+        // display default amount of filters
+        initial_filters.forEach(button => {
+          filters_list.appendChild(button);
+          // add back "show more" button
+          filters_list.after(show_more);
+        });
+      }
+      // if "show all" is ACTIVE
+      else {
+        // display all filters
+          initial_filters.forEach(button => filters_list.appendChild(button));
+          hidden_filters.forEach(button => filters_hidden.appendChild(button));
+          // add back "show more" button
+          filters_hidden.after(show_more);
+      }
+        // smooth scroll transition
+        show_filters.style.maxHeight = show_filters.scrollHeight + "px";
+        // remove clear button
+        clear_button.classList.remove("active");
+    }
+
+    // display results of input
+    results.forEach(result => filters_list.appendChild(result));
+    console.log(results);
+
+    // if there are no results, display nothing
+    if (results.length === 0) {
+      filters_list.innerHTML = '';
+      let zero_results = document.createElement("span");
+      zero_results.textContent = "There are no results";
+      filters_list.appendChild(zero_results);
+    }
+
+    // add results to main search results
+    search_results = results;
+  });
+
+  // add functionality to clear button
+  clear_button.addEventListener("click", () => {
+    // clear filter list div
+    filters_list.innerHTML = '';
+    search_bar.value = '';
+
+    // if "show all" is INACTIVE
+    if (!show_filters.classList.contains("show_all")) {
+      // display default amount of filters
+      initial_filters.forEach(button => {
+        filters_list.appendChild(button);
+        // add back "show more" button
+        filters_list.after(show_more);
+      });
+    }
+    // if "show all" is ACTIVE
+    else {
+      // display all filters
+        initial_filters.forEach(button => filters_list.appendChild(button));
+        hidden_filters.forEach(button => filters_hidden.appendChild(button));
+        // add back "show more" button
+        filters_hidden.after(show_more);
+    }
+      // smooth scroll transition
+      show_filters.style.maxHeight = show_filters.scrollHeight + "px";
+      // remove clear button
+      clear_button.classList.remove("active");
   });
 }
 
