@@ -94,7 +94,6 @@ async function getJSON() {
 getJSON()
   .then(data => {
     postData(data);
-    populateAllButtonsOld(data);
     populateAllButtons(data);
 })
   .catch(() => {
@@ -328,10 +327,7 @@ function createMultiFilters(data, category, button) {
     showMultiFilterButtons(button, filter_buttons, show_filters);
 }
 
-function showMultiFilterButtons(button, filter_buttons, show_filters) {
-  // get button category
-  let category = button.dataset.category; 
-
+function createElements(show_filters) {
   // create "show more" button
   const show_more = document.createElement("button");
   show_more.classList.add("show_more");
@@ -362,6 +358,44 @@ function showMultiFilterButtons(button, filter_buttons, show_filters) {
   // add filters to show_filters div
   show_filters.appendChild(filters_list);
   show_filters.appendChild(filters_hidden);
+
+  return [show_more, search, filters_list, filters_hidden]
+}
+
+function showMultiFilterButtons(button, filter_buttons, show_filters) {
+  // get button category
+  let category = button.dataset.category; 
+
+  // create "show more" button
+  const show_more = document.createElement("button");
+  show_more.classList.add("show_more");
+
+  // create search bar container
+  const search = document.createElement("div");
+  search.classList.add("search_container");
+  // create search bar
+  const search_bar = document.createElement("input");
+  search_bar.setAttribute("type", "text");
+  search_bar.classList.add("search_bar");
+  search_bar.setAttribute("placeholder", "Search " + category.toLowerCase() + "s");
+  // create clear button
+  const clear_button = document.createElement("button");
+  clear_button.classList.add("clear_search");
+  clear_button.innerHTML = '<i class="fa-solid fa-xmark"></i>';
+  // add search bar and clear button to search container
+  search.appendChild(search_bar);
+  search.appendChild(clear_button);
+
+  // create filters div to show filter buttons
+  const filters_list = document.createElement("div");
+  filters_list.classList.add("filters_default");
+  // create filters div for hidden filters
+  const filters_hidden = document.createElement("div");
+  filters_hidden.classList.add("filters_hidden");
+
+  // add filters to show_filters div
+  show_filters.appendChild(filters_list);
+  show_filters.appendChild(filters_hidden);
   
   // decide on maximum amount of filters shown
   let max_initial_filters = 8;
@@ -373,6 +407,16 @@ function showMultiFilterButtons(button, filter_buttons, show_filters) {
   
   let scroll_height;
   let search_results = [];
+
+  // create object of created html elements
+  const htmlElements = {
+    "show_filters": show_filters,
+    "initial_filters": initial_filters,
+    "filters_list": filters_list,
+    "filters_hidden": filters_hidden,
+    "show_more": show_more,
+    "clear_button": clear_button
+  }
 
   // show filters when clicking button
   button.addEventListener("click", () => {
@@ -422,7 +466,7 @@ function showMultiFilterButtons(button, filter_buttons, show_filters) {
         // display initial filters for every category
         filter_buttons.forEach(button => filters_list.appendChild(button));
 
-        // show_filters.style.maxHeight = show_filters.scrollHeight + "px";
+        show_filters.style.maxHeight = show_filters.scrollHeight + "px";
       }
 
       // if category has more than max amount of shown filters, allow user to toggle a "show more" button that shows the rest of them
@@ -473,23 +517,19 @@ function showMultiFilterButtons(button, filter_buttons, show_filters) {
       show_filters.classList.add("show_all");
       // change "show more" to "show less"
       show_more.textContent = "Show Less";
-
       // transition to appropriate scrollheight
       show_filters.style.maxHeight = show_filters.scrollHeight + "px";
-
       // remove show more button temporarily
       show_more.remove();
     }
     else {
       // remove class to indicate "show all" is inactive
       show_filters.classList.remove("show_all");
-    
       // adjust height back to default height
       show_filters.style.maxHeight = scroll_height + "px";
       console.log(scroll_height);
       // change text back to "show more"
       show_more.textContent = "Show More";
-
       // remove show more button temporarily
       show_more.remove();
     }
@@ -521,8 +561,8 @@ function showMultiFilterButtons(button, filter_buttons, show_filters) {
     // console.log(input);
     // make sure input exists and isn't 0
     if (input && input.trim().length > 0) {
-      // sanitize input, remove whitespace
-      input = input.trim().toLowerCase();
+      // split input by commas
+      input = input.split(",");
 
       // clear filter list divs
       filters_list.innerHTML = '';
@@ -534,15 +574,24 @@ function showMultiFilterButtons(button, filter_buttons, show_filters) {
       clear_button.classList.add("active");
 
       // go through filters
-      filter_buttons.filter(button => {
+      filter_buttons.some(button => {
         // get filter and sanitize it
         let filter = button.dataset.filter;
         filter = filter.toLowerCase();
-        // console.log(filter);
-        if (filter.includes(input)) {
-          // push matching filters to array
-          results.push(button);
-        }
+
+        // go through input array
+        input.forEach(input => {
+          // sanitize input, remove whitespace
+          input = input.trim().toLowerCase();
+          // if input isn't just whitespace
+          if (input) {
+            // match input with filters 
+            if (filter.includes(input)) {
+            // push matching filters to array
+            results.push(button);
+          }
+          }
+        });
       });
 
       // if there are no results, display nothing
@@ -555,29 +604,9 @@ function showMultiFilterButtons(button, filter_buttons, show_filters) {
     else {
       // clear filter list div
       filters_list.innerHTML = '';
-      console.log(true);
 
-      // if "show all" is INACTIVE
-      if (!show_filters.classList.contains("show_all")) {
-        // display default amount of filters
-        initial_filters.forEach(button => {
-          filters_list.appendChild(button);
-          // add back "show more" button
-          filters_list.after(show_more);
-        });
-      }
-      // if "show all" is ACTIVE
-      else {
-        // display all filters
-          initial_filters.forEach(button => filters_list.appendChild(button));
-          hidden_filters.forEach(button => filters_hidden.appendChild(button));
-          // add back "show more" button
-          filters_hidden.after(show_more);
-      }
-        // smooth scroll transition
-        show_filters.style.maxHeight = show_filters.scrollHeight + "px";
-        // remove clear button
-        clear_button.classList.remove("active");
+      // reset is search is empty
+      clearSearch(htmlElements);
     }
 
     // display results of input
@@ -593,6 +622,20 @@ function showMultiFilterButtons(button, filter_buttons, show_filters) {
     // clear filter list div
     filters_list.innerHTML = '';
     search_bar.value = '';
+
+    // reset if search is cleared
+    clearSearch(htmlElements);
+  });
+}
+
+function clearSearch(htmlElements) {
+  // destructure object with html elements
+  let show_filters = htmlElements.show_filters;
+  let initial_filters = htmlElements.initial_filters;
+  let filters_list = htmlElements.filters_list;
+  let filters_hidden = htmlElements.filters_hidden;
+  let show_more = htmlElements.show_more;
+  let clear_button = htmlElements.clear_button;
 
     // if "show all" is INACTIVE
     if (!show_filters.classList.contains("show_all")) {
@@ -615,7 +658,6 @@ function showMultiFilterButtons(button, filter_buttons, show_filters) {
       show_filters.style.maxHeight = show_filters.scrollHeight + "px";
       // remove clear button
       clear_button.classList.remove("active");
-  });
 }
 
 function showSortButtons(data) {
@@ -1578,126 +1620,4 @@ function allowTransitions() {
       document.querySelector(".preload").classList.remove("preload");
     }
   }
-}
-
-function showExtraFilters(filter, extra_area) {
-  filter.addEventListener("click", () => {
-    // toggle filter button on and off
-    filter.classList.toggle("filter_button");
-    // if area is hidden show area on click
-    if (extra_area.classList.contains("hide")) {
-      extra_area.classList.remove("hide");
-      extra_area.classList.add("show");
-    }
-    else {
-      extra_area.classList.add("hide");
-      extra_area.classList.remove("show");
-    }
-  });
-}
-
-function populateButtonsOld(data, category, filter) { 
-  // create a new set based off the filter keys
-  const key = new Set(
-    data.map((item) => item[category])
-    .reduce((accumulator, currentValue) => accumulator.concat(currentValue), [])
-  )
-  
-  // create extra section which has all the new filters in it
-  const extra = document.createElement("section");
-  extra.classList.add("extra_filters", "hide");
-  extra.setAttribute("category", category);
-  nav_area.appendChild(extra);
-  // show area when clicked
-  showExtraFilters(filter, extra);
-
-  // counter
-  let i = 0;
-
-  key.forEach((item) => {
-    // checks if item exists and there are no empty strings
-    if (item) {
-      // create the button and add to extra filters area
-      const button = document.createElement("button");
-      button.classList.add("filters");
-      button.setAttribute("category", category);
-      button.setAttribute("filter", item);
-
-      button.setAttribute("data-order", i);
-      i++;
-
-      button.innerHTML = item;
-      extra.appendChild(button);
-      
-      // get each story which matches the filter button
-      clickFilter(button, data, category, item);
-    }
-  });
-}
-
-function populateAllButtonsOld(data) {
-    // get all buttons with multiple filters
-    const filters_main = document.querySelectorAll(".filters_main");
-    // go through array of filter buttons
-    filters_main.forEach(button => 
-      {
-        // get category of button
-        let category = button.dataset.filter;
-        // populate button with filters
-        populateButtonsOld(data, category, button);
-      });
-
-      // get buttons that are booleans
-      const filters_misc = document.querySelectorAll(".filters_misc");
-      // go through array of filter buttons
-      filters_misc.forEach(button => {
-        // get category of button
-        let category = button.dataset.filter;
-        // add click event for each button
-        button.addEventListener("click", () => {
-          // toggle filter_button class
-          button.classList.toggle("filter_button");
-          // if button is INACTIVE
-          if (!button.classList.contains("filter_button")) {
-            // remove button from filter bar and add it back to the extra_area
-             active_filters.removeChild(button);
-
-            // if all buttons have been unclicked and area is empty
-            if (!active_filters.hasChildNodes()) {
-              // hide area of clicked buttons
-              active_filters.innerHTML = '';
-              clicked_buttons.style.display = "none";
-            }
-            // delete category from tracker
-            filtersAndCategories.delete(category);
-            // clear default
-            container.innerHTML = '';
-            // show filtered stories from clicking button
-            showFilteredStories(data);
-          }
-          // if button is ACTIVE
-          else {
-            // add to filter bar
-            clicked_buttons.style.display = "flex";
-            clicked_buttons.style.maxHeight = "auto";
-            active_filters.appendChild(button);
-            // ADD category to tracker
-            filtersAndCategories.set(category, true);
-            // clear default
-            container.innerHTML = '';
-            // show filtered stories from clicking button
-            showFilteredStories(data);
-          }
-          console.log(filtersAndCategories);
-        });
-      });
-    
-    // add functionality to sort buttons 
-    showSortButtons(data);
-      
-    // clear filters 
-    clearFilters(data);
-
-    // show extra filters
-    showExtraFilters(filters_more, extra_filters);
 }
