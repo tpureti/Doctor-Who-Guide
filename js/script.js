@@ -515,11 +515,23 @@ function showMultiFilterButtons(button, filter_buttons, show_filters) {
   search_bar.addEventListener("input", (event) => {
     let results = [];
     let input = event.target.value;
+
+    let zero_results = document.createElement("span");
+    zero_results.textContent = "There are no results";
     // console.log(input);
     // make sure input exists and isn't 0
     if (input && input.trim().length > 0) {
       // sanitize input, remove whitespace
       input = input.trim().toLowerCase();
+
+      // clear filter list divs
+      filters_list.innerHTML = '';
+      filters_hidden.innerHTML = '';
+      // remove show more button
+      show_more.remove();
+
+      // add clear search button
+      clear_button.classList.add("active");
 
       // go through filters
       filter_buttons.filter(button => {
@@ -528,21 +540,22 @@ function showMultiFilterButtons(button, filter_buttons, show_filters) {
         filter = filter.toLowerCase();
         // console.log(filter);
         if (filter.includes(input)) {
-          // clear filter list div
-          filters_list.innerHTML = '';
-          filters_hidden.innerHTML = '';
-          show_more.remove();
           // push matching filters to array
           results.push(button);
-
-          clear_button.classList.add("active");
         }
       });
+
+      // if there are no results, display nothing
+      if (results.length === 0) {
+        filters_list.innerHTML = '';
+        filters_list.appendChild(zero_results);
+      }
     }
     // if input is EMPTY
     else {
       // clear filter list div
       filters_list.innerHTML = '';
+      console.log(true);
 
       // if "show all" is INACTIVE
       if (!show_filters.classList.contains("show_all")) {
@@ -570,14 +583,6 @@ function showMultiFilterButtons(button, filter_buttons, show_filters) {
     // display results of input
     results.forEach(result => filters_list.appendChild(result));
     console.log(results);
-
-    // if there are no results, display nothing
-    if (results.length === 0) {
-      filters_list.innerHTML = '';
-      let zero_results = document.createElement("span");
-      zero_results.textContent = "There are no results";
-      filters_list.appendChild(zero_results);
-    }
 
     // add results to main search results
     search_results = results;
