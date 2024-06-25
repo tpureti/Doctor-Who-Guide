@@ -241,6 +241,7 @@ h1.title {
   padding: 0.75rem 2.5rem 0.75rem 3rem;
   outline: 0;
   border: 2px solid var(--clr-light-grey);
+  z-index: 2;
   -webkit-transition: 0.3s ease;
   transition: 0.3s ease;
 }
@@ -250,9 +251,35 @@ h1.title {
   -webkit-transition: 0.3s ease;
   transition: 0.3s ease;
 }
+
+.search_tips {
+  width: 95%;
+  font-size: var(--fs-lg);
+  padding: 0.75rem 0.75rem 0.75rem 1rem;
+  background-color: var(--clr-med-grey-2);
+  border: 2px solid var(--clr-light-grey);
+  z-index: 1;
+  position: absolute;
+  top: 65px;
+  visibility: hidden;
+  opacity: 0;
+  -webkit-transition: 0.3s ease;
+  transition: 0.3s ease;
+}
+.search_tips > span {
+  display: block;
+}
+.search_tips.active {
+  visibility: visible;
+  opacity: 1;
+  -webkit-transition: 0.3s ease;
+  transition: 0.3s ease;
+}
+
 .search_icon {
   font-size: var(--fs-xl);
   color: var(--clr-light-blue);
+  z-index: 3;
   position: absolute;
   left: 0;
   margin-left: 2rem;
@@ -262,6 +289,7 @@ h1.title {
   font-size: var(--fs-xl);
   padding: 0.5rem 1rem;
   display: none;
+  z-index: 2;
 }
 .clear_input:hover, .clear_input:focus {
   color: var(--clr-pale-red);

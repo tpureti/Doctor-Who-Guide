@@ -1239,6 +1239,7 @@ function mainSearch() {
   const main_search = document.querySelector(".main_search");
   // get clear_input
   const clear_input = document.querySelector(".clear_input");
+  const search_tips = document.querySelector(".search_tips");
 
   let debounceTimer;
   const debounce = (callback, time) => {
@@ -1246,9 +1247,28 @@ function mainSearch() {
     debounceTimer = window.setTimeout(callback, time);
   };
 
-  // add event listener
+  // add event listener to show tips
+  main_search.addEventListener("focusin", () => {
+    search_tips.classList.add("active");
+  });
+
+  // add event listener to close tips
+  main_search.addEventListener("focusout", () => {
+    search_tips.classList.remove("active");
+  });
+
+  // add event listener that gets user input
   main_search.addEventListener("input", (event) => {
+    // get user input
     let input = event.target.value;
+    // add clear button
+    if (input) {
+      clear_input.classList.add("active");
+    }
+    else {
+      clear_input.classList.remove("active");
+    }
+    // handle search queries
     debounce(() => handleSearches(input, results), 500);
     // handleSearches(input, results);
   });
@@ -1264,13 +1284,6 @@ function mainSearch() {
     let and_searches = [];
     let or_searches = [];
     let not_searches = [];
-
-    if (full_input) {
-      clear_input.classList.add("active");
-    }
-    else {
-      clear_input.classList.remove("active");
-    }
 
     // if there's QUOTES
     const QUOTE = full_input.match(/\"[\d\w\s\.\:]+\"/g);
@@ -1307,11 +1320,11 @@ function mainSearch() {
       gen_search = input;
     }
    
-   console.log(gen_search);
-   console.log(exact_searches);
-   console.log(and_searches);
-   console.log(or_searches);
-   console.log(not_searches);
+  //  console.log(gen_search);
+  //  console.log(exact_searches);
+  //  console.log(and_searches);
+  //  console.log(or_searches);
+  //  console.log(not_searches);
 
    let searchResults = [];
    // go through currently displayed data  
@@ -1358,15 +1371,6 @@ function mainSearch() {
         addToSearchResults(or_results, searchResults);
       }
 
-      // // get results from NOT searches
-      // if (not_searches.length > 0) {
-      //   let not_results = findNOTSearches(not_searches, lowercase_entry, data);
-        
-      //   if (not_results !== undefined) {
-      //     console.log(not_results);
-      //     searchResults.push(not_results);
-      //   }
-      // }
     });
 
     // combine results
@@ -1381,8 +1385,9 @@ function mainSearch() {
     // display results
     container.innerHTML = '';
     postData(searchResults);
+    // show number of results
+    num_of_results.textContent = searchResults.length;
     console.log(searchResults);
-
   }
 
   // add event listener to "clear" button
@@ -1416,7 +1421,7 @@ function parseSearchTerms(INPUT, keyword_searches, keyword) {
           // remove whitespace
           term = term.trim();
           // add to set
-          if (!term.match(regex)) {
+          if (!term.match(regex) && !term.match(/NOT|-/)) {
             // add to subarray
             array.push(term.toLowerCase());
           }
