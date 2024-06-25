@@ -1244,15 +1244,13 @@ function mainSearch() {
   const debounce = (callback, time) => {
     window.clearTimeout(debounceTimer);
     debounceTimer = window.setTimeout(callback, time);
-    console.log(debounceTimer);
   };
 
   // add event listener
   main_search.addEventListener("input", (event) => {
     let input = event.target.value;
-    // debounce(() => handleSearches(input), 500);
-    // setTimeout(handleSearches, 500, input, results);
-    handleSearches(input, results);
+    debounce(() => handleSearches(input, results), 500);
+    // handleSearches(input, results);
   });
 
   // function that filters search inputs
@@ -1294,12 +1292,12 @@ function mainSearch() {
     // add individual terms to array
     parseSearchTerms(NOT, not_searches, "NOT");
 
+    let or = [];
     // if there's a comma and it's NOT FOLLOWED by a key search term
     const COMMA_AHEAD = full_input.match(/,(?![\d\w\s]+(AND|&|OR|\|))/g);
     // if there's a comma and it's NOT PRECEDED by a key search term
     const COMMA_BEHIND = full_input.match(/(?<!(AND|&|OR|\|)[\d\w\s]+),/g);
     if (COMMA_AHEAD !== null && COMMA_BEHIND !== null) {
-      let or = [];
       or.push(input);
       parseSearchTerms(or, or_searches, "OR");
     }
@@ -1309,11 +1307,11 @@ function mainSearch() {
       gen_search = input;
     }
    
-  //  console.log(gen_search);
-  //  console.log(exact_searches);
-  //  console.log(and_searches);
-  //  console.log(or_searches);
-  //  console.log(not_searches);
+   console.log(gen_search);
+   console.log(exact_searches);
+   console.log(and_searches);
+   console.log(or_searches);
+   console.log(not_searches);
 
    let searchResults = [];
    // go through currently displayed data  
@@ -1334,55 +1332,57 @@ function mainSearch() {
 
       if (gen_search !== undefined) {
         // get results from regular search
-        let gen_results = findGeneralSearches(gen_search, lowercase_entry, data);
+        let gen_results = findGenSearches(gen_search, lowercase_entry, data);
         // add to search results
-        if (gen_results !== undefined) {
-          searchResults.push(gen_results);
-        }
+        addToSearchResults(gen_results, searchResults);
       }
 
       if (exact_searches.length > 0) {
         // get results for quoted searches
-        let exact_results = findExactMatches(exact_searches, lowercase_entry, data);
-  
-        if (exact_results !== undefined) {
-          searchResults.push(exact_results);
-        }
+        let exact_results = findExactSearches(exact_searches, lowercase_entry, data);
+        // add to search results
+        addToSearchResults(exact_results, searchResults);
       }
 
       // get results from AND searches
       if (and_searches.length > 0) {
         let and_results = findANDSearches(and_searches, lowercase_entry, data);
-        // add to main search results
-        if (and_results !== undefined) {
-          searchResults.push(and_results);
-        }
+        // add to search results
+        addToSearchResults(and_results, searchResults);
       }
 
       // get results from OR searches
       if (or_searches.length > 0) {
         let or_results = findORSearches(or_searches, lowercase_entry, data);
-  
-        if (or_results !== undefined) {
-          searchResults.push(or_results);
-        }
+        // add to search results
+        addToSearchResults(or_results, searchResults);
       }
 
-      // get results from NOT searches
-      if (not_searches.length > 0) {
-        let not_results = findNOTSearches(not_searches, lowercase_entry, data);
+      // // get results from NOT searches
+      // if (not_searches.length > 0) {
+      //   let not_results = findNOTSearches(not_searches, lowercase_entry, data);
         
-        if (not_results !== undefined) {
-          searchResults.push(not_results);
-        }
-      }
+      //   if (not_results !== undefined) {
+      //     console.log(not_results);
+      //     searchResults.push(not_results);
+      //   }
+      // }
     });
+
+    // combine results
+    searchResults = [...new Set(searchResults)];    
+
+    // find NOT searches
+    if (not_searches.length > 0) {
+      let not_results = findNOTSearches(not_searches, searchResults);
+      searchResults = not_results;
+    }
+
     // display results
-   searchResults = [...new Set(searchResults)];
-   container.innerHTML = '';
-   postData(searchResults);
-  //  setTimeout(() => {
-  //  }, 200);
+    container.innerHTML = '';
+    postData(searchResults);
+    console.log(searchResults);
+
   }
 
   // add event listener to "clear" button
@@ -1392,7 +1392,7 @@ function mainSearch() {
     // reset to previous results
     main_search.value = '';
     container.innerHTML = '';
-    postData(filteredStories);
+    postData(results);
   });
 }
 
@@ -1431,7 +1431,7 @@ function parseSearchTerms(INPUT, keyword_searches, keyword) {
           // remove whitespace
           term = term.trim();
           // add to set
-          if (!term.match(regex)) {
+          if (!term.match(regex) && term && !term.match(/NOT|-/)) {
             // add to subarray
             array.push(term.toLowerCase());
           }
@@ -1447,7 +1447,6 @@ function parseSearchTerms(INPUT, keyword_searches, keyword) {
         // add to set
         keyword_searches.push(term.toLowerCase());
       }
-      console.log(array);
     });
     // make a set from the array
     keyword_searches = [...new Set(keyword_searches)];
@@ -1456,7 +1455,13 @@ function parseSearchTerms(INPUT, keyword_searches, keyword) {
 
 }
 
-function findGeneralSearches(plain_search, lowercase_entry, data) {
+function addToSearchResults(individual_results, searchResults) {
+  if (individual_results !== undefined) {
+    searchResults.push(individual_results);
+  }
+}
+
+function findGenSearches(plain_search, lowercase_entry, data) {
   const result = lowercase_entry.some(entry => {
     if (entry.includes(plain_search)) {
       return true;
@@ -1468,17 +1473,16 @@ function findGeneralSearches(plain_search, lowercase_entry, data) {
   }
 }
 
-function findExactMatches(exact_search, lowercase_entry, data) {
-  const result = lowercase_entry.some(entry => {
-    exact_search.forEach(search => {
-      search = search.toLowerCase();
+function findExactSearches(exact_search, lowercase_entry, data) {
+  let results = lowercase_entry.some(entry => {
+    return exact_search.some(search => {
       if (entry === search) {
         return true;
       }
     });
   });
 
-  if (result === true) {
+  if (results === true) {
     return data;
   }
 }
@@ -1520,26 +1524,37 @@ function findANDSearches(and_searches, lowercase_entry, data) {
   }
 }
 
-function findNOTSearches(not_searches, lowercase_entry, data) {
-  const result = not_searches.every(search => {
-    return lowercase_entry.every(entry => {
-      // if entry DOES NOT INCLUDE search
-      if (!entry.includes(search)) {
-        return true;
-      }
-    });
-  });
-  // add to array
-  if (result === true) {
-    return data;
-  }
-}
+function findNOTSearches(not_searches, searchResults) {
+  let not_results = [];
+  searchResults.filter(data => {
+    // turn data into array of values 
+    let entry = Object.values(data).flat().flat().flat();
+    
+    // make data lowercase
+    let lowercase_entry = entry.map(entry => {
+      if (!Array.isArray(entry) && typeof entry !== 'object' && typeof entry === 'string') {
+          return entry.toLowerCase();
+        }
+      });
 
-function checkUndefined(value, array) {
-  if (typeof value !== 'undefined') {
-    value = value.trim().toLowerCase();
-    array.add(value);
-  }
+      // get rid of undefined entries
+      lowercase_entry = lowercase_entry.filter(entry => entry !== undefined);
+
+      const result = not_searches.every(search => {
+        return lowercase_entry.every(entry => {
+          // if entry DOES NOT INCLUDE search
+          if (!entry.includes(search)) {
+            return true;
+          }
+        });
+      });
+      // add to array
+      if (result === true) {
+        not_results.push(data);
+      }
+  });
+
+  return not_results;
 }
 
 // function which loops through and displays json data
