@@ -80,8 +80,8 @@ const num_of_results = document.querySelector(".number_of_results");
 // map that tracks which buttons are clicked
 let filtersAndCategories = new Map();
 let filters = [];
-
-allowTransitions();
+// results
+let results = [];
 
 // fetch json data
 async function getJSON() {
@@ -93,9 +93,11 @@ async function getJSON() {
 // resolve json data
 getJSON()
   .then(data => {
-    showFilteredStories(data);
     populateAllButtons(data);
-    // postData(data);
+    showFilteredStories(data);
+    mainSearch();
+    // 
+    allowTransitions();
 })
   .catch(() => {
     console.log("error: JSON not found")
@@ -1214,23 +1216,25 @@ function showFilteredStories(data) {
     }
   }
 
-  filteredStories = [... new Set(filteredStories.concat(stories))];
-  console.log(filteredStories);
-  postData(filteredStories);
-
-  // show number of results
-  num_of_results.textContent = filteredStories.length;
-
   // reset page if all filters are unclicked or cleared
   if (categories.length === 0) {
     filteredStories = data;
     postData(data);
   }
+  
+  filteredStories = [... new Set(filteredStories.concat(stories))];
+  postData(filteredStories);
+  
+  // show number of results
+  num_of_results.textContent = filteredStories.length;
 
-  mainSearch(filteredStories);
+  console.log(filteredStories);
+  // add filtered stories to global results container
+  results = [];
+  results = results.concat(filteredStories);
 }
 
-function mainSearch(filteredStories) {
+function mainSearch() {
   // get search bar
   const main_search = document.querySelector(".main_search");
   // get clear_input
@@ -1246,15 +1250,13 @@ function mainSearch(filteredStories) {
   // add event listener
   main_search.addEventListener("input", (event) => {
     let input = event.target.value;
-    // console.log(input);
     // debounce(() => handleSearches(input), 500);
-    // setTimeout(handleSearches(input), 500);
-    handleSearches(input);
+    // setTimeout(handleSearches, 500, input, results);
+    handleSearches(input, results);
   });
 
-
   // function that filters search inputs
-  const handleSearches = (input) => {
+  const handleSearches = (input, filteredStories) => {
     // remove whitespace
     input = input.trim();
     let full_input = input;
@@ -1316,6 +1318,7 @@ function mainSearch(filteredStories) {
    let searchResults = [];
    // go through currently displayed data  
    filteredStories.filter(data => {
+    // console.log(data);
     // turn data into array of values 
     let entry = Object.values(data).flat().flat().flat();
     
@@ -1374,10 +1377,12 @@ function mainSearch(filteredStories) {
         }
       }
     });
-
+    // display results
    searchResults = [...new Set(searchResults)];
    container.innerHTML = '';
    postData(searchResults);
+  //  setTimeout(() => {
+  //  }, 200);
   }
 
   // add event listener to "clear" button
@@ -1389,11 +1394,6 @@ function mainSearch(filteredStories) {
     container.innerHTML = '';
     postData(filteredStories);
   });
-}
-
-function searched() {
-  container.innerHTML = '';
-  postData(searchResults);
 }
 
 function parseSearchTerms(INPUT, keyword_searches, keyword) {
