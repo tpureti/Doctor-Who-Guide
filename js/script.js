@@ -93,8 +93,9 @@ async function getJSON() {
 // resolve json data
 getJSON()
   .then(data => {
-    postData(data);
+    showFilteredStories(data);
     populateAllButtons(data);
+    // postData(data);
 })
   .catch(() => {
     console.log("error: JSON not found")
@@ -130,6 +131,8 @@ function populateAllButtons(data) {
     let category = button.dataset.category;
     createMultiFilters(data, category, button);
   });
+
+  clearFilters(data);
 }
 
 function clickSort(data) {
@@ -377,7 +380,7 @@ function showMultiFilterButtons(button, filter_buttons, show_filters) {
   const search_bar = document.createElement("input");
   search_bar.setAttribute("type", "text");
   search_bar.classList.add("search_bar");
-  search_bar.setAttribute("placeholder", "Search " + category.toLowerCase() + "s");
+  search_bar.setAttribute("placeholder", "Search " + category.toLowerCase() + "s...");
   // create clear button
   const clear_button = document.createElement("button");
   clear_button.classList.add("clear_search");
@@ -820,7 +823,6 @@ function addFilter(button) {
 
   // if filter is multi filter
   if (button.classList.contains("multi")) {
-  console.log(button);
   // get category and filter names
   let category = button.dataset.category;
   let filter = button.dataset.filter;
@@ -993,18 +995,15 @@ function clearFilters(data) {
     });
 
     // get multi-filters from sidebar
-    const show_filters = document.querySelectorAll(".show_filters");
+    const multi_filters = document.querySelectorAll(".multi");
     // clear active status on all buttons
-    show_filters.forEach(div => {
-      let filters = Array.from(div.children);
-      filters.forEach(button => {
+    multi_filters.forEach(button => {
         if (button.classList.contains("active")) {
           // toggle all active buttons off
           button.classList.toggle("active");
           // accessibility
           button.ariaPressed = false;
         }
-      });
     });
     // get boolean filters from sidebar
     const bool_filters = document.querySelectorAll(".boolean_filter");
@@ -1079,13 +1078,13 @@ function showFilteredStories(data) {
     // make sure filter exists and isn't empty
     if (currentCategory in data && typeof filters !== 'undefined') { 
 
-      //turn data into array of entries 
+      // turn data into array of entries 
       let entries = Array.from(Object.entries(data));
       // turn filters and categories clicked into array
       let clickedFilters = Array.from(filtersAndCategories.entries());
 
       // check whether all clicked filters are present in data
-      let checkFilters = function (entries, clickedFilters) {
+      let checkFilters = (entries, clickedFilters) => {
         return clickedFilters.every((filter) => {
           // flatten each entry into one array
           filter = filter.flat();
@@ -1204,8 +1203,15 @@ function showFilteredStories(data) {
 
   // if sorted by viewership
   if (filtersAndCategories.has("TotalViewers")) {
+     let value = filtersAndCategories.get("TotalViewers");
     // sort in ascending order
-    filteredStories.sort((a, b) => b.TotalViewers - a.TotalViewers);
+    if (value === "Ascending") {
+      filteredStories.sort((a, b) => b.TotalViewers - a.TotalViewers);
+    }
+    // sort in descending order
+    else {
+      filteredStories.sort((a, b) => a.TotalViewers - b.TotalViewers);
+    }
   }
 
   filteredStories = [... new Set(filteredStories.concat(stories))];
@@ -1217,7 +1223,322 @@ function showFilteredStories(data) {
 
   // reset page if all filters are unclicked or cleared
   if (categories.length === 0) {
+    filteredStories = data;
     postData(data);
+  }
+
+  mainSearch(filteredStories);
+}
+
+function mainSearch(filteredStories) {
+  // get search bar
+  const main_search = document.querySelector(".main_search");
+  // get clear_input
+  const clear_input = document.querySelector(".clear_input");
+
+  let debounceTimer;
+  const debounce = (callback, time) => {
+    window.clearTimeout(debounceTimer);
+    debounceTimer = window.setTimeout(callback, time);
+    console.log(debounceTimer);
+  };
+
+  // add event listener
+  main_search.addEventListener("input", (event) => {
+    let input = event.target.value;
+    // console.log(input);
+    // debounce(() => handleSearches(input), 500);
+    // setTimeout(handleSearches(input), 500);
+    handleSearches(input);
+  });
+
+
+  // function that filters search inputs
+  const handleSearches = (input) => {
+    // remove whitespace
+    input = input.trim();
+    let full_input = input;
+    // create arrays for various types of searches
+    let gen_search;
+    let exact_searches = [];
+    let and_searches = [];
+    let or_searches = [];
+    let not_searches = [];
+
+    if (full_input) {
+      clear_input.classList.add("active");
+    }
+    else {
+      clear_input.classList.remove("active");
+    }
+
+    // if there's QUOTES
+    const QUOTE = full_input.match(/\"[\d\w\s\.\:]+\"/g);
+    // add individual terms to array
+    parseSearchTerms(QUOTE, exact_searches, "QUOTE");
+
+    // if there's an AND
+    const AND = full_input.match(/(([\d\w\s]+(AND|&)[\d\w\s]+))/g);
+    // add individual terms to array
+    parseSearchTerms(AND, and_searches, "AND");
+    
+    // if there's an OR
+    const OR = full_input.match(/(([\d\w\s]+(OR|\|)[\d\w\s]+))/g);
+    // add individual terms to array
+    parseSearchTerms(OR, or_searches, "OR");
+
+    // if there's a NOT
+    const NOT = full_input.match(/((NOT|-)[\"\d\w\s\"]+)/g);
+    // add individual terms to array
+    parseSearchTerms(NOT, not_searches, "NOT");
+
+    // if there's a comma and it's NOT FOLLOWED by a key search term
+    const COMMA_AHEAD = full_input.match(/,(?![\d\w\s]+(AND|&|OR|\|))/g);
+    // if there's a comma and it's NOT PRECEDED by a key search term
+    const COMMA_BEHIND = full_input.match(/(?<!(AND|&|OR|\|)[\d\w\s]+),/g);
+    if (COMMA_AHEAD !== null && COMMA_BEHIND !== null) {
+      let or = [];
+      or.push(input);
+      parseSearchTerms(or, or_searches, "OR");
+    }
+
+    if (QUOTE === null && AND === null && OR === null && NOT == null && COMMA_AHEAD == null && COMMA_BEHIND === null) {
+      input = input.toLowerCase();
+      gen_search = input;
+    }
+   
+  //  console.log(gen_search);
+  //  console.log(exact_searches);
+  //  console.log(and_searches);
+  //  console.log(or_searches);
+  //  console.log(not_searches);
+
+   let searchResults = [];
+   // go through currently displayed data  
+   filteredStories.filter(data => {
+    // turn data into array of values 
+    let entry = Object.values(data).flat().flat().flat();
+    
+    // make data lowercase
+    let lowercase_entry = entry.map(entry => {
+      if (!Array.isArray(entry) && typeof entry !== 'object' && typeof entry === 'string') {
+          return entry.toLowerCase();
+        }
+      });
+
+      // get rid of undefined entries
+      lowercase_entry = lowercase_entry.filter(entry => entry !== undefined);
+
+      if (gen_search !== undefined) {
+        // get results from regular search
+        let gen_results = findGeneralSearches(gen_search, lowercase_entry, data);
+        // add to search results
+        if (gen_results !== undefined) {
+          searchResults.push(gen_results);
+        }
+      }
+
+      if (exact_searches.length > 0) {
+        // get results for quoted searches
+        let exact_results = findExactMatches(exact_searches, lowercase_entry, data);
+  
+        if (exact_results !== undefined) {
+          searchResults.push(exact_results);
+        }
+      }
+
+      // get results from AND searches
+      if (and_searches.length > 0) {
+        let and_results = findANDSearches(and_searches, lowercase_entry, data);
+        // add to main search results
+        if (and_results !== undefined) {
+          searchResults.push(and_results);
+        }
+      }
+
+      // get results from OR searches
+      if (or_searches.length > 0) {
+        let or_results = findORSearches(or_searches, lowercase_entry, data);
+  
+        if (or_results !== undefined) {
+          searchResults.push(or_results);
+        }
+      }
+
+      // get results from NOT searches
+      if (not_searches.length > 0) {
+        let not_results = findNOTSearches(not_searches, lowercase_entry, data);
+        
+        if (not_results !== undefined) {
+          searchResults.push(not_results);
+        }
+      }
+    });
+
+   searchResults = [...new Set(searchResults)];
+   container.innerHTML = '';
+   postData(searchResults);
+  }
+
+  // add event listener to "clear" button
+  clear_input.addEventListener("click", () => {
+    // remove active class
+    clear_input.classList.remove("active");
+    // reset to previous results
+    main_search.value = '';
+    container.innerHTML = '';
+    postData(filteredStories);
+  });
+}
+
+function searched() {
+  container.innerHTML = '';
+  postData(searchResults);
+}
+
+function parseSearchTerms(INPUT, keyword_searches, keyword) {
+  // if term exists
+  if (INPUT !== null) {
+    INPUT.forEach(term => {
+      let array = [];
+      // if it's a quote
+      if (keyword === "QUOTE") {
+        // remove quotes
+        term = term.slice(1, -1);
+        // add to set
+        keyword_searches.push(term.toLowerCase());
+      }
+      // if it's an AND or OR search
+      else if (keyword === "AND") {
+        let regex = /(AND|&)/;
+        term = term.split(regex);
+        term.forEach(term => {
+          // remove whitespace
+          term = term.trim();
+          // add to set
+          if (!term.match(regex)) {
+            // add to subarray
+            array.push(term.toLowerCase());
+          }
+        });
+        // add to main array
+        keyword_searches.push(array);
+      }
+      else if (keyword === "OR") {
+        let regex = /(OR|\||,)/;
+        term = term.split(regex);
+        term.forEach(term => {
+          // remove whitespace
+          term = term.trim();
+          // add to set
+          if (!term.match(regex)) {
+            // add to subarray
+            array.push(term.toLowerCase());
+          }
+        });
+        // add to main array
+        keyword_searches.push(array);
+      }
+      // if it's a NOT
+      else if (keyword === "NOT") {
+        // remove keyword and whitespace
+        term = term.replace(/[NOT|-]+/,"");
+        term = term.trim();
+        // add to set
+        keyword_searches.push(term.toLowerCase());
+      }
+      console.log(array);
+    });
+    // make a set from the array
+    keyword_searches = [...new Set(keyword_searches)];
+
+  }
+
+}
+
+function findGeneralSearches(plain_search, lowercase_entry, data) {
+  const result = lowercase_entry.some(entry => {
+    if (entry.includes(plain_search)) {
+      return true;
+    }
+  });
+
+  if (result === true) {
+    return data;
+  }
+}
+
+function findExactMatches(exact_search, lowercase_entry, data) {
+  const result = lowercase_entry.some(entry => {
+    exact_search.forEach(search => {
+      search = search.toLowerCase();
+      if (entry === search) {
+        return true;
+      }
+    });
+  });
+
+  if (result === true) {
+    return data;
+  }
+}
+
+function findORSearches(or_searches, lowercase_entry, data) {
+  // get the result from searches
+  const result = or_searches.some(search => {
+    return search.some(search => {
+      return lowercase_entry.some(entry => {
+        if (entry.includes(search)) {
+          // console.log(data);
+          return true;
+        }
+      });
+    });
+    });
+  
+  // if result is true, add to array
+  if (result === true) {
+    return data;
+  }
+}
+
+function findANDSearches(and_searches, lowercase_entry, data) {
+  // get the result from searches
+  const result = and_searches.some(search => {
+    return search.every(search => {
+      return lowercase_entry.some(entry => {
+        if (entry.includes(search)) {
+          return true;
+          }
+        });
+      });
+    });
+  
+  // if result is true, add to array
+  if (result === true) {
+    return data;
+  }
+}
+
+function findNOTSearches(not_searches, lowercase_entry, data) {
+  const result = not_searches.every(search => {
+    return lowercase_entry.every(entry => {
+      // if entry DOES NOT INCLUDE search
+      if (!entry.includes(search)) {
+        return true;
+      }
+    });
+  });
+  // add to array
+  if (result === true) {
+    return data;
+  }
+}
+
+function checkUndefined(value, array) {
+  if (typeof value !== 'undefined') {
+    value = value.trim().toLowerCase();
+    array.add(value);
   }
 }
 

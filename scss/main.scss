@@ -62,9 +62,9 @@ button {
 
 
 h1.title {
-  font-size: clamp(var(--fs-5xl), 5.5vw, var(--fs-header));
+  font-size: clamp(var(--fs-3xl), 5.5vw, var(--fs-header));
   font-weight: 700;
-  color: var(--clr-pale-red);
+  color: var(--clr-bright-orange);
   // 
   display: flex;
   justify-content: center;
@@ -92,7 +92,14 @@ h1.title {
   grid-area: header;
   width: 100%;
   display: grid;
-  justify-content: center;
+  justify-items: center;
+  align-items: center;
+  grid-template-columns: 1fr 3fr;
+  //
+  position: relative; 
+  // position: sticky;
+  // top: -60px;
+  z-index: 3;
 }
 
 #nav {
@@ -100,13 +107,68 @@ h1.title {
   z-index: 1;
   margin-top: 2rem;
   display: grid;
-  grid-template-columns: 50rem;
-  grid-template-rows: 1fr auto;
   justify-items: center;
   gap: 1rem;
 }
 
+.mainsearch_container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 1rem;
+  width: min(40rem, 100%);
+  position: relative;
+}
 
+.main_search {
+  // styling
+  font-size: var(--fs-xl);
+  color: var(--clr-white);
+  background-color: var(--clr-med-grey);
+  width: 100%;
+  padding: .75rem 2.5rem .75rem 3rem;
+  outline: 0;
+  border: 2px solid var(--clr-light-grey);
+  //
+  transition: .3s ease; 
+
+  &:focus, &:focus-within, &:active {
+    border: 2px solid var(--clr-light-blue);
+    background-color: var(--clr-med-grey-2);
+    // 
+    transition: .3s ease;
+  }
+
+  &::placeholder {
+
+  }
+}
+
+.search_icon {
+  font-size: var(--fs-xl);
+  color: var(--clr-light-blue);
+  //
+  position: absolute;
+  left: 0;
+  margin-left: 2rem;
+}
+
+.clear_input {
+  font-size: var(--fs-xl);
+  padding: .5rem 1rem;
+  display: none;
+
+  &:hover, &:focus {
+    color: var(--clr-pale-red);
+  }
+
+  &.active {
+    display: block;
+    position: absolute;
+    right: 0;
+    margin-right: 1rem;
+  }
+}
 
 .sidebar {
   // background-color: var(--clr-dark-grey-1);
@@ -288,7 +350,7 @@ h1.title {
 
   h3 {
     font-size: var(--fs-2xl);
-    color: var(--clr-pale-yellow);
+    // color: var(--clr-pale-yellow);
     //
     text-align: center; 
     margin-bottom: .5rem;
@@ -476,7 +538,6 @@ h1.title {
 
   &.active {
     display: block;
-    position: absolute;
     position: absolute;
     right: 0;
     align-self: center;
