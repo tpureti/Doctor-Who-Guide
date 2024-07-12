@@ -14,7 +14,7 @@
   <link rel="stylesheet" href="css/all.css">
 
 </head>
-<body class="preload wrapper">
+<body id="wrapper" class="preload wrapper">
   <!-- HEADER -->
   <div id="header">
     <h1 class="title">Doctor Who Guide</h1>
@@ -36,6 +36,13 @@
   </div>
 
   <!-- SIDEBAR -->
+  <button class="open_filters">
+    Filters
+    <div class="filters_icon">
+      <i class="fa-solid fa-sliders"></i>
+    </div>
+  </button>
+
   <div class="sidebar">
     <h2 class="filter_title"></h2>
         <!-- BOOLEAN FILTERS -->
@@ -331,16 +338,15 @@
         </div>
       </div>
       <!-- END EPISODE INFO  -->
+    </div>
 
-    <!-- BUTTONS -->
+     <!-- BUTTONS -->
      <div class="button_area">
       <button class="button button_essential">★</button>
       <button class="button button_castcrew">Cast & Crew</button>
       <button class="button button_summary">Summary</button>
       <button class="button button_episodes">Episodes</button>
-      
      </div> 
-    </div>
 
     </div>
    <!-- CONTAINER FOR ESSENTIAL -->

@@ -75,7 +75,11 @@ const clicked_filters = document.querySelector(".clicked_filters");
 const active_filters = document.querySelector(".active_filters");
 const clear_filters = document.querySelector(".clear_filters");
 
+const header = document.querySelector("#header");
+
 const num_of_results = document.querySelector(".number_of_results");
+
+const open_filters = document.querySelector(".open_filters");
 
 // map that tracks which buttons are clicked
 let filtersAndCategories = new Map();
@@ -96,6 +100,8 @@ getJSON()
     populateAllButtons(data);
     showFilteredStories(data);
     mainSearch();
+    // shrinkHeader();
+    openFilters();
     // 
     allowTransitions();
 })
@@ -103,6 +109,42 @@ getJSON()
     console.log("error: JSON not found")
   });
 
+function openFilters() {
+  // get sidebar
+  const sidebar = document.querySelector(".sidebar");
+
+  // add event listener to open sidebar
+  open_filters.addEventListener("click", () => {
+    // add/remove "active" class on sidebar
+    sidebar.classList.toggle("active");
+
+    // if sidebar is active
+    if (sidebar.classList.contains("active")) {
+      // set width 
+      sidebar.style.width = "fit-content";
+        // add event listener to sidebar for transition
+    }
+  });
+
+  let clientWidth = window.innerWidth;
+  // apply eventlistener if window is small enough
+  if (clientWidth < 1356) {
+    // add event listener to sidebar for transition
+    sidebar.addEventListener("transitionend", (event) => {
+      let sidebar = event.target;
+  
+      if (event.propertyName === "transform" && sidebar.classList.contains("sidebar")) {
+        // if sidebar has been CLOSED
+        if (!sidebar.classList.contains("active")) {
+          // set width to 0
+          sidebar.style.width = "0px";
+        }
+      }
+    });
+  }
+
+
+}
 
 function populateAllButtons(data) {
   // show sort buttons when pressed
@@ -1261,12 +1303,15 @@ function mainSearch() {
   main_search.addEventListener("input", (event) => {
     // get user input
     let input = event.target.value;
-    // add clear button
+    // add clear button and hide tips
     if (input) {
       clear_input.classList.add("active");
+      search_tips.classList.remove("active");
     }
+    // remove clear button and show tips
     else {
       clear_input.classList.remove("active");
+      search_tips.classList.add("active");
     }
     // handle search queries
     debounce(() => handleSearches(input, results), 500);
@@ -1827,7 +1872,9 @@ function cloneStoryContainer() {
   story.replaceWith(createStory);
 
   // find buttons in story Node
-  let btns = createStory.children.item(1).children.item(1).children.item(4).children;
+  // let btns_og = createStory.children.item(1).children.item(1).children.item(4).children;
+  let btns = createStory.children.item(1).children.item(2).children;
+  // console.log(btns2);
   // HTML collection of info areas
   let info = createStory.children.item(1).children.item(1).children;
   let essential_info = createStory.children.item(2);
@@ -1949,6 +1996,18 @@ function addEssentialClick(button, info) {
       info.classList.add("show");
     }
   });
+}
+
+function shrinkHeader() {
+  // console.log(header.style.padding);    
+  window.onscroll = () => {
+    if (document.documentElement.scrollTop > header.offsetHeight) {
+      header.style.padding = ".75rem .5rem";
+    }
+    else {
+      header.style.padding = "2rem 1.5rem";
+    }
+  }
 }
 
 /**

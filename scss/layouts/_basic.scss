@@ -1,0 +1,82 @@
+/* CSS DOCUMENT */
+@charset "UTF-8";
+
+@use 'base';
+// 
+@use '../abstracts/mixins' as *;
+
+:root {
+  --clr-text: var(--clr-white);
+  --bg: var(--clr-dark-grey-2);
+  --container-bg: var(--clr-dark-grey-1);
+  // filter colors
+  --main-filters: var(--clr-dark-yellow);
+  --filter-border: var(--clr-dark-grey-2);
+  // 
+  --number: var(--clr-light-blue);
+  --primary-doctor: var(--clr-bright-orange);
+  --h3: var(--clr-dark-yellow);
+  --essential-button: var(--clr-dark-yellow);
+  --castcrew-button: var(--clr-bright-orange);
+  --summary-button: var(--clr-pale-red);
+  --eps-button: #f674c2;
+  --opacity-transition: opacity .5s ease-in-out;
+  --button-transition: .5s ease-in-out;
+}
+
+/*
+  GENERAL STYLES
+*/
+body {
+  font-family: var(--ff-sans);
+  font-size: var(--fs-md);
+  background-color: var(--bg);
+  color: var(--clr-text);
+  line-height: 1.25;
+}
+
+/*
+  BASIC STYLES
+*/
+
+h1, h2, h3, .number, .doctor {
+  font-family: var(--ff-serif);
+}
+
+a {
+  transition: var(--button-transition);
+  color: var(--clr-light-blue);
+  font-weight: 500;
+  
+  &:hover, &:focus {
+    transition: var(--button-transition);
+    color: var(--clr-bright-orange);
+  }
+}
+
+button {
+  border: none;
+  margin: 0;
+}
+
+.wrapper {
+  display: grid;
+  grid-template-columns: 25rem auto;
+  grid-template-rows:  auto auto 1fr auto;
+  grid-template-areas: 
+  "header header header"
+  "sidebar filters filters"
+  "sidebar container container"
+  "footer footer footer";
+  align-items: start;
+
+  @media ($tablet) {
+    grid-template-columns: auto auto;
+    grid-template-rows:  auto auto 1fr auto;
+    grid-template-areas: 
+    "header header header"
+    "filter-button filters filters"
+    "sidebar container container"
+    "footer footer footer";
+  }
+}
