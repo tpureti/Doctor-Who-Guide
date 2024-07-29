@@ -1,6 +1,6 @@
 
 // get divs where the info will be placed
-const container = document.querySelector("#container");
+const container = document.querySelector("#stories_container");
 const story = document.querySelector(".story");
 const info = document.querySelector(".info_area");
 // basic info
@@ -100,7 +100,7 @@ getJSON()
     populateAllButtons(data);
     showFilteredStories(data);
     mainSearch();
-    // shrinkHeader();
+    shrinkHeader();
     openFilters();
     // 
     allowTransitions();
@@ -117,6 +117,8 @@ function openFilters() {
   open_filters.addEventListener("click", () => {
     // add/remove "active" class on sidebar
     sidebar.classList.toggle("active");
+    // add/remove "active" class on open filters button
+    open_filters.classList.toggle("active");
 
     // if sidebar is active
     if (sidebar.classList.contains("active")) {
@@ -136,11 +138,16 @@ function openFilters() {
       if (event.propertyName === "transform" && sidebar.classList.contains("sidebar")) {
         // if sidebar has been CLOSED
         if (!sidebar.classList.contains("active")) {
+          // console.log(true);
           // set width to 0
           sidebar.style.width = "0px";
         }
       }
     });
+  }
+
+  if (clientWidth >= 1356) {
+    console.log("meow");
   }
 
 
@@ -989,10 +996,10 @@ function showActiveFilters() {
   else {
     console.log(true);
     // create and add text to say there's no filters applied
-    let empty_filters = document.createElement("span");
-    empty_filters.classList.add("no_filters");
-    empty_filters.textContent = "No filters currently applied";
-    active_filters.appendChild(empty_filters);
+    // let empty_filters = document.createElement("span");
+    // empty_filters.classList.add("no_filters");
+    // empty_filters.textContent = "No filters currently applied";
+    // active_filters.appendChild(empty_filters);
     // change spacing back to center on container
     filter_container.style.justifyContent = "center";
     // remove active class on clear all button
@@ -1012,8 +1019,8 @@ function clearFilters(data) {
     active_filters.innerHTML = '';
 
     // hide clicked filters div
-    clicked_filters.classList.toggle("active");
-    clicked_filters.style.maxHeight = null;
+    // clicked_filters.classList.toggle("active");
+    // clicked_filters.style.maxHeight = null;
 
     // get sort filters
     const sort_filters = document.querySelectorAll(".sort_filter");
@@ -1999,13 +2006,22 @@ function addEssentialClick(button, info) {
 }
 
 function shrinkHeader() {
-  // console.log(header.style.padding);    
+  // console.log(clicked_filters.children[0]);
+  // let clicked_filters =  clicked_filters.children[0];
+
   window.onscroll = () => {
     if (document.documentElement.scrollTop > header.offsetHeight) {
       header.style.padding = ".75rem .5rem";
+      // if there are no filters selected
+      if (active_filters.childElementCount === 0) {
+        clicked_filters.style.visibility = "hidden";
+      }
+      // if there are filters
+      
     }
     else {
       header.style.padding = "2rem 1.5rem";
+      clicked_filters.style.visibility = "visible";
     }
   }
 }
