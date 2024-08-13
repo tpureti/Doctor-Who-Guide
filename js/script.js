@@ -6,6 +6,7 @@ const info = document.querySelector(".info_area");
 // basic info
 const number = document.querySelector(".number");
 const title = document.querySelector(".story_title");
+const poster_area = document.querySelector(".poster_area");
 const poster = document.querySelector(".poster");
 const doctor = document.querySelector(".doctor");
 const rating = document.querySelector(".rating");
@@ -1167,7 +1168,7 @@ function showFilteredStories(data) {
                   else if (category === "MissingEpisodes") {
                     return true;
                   }
-                  else if (category === "Animated" && !entry.includes("None")) {
+                  else if (category === "Animated" && !entry.includes("Not Animated")) {
                     return true;
                   }
                 });
@@ -1664,6 +1665,7 @@ function postData(data) {
       // add essential class if essential story
       if (story_essential === true) {
         info.classList.add("essential");
+        poster_area.classList.add("essential_poster");
         essential_button.style.display = "block";
 
         // check if anything is written for essential reason
@@ -1680,6 +1682,7 @@ function postData(data) {
 
       } else {
         info.classList.remove("essential");
+        poster_area.classList.remove("essential_poster");
         essential_button.style.display = "none";
       }
 
@@ -1719,7 +1722,7 @@ function postData(data) {
       summary.innerHTML = summary_paras;
   
       // if there are missing episodes, set result to missing eps div
-      if ('MissingEpisodes' in results) {
+      if ('MissingEpisodes' in results || parseInt(story_number) < 51) {
         // display status div
         status_area.style.display = "block"; 
         // displays number of episodes if there are any missing
@@ -1727,29 +1730,25 @@ function postData(data) {
 
         // set status of story
         // if ALL EPISODES are missing
-        if (eps_missing == story_eps) {
+        if (eps_missing === story_eps) {
           missing_status.innerHTML = "Completely Missing";
-          missing_status.style.color = "#FF7171";
+          missing_status.style.color = "var(--clr-pale-red)";
           // set episodes to missing eps/total eps
           episodes.innerHTML = missing_eps + "/" + story_eps;
         }
         // if NO EPISODES are missing
-        else if (eps_missing == 0) {
+        else if ('MissingEpisodes' in results === false) {
           missing_status.innerHTML = "Complete";
-          missing_status.style.color = "#fff";
+          missing_status.style.color = "var(--clr-light-green)";
         } 
         // if SOME EPISODES are missing
         else {
           missing_status.innerHTML = "Partially Missing";
-          missing_status.style.color = "#FFE76A";
+          missing_status.style.color = "var(--clr-pale-yellow)";
           // set episodes to missing eps/total eps
           episodes.innerHTML = missing_eps + "/" + story_eps;
         }
       }
-      // else if (parseInt(story_number) < 51) {
-      //     missing_status.innerHTML = "Complete";
-      //     missing_status.style.color = "#fff";
-      // }
       // otherwise hide 
       else {
         status_area.style.display = "none";
@@ -2006,10 +2005,11 @@ function addEssentialClick(button, info) {
 }
 
 function shrinkHeader() {
-  // console.log(clicked_filters.children[0]);
-  // let clicked_filters =  clicked_filters.children[0];
-
+  let container = clicked_filters.children[0];
+  
   window.onscroll = () => {
+    const buttons = clicked_filters.querySelectorAll("button");
+
     if (document.documentElement.scrollTop > header.offsetHeight) {
       header.style.padding = ".75rem .5rem";
       // if there are no filters selected
@@ -2017,11 +2017,24 @@ function shrinkHeader() {
         clicked_filters.style.visibility = "hidden";
       }
       // if there are filters
-      
+      else {
+        container.style.border = "none";
+        // clicked_filters.style.backgroundColor = "rgb(22, 22, 22, 0.5)";
+        clicked_filters.style.borderBottom = "1px solid var(--clr-med-grey)";
+        
+        buttons.forEach(button => {
+          button.classList.add("scroll");
+        });
+      }
     }
     else {
       header.style.padding = "2rem 1.5rem";
+      container.style.borderBottom = "1px solid var(--clr-med-grey)";
       clicked_filters.style.visibility = "visible";
+
+      buttons.forEach(button => {
+        button.classList.remove("scroll");
+      });
     }
   }
 }

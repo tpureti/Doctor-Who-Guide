@@ -486,7 +486,7 @@
      "Rating": null,
      "Villain": [],
      "AdditionalTags": "Historical",
-     "Animated": "None"
+     "Animated": "Not Animated"
 },{
      "Number": "005",
      "Title": "The Keys of Marinus",
@@ -1049,7 +1049,7 @@
      "Rating": null,
      "Villain": [],
      "AdditionalTags": "Historical",
-     "Animated": "Partial"
+     "Animated": "Partially Animated"
 },{
      "Number": "009",
      "Title": "Planet of Giants",
@@ -1788,7 +1788,7 @@
      "Rating": null,
      "Villain": [],
      "AdditionalTags": [],
-     "Animated": "None"
+     "Animated": "Not Animated"
 },{
      "Number": "015",
      "Title": "The Space Museum",
@@ -2296,7 +2296,7 @@
      "Rating": null,
      "Villain": [],
      "AdditionalTags": [],
-     "Animated": "Full"
+     "Animated": "Fully Animated"
 },{
      "Number": "019",
      "Title": "Mission to the Unknown",
@@ -2365,7 +2365,7 @@
           "Daleks"
      ],
      "AdditionalTags": [],
-     "Animated": "None"
+     "Animated": "Not Animated"
 },{
      "Number": "020",
      "Title": "The Myth Makers",
@@ -2486,7 +2486,7 @@
      "Rating": null,
      "Villain": [],
      "AdditionalTags": "Historical",
-     "Animated": "None"
+     "Animated": "Not Animated"
 },{
      "Number": "021",
      "Title": "The Daleks' Master Plan",
@@ -2758,7 +2758,7 @@
           "Daleks"
      ],
      "AdditionalTags": [],
-     "Animated": "None"
+     "Animated": "Not Animated"
 },{
      "Number": "022",
      "Title": "The Massacre",
@@ -2897,7 +2897,7 @@
      "Rating": null,
      "Villain": [],
      "AdditionalTags": "Historical",
-     "Animated": "None"
+     "Animated": "Not Animated"
 },{
      "Number": "023",
      "Title": "The Ark",
@@ -3136,7 +3136,7 @@
      "Rating": null,
      "Villain": [],
      "AdditionalTags": [],
-     "Animated": "None"
+     "Animated": "Not Animated"
 },{
      "Number": "025",
      "Title": "The Gunfighters",
@@ -3374,7 +3374,7 @@
      "Rating": null,
      "Villain": [],
      "AdditionalTags": [],
-     "Animated": "None"
+     "Animated": "Not Animated"
 },{
      "Number": "027",
      "Title": "The War Machines",
@@ -3628,7 +3628,7 @@
      "Rating": null,
      "Villain": [],
      "AdditionalTags": [],
-     "Animated": "None"
+     "Animated": "Not Animated"
 },{
      "Number": "029",
      "Title": "The Tenth Planet",
@@ -3759,7 +3759,7 @@
      ],
      "AdditionalTags": [],
      "WhyEssential": [],
-     "Animated": "Partial"
+     "Animated": "Partially Animated"
 },{
      "Number": "030",
      "Title": "The Power of the Daleks",
@@ -3910,7 +3910,7 @@
      ],
      "AdditionalTags": [],
      "WhyEssential": [],
-     "Animated": "Full"
+     "Animated": "Fully Animated"
 },{
      "Number": "031",
      "Title": "The Highlanders",
@@ -4036,7 +4036,7 @@
      "Rating": null,
      "Villain": [],
      "AdditionalTags": "Historical",
-     "Animated": "None"
+     "Animated": "Not Animated"
 },{
      "Number": "032",
      "Title": "The Underwater Menace",
@@ -4158,7 +4158,7 @@
      "Rating": null,
      "Villain": [],
      "AdditionalTags": [],
-     "Animated": "Partial"
+     "Animated": "Partially Animated"
 },{
      "Number": "033",
      "Title": "The Moonbase",
@@ -4289,7 +4289,7 @@
           "Cybermen"
      ],
      "AdditionalTags": [],
-     "Animated": "Partial"
+     "Animated": "Partially Animated"
 },{
      "Number": "034",
      "Title": "The Macra Terror",
@@ -4422,7 +4422,7 @@
      "Rating": null,
      "Villain": [],
      "AdditionalTags": [],
-     "Animated": "Full"
+     "Animated": "Fully Animated"
 },{
      "Number": "035",
      "Title": "The Faceless Ones",
@@ -4572,7 +4572,7 @@
      "Rating": null,
      "Villain": [],
      "AdditionalTags": [],
-     "Animated": "Full"
+     "Animated": "Fully Animated"
 },{
      "Number": "036",
      "Title": "The Evil of the Daleks",
@@ -4998,7 +4998,7 @@
      "Rating": null,
      "Villain": [],
      "AdditionalTags": "Historical",
-     "Animated": "Full"
+     "Animated": "Fully Animated"
 },{
      "Number": "039",
      "Title": "The Ice Warriors",
@@ -5142,7 +5142,7 @@
           "Ice Warriors"
      ],
      "AdditionalTags": [],
-     "Animated": "Partial"
+     "Animated": "Partially Animated"
 },{
      "Number": "040",
      "Title": "The Enemy of the World",
@@ -5442,7 +5442,7 @@
      "Villain": [],
      "AdditionalTags": [],
      "WhyEssential": [],
-     "Animated": "Partial"
+     "Animated": "Partially Animated"
 },{
      "Number": "042",
      "Title": "Fury from the Deep",
@@ -5589,7 +5589,7 @@
      "Rating": null,
      "Villain": [],
      "AdditionalTags": [],
-     "Animated": "Full"
+     "Animated": "Fully Animated"
 },{
      "Number": "043",
      "Title": "The Wheel in Space",
@@ -5744,7 +5744,7 @@
           "Daleks"
      ],
      "AdditionalTags": [],
-     "Animated": "Partial"
+     "Animated": "Partially Animated"
 },{
      "Number": "044",
      "Title": "The Dominators",
@@ -6199,7 +6199,7 @@
      ],
      "AdditionalTags": [],
      "WhyEssential": [],
-     "Animated": "Partial"
+     "Animated": "Partially Animated"
 },{
      "Number": "047",
      "Title": "The Krotons",
@@ -6580,7 +6580,7 @@
      "Rating": null,
      "Villain": [],
      "AdditionalTags": [],
-     "Animated": "None"
+     "Animated": "Not Animated"
 },{
      "Number": "050",
      "Title": "The War Games",
@@ -14259,7 +14259,7 @@
      "Rating": null,
      "Villain": [],
      "AdditionalTags": [],
-     "Animated": "Partial"
+     "Animated": "Partially Animated"
 },{
      "Number": "109",
      "Title": "The Leisure Hive",

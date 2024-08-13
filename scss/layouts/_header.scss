@@ -15,10 +15,15 @@ h1.title {
 
   @media ($tablet) {
   }
+
+  @media ($mobile) {
+    // font-size: var(--fs-xl);
+  }
 }
 
 #header {
   // styling
+  width: 100%;
   z-index: 2;
   background-color: var(--container-bg);
   padding: 2rem 1.5rem;
@@ -57,6 +62,10 @@ h1.title {
   position: relative;
   // top: -60px;
   z-index: 3;
+
+  @media ($tablet) {
+    width: min(30rem, 100%);
+  }
 }
 
 .main_search {
@@ -147,7 +156,7 @@ h1.title {
   align-items: center;
   // position: relative; 
   position: sticky;
-  top: 107px;
+  top: 128px;
   z-index: 2;
   // top: 0px;
   
@@ -181,12 +190,13 @@ h1.title {
     display: flex;
     flex-wrap: wrap;
     gap: 1rem;
+    align-items: center;
 
     span {
       color: var(--clr-light-grey);
-      font-size: var(--fs-2xl);
+      font-size: var(--fs-xl);
       font-weight: 600;
-      padding: .4rem .75rem;
+      // padding: .4rem .75rem;
     }
   }
 
@@ -199,6 +209,11 @@ h1.title {
     padding: .5rem 1rem;
     border: 1px solid var(--clr-med-grey);
     transition: var(--button-transition);
+
+    &.scroll {
+      font-size: var(--fs-lg);
+      padding: .25rem .5rem;
+    }
 
     &::after {
       font-weight: 700;
@@ -221,7 +236,7 @@ h1.title {
   font-size: var(--fs-xl);
   font-weight: 600;
   text-decoration: underline;
-  background-color: var(--clr-med-grey-2);
+  // background-color: var(--clr-med-grey-2);
   // positioning
   justify-content: flex-end;
   align-items: center;
