@@ -75,12 +75,12 @@ const nav_area = document.querySelector("#nav");
 const clicked_filters = document.querySelector(".clicked_filters");
 const active_filters = document.querySelector(".active_filters");
 const clear_filters = document.querySelector(".clear_filters");
+const open_filters = document.querySelector(".open_filters");
 
 const header = document.querySelector("#header");
 
 const num_of_results = document.querySelector(".number_of_results");
 
-const open_filters = document.querySelector(".open_filters");
 
 // map that tracks which buttons are clicked
 let filtersAndCategories = new Map();
@@ -1019,9 +1019,8 @@ function clearFilters(data) {
     // reset active filters div
     active_filters.innerHTML = '';
 
-    // hide clicked filters div
-    // clicked_filters.classList.toggle("active");
-    // clicked_filters.style.maxHeight = null;
+    // remove border from filters
+    clicked_filters.style.borderBottom = null;
 
     // get sort filters
     const sort_filters = document.querySelectorAll(".sort_filter");
@@ -1323,7 +1322,6 @@ function mainSearch() {
     }
     // handle search queries
     debounce(() => handleSearches(input, results), 500);
-    // handleSearches(input, results);
   });
 
   // function that filters search inputs
@@ -2005,31 +2003,83 @@ function addEssentialClick(button, info) {
 }
 
 function shrinkHeader() {
-  let container = clicked_filters.children[0];
-  
-  window.onscroll = () => {
-    const buttons = clicked_filters.querySelectorAll("button");
+  let container = clicked_filters.children[1];
+  // 
+  let prevScroll = window.scrollY;
 
+  let scrollCountTimer;
+  let scrollCount = 0;
+
+  window.onscroll = () => {
+
+    // if (scrollCountTimer) {
+    //   clearTimeout(scrollCountTimer)
+    // }
+    // scrollCountTimer = setTimeout(() => {
+    //   scrollCount++
+    // }, 500);
+
+    const buttons = clicked_filters.querySelectorAll("button");
+    
     if (document.documentElement.scrollTop > header.offsetHeight) {
-      header.style.padding = ".75rem .5rem";
+      // get current scroll height
+      let currentScroll = window.scrollY;
+      // make header smaller
+      header.classList.add("scroll");
+
+      // header disappears if we scroll past header
+      if (prevScroll > currentScroll) {
+        header.style.top = "0";
+      }
+      // shows up if we scroll up
+      else {
+        header.style.top = "-" + header.offsetHeight + "px";
+      }
+
+      if (prevScroll > currentScroll) {
+        // fix clicked filters below header
+        clicked_filters.style.top = header.offsetHeight + "px";
+      }
+      else {
+        // fix clicked filters to top of screen
+        clicked_filters.style.top = "0";
+        open_filters.classList.add("scroll");
+      }
+
       // if there are no filters selected
       if (active_filters.childElementCount === 0) {
-        clicked_filters.style.visibility = "hidden";
+        // clicked_filters.style.visibility = "hidden";
+        clicked_filters.style.borderBottom = null;
       }
       // if there are filters
       else {
         container.style.border = "none";
         // clicked_filters.style.backgroundColor = "rgb(22, 22, 22, 0.5)";
         clicked_filters.style.borderBottom = "1px solid var(--clr-med-grey)";
-        
+
+        // make buttons smaller on scroll
         buttons.forEach(button => {
           button.classList.add("scroll");
         });
+
+        // if (prevScroll > currentScroll) {
+        //   // fix clicked filters below header
+        //   clicked_filters.style.top = header.offsetHeight + "px";
+        // }
+        // else {
+        //   // fix clicked filters to top of screen
+        //   clicked_filters.style.top = "0";
+        // }
       }
+
+      // 
+      prevScroll = currentScroll;
     }
     else {
-      header.style.padding = "2rem 1.5rem";
-      container.style.borderBottom = "1px solid var(--clr-med-grey)";
+      // make header smaller
+      header.classList.remove("scroll");
+      // attach clicked filters below header
+      clicked_filters.style.top = header.offsetHeight + "px";
       clicked_filters.style.visibility = "visible";
 
       buttons.forEach(button => {

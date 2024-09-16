@@ -6,45 +6,78 @@
 @use '../abstracts/mixins' as *;
 
 .filters_button {
-  grid-area: filter-button;
-  grid-row: 4 / 5;
+  // grid-area: filter-button;
+  // grid-row: 4 / 5;
   max-width: fit-content;
   display: none;
   justify-content: center;
   margin: 0 2rem;
   z-index: 3;
 
-    @media ($tablet) {
+  @media ($tablet) {
     // positioning
+    grid-row: 4 / 5;
     display: flex;
+  }
+
+  @media ($mobile) {
+    grid-row: 2 / 3;
   }
 }
 
 .open_filters {
   max-width: min-content;
   display: flex;
-  gap: 1rem;
+  gap: .5rem;
   align-items: center;
   // styling
   font-family: var(--ff-sans);
   font-size: var(--fs-2xl);
   font-weight: 600;
-  text-transform: uppercase;
-  color: var(--clr-dark-grey-2);
-  background-color: var(--clr-light-blue);
+  // text-transform: uppercase;
+  background-color: var(--clr-dark-grey-2);
+  color: var(--clr-light-blue);
+  border: 1px solid var(--clr-light-blue);
   padding: .5rem 1rem;
   margin: 1rem 0rem;
   // 
   transition: var(--button-transition);
 
   &:hover, &:focus, &:active, &.active {
-    background-color: var(--clr-med-grey);
-    color: var(--clr-light-blue);
+    color: var(--clr-med-grey);
+    background-color: var(--clr-light-blue);
     transition: var(--button-transition);
+  }
+
+  &.scroll {
+    font-size: var(--fs-lg);
+    padding: .25rem .75rem;
   }
   
   i {
     font-size: var(--fs-xl);
+  }
+
+  &::after {
+      content: "Filters";
+  }
+
+  @media ($mobile) {
+    gap: 0;
+    
+    &::after {
+      content: "";
+    }
+  }
+}
+
+.filters_icon {
+  display: inline-flex;
+
+  i {
+    @media ($mobile) {
+      font-size: var(--fs-xl);
+    }
   }
 }
 
@@ -62,13 +95,13 @@
   }
 
   @media ($tablet) {
+    position: relative;
     margin: 4rem 0 0 2rem;
     max-width: 18rem;
     visibility: hidden;
     overflow-x: hidden;
     width: 0;
     transform: translateX(-400px);
-    position: relative;
     transition: transform .3s ease;
 
     &.active {
@@ -77,7 +110,17 @@
       transform: translateX(0);
       transition: transform .3s ease;
     }
+  }
 
+  @media ($mobile) {
+    position: fixed;
+    top: 0;
+    left: 0;
+    // z-index: 4;
+
+    &.active {
+      height: auto;
+    }
   }
 }
 

@@ -87,8 +87,8 @@ button {
     grid-template-rows:  auto auto auto auto auto auto;
     grid-template-areas: 
     "header"
+    // "filter-button"
     "filters"
-    "filter-button"
     "sidebar"
     "container"
     "footer";
