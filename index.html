@@ -35,10 +35,39 @@
     <!-- </nav> -->
   </div>
 
-  <!-- SIDEBAR -->
+  <!-- SHOW CLICKED FILTERS -->
+  <div class="clicked_filters">
+    <!-- FILTER BUTTON -->
+    <div class="filters_button">
+    <button class="open_filters">
+      <div class="filters_icon">
+        <i class="fa-solid fa-sliders"></i>
+      </div>
+    </button>
+  </div>
+   
+  <!-- ACTIVE FILTERS -->
+    <div class="container">
+      <div class="active_filters">
+        <!-- <span class="no_filters">No filters currently applied</span> -->
+        <!-- <span>FILTERS</span> -->
+      </div>
+      <button class="clear_filters" aria-disabled="true" disabled>clear all</button>
+    </div>
+  </div>
+
+    <!-- SIDEBAR -->
   <div class="sidebar">
-    <h2 class="filter_title"></h2>
-        <!-- BOOLEAN FILTERS -->
+    <!-- <h2 class="filter_title">Advanced Filters</h2> -->
+    <!-- BUTTON GROUP -->
+    <div class="sidebar_buttons">
+      <!-- CLEAR BUTTON -->
+      <button class="clear_filters" aria-disabled="true" disabled><i class="fa-solid fa-rotate-right"></i> reset all</button>
+      <!-- CLOSE BUTTON -->
+      <button class="close_filters"><i class="fa-solid fa-xmark"></i></button>
+    </div>
+
+    <!-- BOOLEAN FILTERS -->
     <div class="boolean_filters">
       <div class="boolean_filter_wrapper">
         <button class="filter boolean_filter" data-category="boolean" data-filter="Essential" aria-pressed="false">Essential</button>
@@ -50,7 +79,7 @@
         <button class="filter boolean_filter" data-category="boolean" data-filter="Animated" aria-pressed="false">Animated</button>
       </div>
       <!-- <div class="boolean_filter_wrapper">
-        <button class="filter boolean_filter" data-category="boolean" data-filter="Favorite" aria-pressed="false">♡</button>
+        <button class="filter boolean_filter" data-category="boolean" data-filter="Favorite" aria-pressed="false">Favorites</button>
       </div> -->
     </div>
 
@@ -155,26 +184,6 @@
     </div>
   </div>
 
-  <!-- SHOW CLICKED FILTERS -->
-  <div class="clicked_filters">
-    <!-- FILTER BUTTON -->
-    <div class="filters_button">
-    <button class="open_filters">
-      <div class="filters_icon">
-        <i class="fa-solid fa-sliders"></i>
-      </div>
-    </button>
-  </div>
-   
-  <!-- ACTIVE FILTERS -->
-    <div class="container">
-      <div class="active_filters">
-        <!-- <span class="no_filters">No filters currently applied</span> -->
-        <!-- <span>FILTERS</span> -->
-      </div>
-      <button class="clear_filters" aria-disabled="true" disabled>clear all</button>
-    </div>
-  </div>
 
   <!-- MAIN -->  
   <main id="container">

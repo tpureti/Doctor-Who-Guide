@@ -74,10 +74,11 @@ const sort_dropdown = document.querySelector(".sort_dropdown");
 const nav_area = document.querySelector("#nav");
 const clicked_filters = document.querySelector(".clicked_filters");
 const active_filters = document.querySelector(".active_filters");
-const clear_filters = document.querySelector(".clear_filters");
+const clear_filters = document.querySelectorAll(".clear_filters");
 const open_filters = document.querySelector(".open_filters");
 
 const header = document.querySelector("#header");
+const sidebar = document.querySelector(".sidebar");
 
 const num_of_results = document.querySelector(".number_of_results");
 
@@ -101,8 +102,9 @@ getJSON()
     populateAllButtons(data);
     showFilteredStories(data);
     mainSearch();
+    closeSidebar();
     shrinkHeader();
-    openFilters();
+    openSidebar();
     // 
     allowTransitions();
 })
@@ -110,7 +112,7 @@ getJSON()
     console.log("error: JSON not found")
   });
 
-function openFilters() {
+function openSidebar() {
   // get sidebar
   const sidebar = document.querySelector(".sidebar");
 
@@ -124,8 +126,8 @@ function openFilters() {
     // if sidebar is active
     if (sidebar.classList.contains("active")) {
       // set width 
-      sidebar.style.width = "fit-content";
-        // add event listener to sidebar for transition
+      // sidebar.style.width = "min(25rem, 100%)";
+      // sidebar.style.maxWidth = "25rem";
     }
   });
 
@@ -141,7 +143,7 @@ function openFilters() {
         if (!sidebar.classList.contains("active")) {
           // console.log(true);
           // set width to 0
-          sidebar.style.width = "0px";
+          // sidebar.style.width = "0px";
         }
       }
     });
@@ -151,7 +153,15 @@ function openFilters() {
     console.log("meow");
   }
 
+}
 
+function closeSidebar() {
+  const close_button = document.querySelector(".close_filters");
+
+  close_button.addEventListener("click", () => {
+    sidebar.classList.remove("active");
+    open_filters.classList.remove("active");
+  });
 }
 
 function populateAllButtons(data) {
@@ -184,7 +194,9 @@ function populateAllButtons(data) {
     createMultiFilters(data, category, button);
   });
 
-  clearFilters(data);
+  clear_filters.forEach(button => {
+    clearFilters(button, data);
+  });
 }
 
 function clickSort(data) {
@@ -820,8 +832,8 @@ function showSortButtons(data) {
 
 function clickFilter(filter_button, data) {
   // get category and filter
-  // let category = filter_button.dataset.category;
-  // let filter = filter_button.dataset.filter;
+  let category = filter_button.dataset.category;
+  let filter = filter_button.dataset.filter;
   // let cloned_button;
 
   let cloned_button = filter_button.cloneNode(true);
@@ -854,7 +866,14 @@ function clickFilter(filter_button, data) {
       console.log(filtersAndCategories);
       // clone button and place it in active filters
       cloned_button = filter_button.cloneNode(true);
-      // cloned_button.textContent = category + ": " + filter; 
+      // cloned_button.textContent = category + ": " + filter;
+
+      // if scrollheight is past header
+      if (document.documentElement.scrollTop > header.offsetHeight) {
+        // adjust size of buttons
+        cloned_button.classList.add("scroll");
+      } 
+
       active_filters.appendChild(cloned_button);
       // add functionality to cloned buttons
       removeClonedButtons(data, cloned_button, filter_button);
@@ -975,44 +994,41 @@ function removeClonedButtons(data, cloned_button, original_button) {
 
 function showActiveFilters() {
   // get container for active filters + clear all button
-  const filter_container = document.querySelector(".container");
+  // const filter_container = document.querySelector(".container");
 
   // if there's more than one active filter
   if (active_filters.childElementCount > 0) {
-    // remove default text
-    const empty_filters = document.querySelector(".no_filters");
-    if (empty_filters !== null) {
-      empty_filters.remove();
-    }
-    // change spacing to space-between on container
-    filter_container.style.justifyContent = "space-between";
-    // active class to clear filter button
-    clear_filters.classList.add("active");
-    // remove disabled attribute from button
-    clear_filters.removeAttribute("disabled");
-    // accessibility
-    clear_filters.ariaDisabled = false; 
+
+
+    // apply to both clear buttons
+    clear_filters.forEach(button => {
+      // active class to clear filter button
+      button.classList.add("active");
+      // remove disabled attribute from button
+      button.removeAttribute("disabled");
+      // accessibility
+      button.ariaDisabled = false; 
+    });
   }
   // if there are no active filters
   else {
     console.log(true);
-    // create and add text to say there's no filters applied
-    // let empty_filters = document.createElement("span");
-    // empty_filters.classList.add("no_filters");
-    // empty_filters.textContent = "No filters currently applied";
-    // active_filters.appendChild(empty_filters);
-    // change spacing back to center on container
-    filter_container.style.justifyContent = "center";
-    // remove active class on clear all button
-    clear_filters.classList.remove("active");
-    // add back in disabled attribute
-    clear_filters.setAttribute("Disabled", "");
-    // accessibility
-    clear_filters.ariaDisabled = true;
+    // disable reset button
+    // clear_filters[1].removeEventListener("click", () => {});
+
+    // apply to both clear buttons
+    clear_filters.forEach(button => {
+      // remove active class on clear all button
+      button.classList.remove("active");
+      // add back in disabled attribute
+      button.setAttribute("Disabled", "");
+      // accessibility
+      button.ariaDisabled = true;
+    });
   }
 }
 
-function clearFilters(data) {
+function clearFilters(clear_filters, data) {
   clear_filters.addEventListener("click", () => {
     // accesibility
     clear_filters.ariaHidden = false;
@@ -2046,6 +2062,11 @@ function shrinkHeader() {
         open_filters.classList.add("scroll");
       }
 
+      // make buttons smaller on scroll
+      buttons.forEach(button => {
+        button.classList.add("scroll");
+      });
+
       // if there are no filters selected
       if (active_filters.childElementCount === 0) {
         // clicked_filters.style.visibility = "hidden";
@@ -2056,20 +2077,6 @@ function shrinkHeader() {
         container.style.border = "none";
         // clicked_filters.style.backgroundColor = "rgb(22, 22, 22, 0.5)";
         clicked_filters.style.borderBottom = "1px solid var(--clr-med-grey)";
-
-        // make buttons smaller on scroll
-        buttons.forEach(button => {
-          button.classList.add("scroll");
-        });
-
-        // if (prevScroll > currentScroll) {
-        //   // fix clicked filters below header
-        //   clicked_filters.style.top = header.offsetHeight + "px";
-        // }
-        // else {
-        //   // fix clicked filters to top of screen
-        //   clicked_filters.style.top = "0";
-        // }
       }
 
       // 

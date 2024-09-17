@@ -40,6 +40,10 @@
     border: 1.5px solid var(--clr-dark-yellow);
     box-shadow: 5px 5px 0px 0px var(--clr-dark-yellow);
     }
+
+    @media ($mobile) {
+      font-size: var(--fs-lg);
+    }
   }
   
   p {
