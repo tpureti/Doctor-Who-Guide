@@ -84,9 +84,13 @@
 }
 
 .sidebar_buttons {
-  display: flex;
-  flex: 1 1 auto;
-  padding: 1rem;
+  display: none;
+
+  @media ($tablet) {
+    display: flex;
+    flex: 1 1 auto;
+    padding: 1rem;
+  }
 
   .clear_filters {
     // styling
@@ -120,8 +124,15 @@
   background-color: var(--clr-dark-grey-2);
   // positioning
   grid-area: sidebar;
-  margin: 0 0 0 4rem;
-  // max-width: 25rem;
+  width: min(26.875rem, 100%);
+  height: 80%;
+  padding: 0 4rem;
+  position: fixed;
+  top: 15rem;
+  // left: 4rem;
+  overflow-y: scroll;
+  scrollbar-width: thin;
+  scrollbar-color: var(--clr-light-blue) var(--clr-dark-grey-2);
 
   h2 {
     font-size: var(--fs-4xl);
@@ -341,9 +352,11 @@
 
   h3 {
     font-size: var(--fs-2xl);
-    // color: var(--clr-pale-yellow);
+    color: var(--clr-light-grey);
     //
-    text-align: center; 
+    padding: .2rem;
+    width: 100%;
+    text-align: left; 
     margin-bottom: .5rem;
   }
 }

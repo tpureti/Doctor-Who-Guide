@@ -354,7 +354,7 @@ h1.title {
   -ms-grid-column: 1;
   -ms-grid-column-span: 2;
   background-color: var(--clr-dark-grey-2);
-  margin: 1rem 0 1rem;
+  margin-bottom: 1rem;
   grid-area: filters;
   width: 100%;
   display: -webkit-box;
@@ -410,15 +410,23 @@ h1.title {
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
-  gap: 1rem;
+  gap: 0.5rem;
   -webkit-box-align: center;
       -ms-flex-align: center;
           align-items: center;
+  -ms-flex-wrap: wrap;
+      flex-wrap: wrap;
 }
 .clicked_filters .active_filters span {
   color: var(--clr-light-grey);
   font-size: var(--fs-xl);
   font-weight: 600;
+}
+@media (max-width: 1365px) {
+  .clicked_filters .active_filters {
+    -ms-flex-wrap: nowrap;
+        flex-wrap: nowrap;
+  }
 }
 .clicked_filters .filter {
   font-size: var(--fs-xl);
@@ -444,8 +452,8 @@ h1.title {
 .clicked_filters .filter:hover, .clicked_filters .filter:focus {
   -webkit-transition: var(--button-transition);
   transition: var(--button-transition);
-  background-color: var(--clr-dark-yellow);
-  color: var(--clr-dark-grey-2);
+  color: var(--clr-dark-yellow);
+  background-color: var(--clr-dark-grey-2);
 }
 @media (max-width: 431px) {
   .clicked_filters .filter {
@@ -572,13 +580,18 @@ h1.title {
 }
 
 .sidebar_buttons {
-  display: -webkit-box;
-  display: -ms-flexbox;
-  display: flex;
-  -webkit-box-flex: 1;
-      -ms-flex: 1 1 auto;
-          flex: 1 1 auto;
-  padding: 1rem;
+  display: none;
+}
+@media (max-width: 1365px) {
+  .sidebar_buttons {
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-box-flex: 1;
+        -ms-flex: 1 1 auto;
+            flex: 1 1 auto;
+    padding: 1rem;
+  }
 }
 .sidebar_buttons .clear_filters {
   font-size: var(--fs-2xl);
@@ -609,7 +622,14 @@ h1.title {
   -ms-grid-column: 1;
   background-color: var(--clr-dark-grey-2);
   grid-area: sidebar;
-  margin: 0 0 0 4rem;
+  width: min(26.875rem, 100%);
+  height: 80%;
+  padding: 0 4rem;
+  position: fixed;
+  top: 15rem;
+  overflow-y: scroll;
+  scrollbar-width: thin;
+  scrollbar-color: var(--clr-light-blue) var(--clr-dark-grey-2);
 }
 .sidebar h2 {
   font-size: var(--fs-4xl);
@@ -829,7 +849,10 @@ h1.title {
 }
 .multi_filters h3 {
   font-size: var(--fs-2xl);
-  text-align: center;
+  color: var(--clr-light-grey);
+  padding: 0.2rem;
+  width: 100%;
+  text-align: left;
   margin-bottom: 0.5rem;
 }
 

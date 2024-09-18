@@ -1046,6 +1046,7 @@ function clearFilters(clear_filters, data) {
     selected_filter.style.paddingTop = "0rem";
     selected_filter.innerHTML = "";
 
+    // clear sort filters
     sort_filters.forEach(btn => {
       // accessibility
       btn.ariaPressed = false;
@@ -1061,7 +1062,7 @@ function clearFilters(clear_filters, data) {
       arrow.classList.remove("fa-arrow-down-wide-short");
     });
 
-    // get multi-filters from sidebar
+    // clear multi-filters from sidebar
     const multi_filters = document.querySelectorAll(".multi");
     // clear active status on all buttons
     multi_filters.forEach(button => {
@@ -1072,7 +1073,8 @@ function clearFilters(clear_filters, data) {
           button.ariaPressed = false;
         }
     });
-    // get boolean filters from sidebar
+
+    // clear boolean filters from sidebar
     const bool_filters = document.querySelectorAll(".boolean_filter");
     bool_filters.forEach(button => {
       if (button.classList.contains("active")) {
@@ -1088,6 +1090,8 @@ function clearFilters(clear_filters, data) {
     showActiveMultiFilterButtons();
     // clear filters clicked
     filtersAndCategories.clear();
+    // set filteredStories to default data
+    results = data;
     // post default page
     container.innerHTML = '';
     postData(data);
@@ -1196,8 +1200,6 @@ function showFilteredStories(data) {
       if (checkFilters(entries, clickedFilters)) {
         filteredStories.push(data);
       }
-
-      
     }
   });
 
@@ -1394,6 +1396,7 @@ function mainSearch() {
   //  console.log(not_searches);
 
    let searchResults = [];
+   console.log(filteredStories);
    // go through currently displayed data  
    filteredStories.filter(data => {
     // console.log(data);
