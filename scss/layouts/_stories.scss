@@ -5,13 +5,39 @@
 //
 @use '../abstracts/mixins' as *;
 
+.scroll_buttons {
+  grid-area: scroll-buttons;
+  grid-column: 3 / 4;
+  grid-row: 3 / 4;
+  // positioning
+  z-index: 4;
+  position: fixed;
+  height: 100%;
+  right: 4rem;
+  bottom: 2rem;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  justify-content: flex-end;
+  gap: 1rem;
+
+  i {
+    font-size: var(--fs-5xl);
+    font-weight: 600;
+    color: var(--clr-light-blue);
+    background-color: var(--clr-dark-grey-2);
+    border-radius: 100%;
+  }
+}
 
 .stories_displayed {
     // styling
     font-size: var(--fs-2xl);
-    font-weight: 500;
+    font-weight: 600;
     text-transform: lowercase;
     text-align: center;
+    // positioning
+    margin-top: 1rem;
 
     .number_of_results {
       font-weight: 700;
@@ -375,7 +401,19 @@
   }
 }
 
+.close_tab {
+  // styling
+  font-size: var(--fs-3xl);
+  font-weight: 800;
+  // positioning
+  position: absolute;
+  right: 0;
+  // padding-right: 1rem;
+  // margin-right: 1rem;
+}
+
 .castcrew_info {
+  position: relative;
   opacity: 0;
   height: 0;
   transition: var(--opacity-transition);
@@ -388,7 +426,7 @@
   gap: .5rem;
   align-content: stretch;
   align-items: start;
-  justify-items: center;
+  justify-items: start;
   justify-content: center;
 
   span {
@@ -398,7 +436,21 @@
   }
 }
 
+.summary_info {
+  position: relative;
+  // styling
+  // padding: 0 1rem;
+  height: 0;
+  visibility: hidden;
+  opacity: 0;
+  // positioning
+  grid-column: 1 / 3;
+  overflow: scroll;
+  transition: var(--opacity-transition);
+}
+
 .episodes_info {
+  position: relative;
   opacity: 0;
   height: 0;
   transition: var(--opacity-transition);
@@ -408,6 +460,7 @@
 
 .info_divs {
     margin: 1.5rem 1.5rem 0 1.5rem;
+    padding-top: 1rem;
     // flex: 1 1 auto;
     display: flex;
     flex-direction: column;
@@ -417,18 +470,6 @@
     @media ($mobile) {
       margin: 1rem 0;
     }
-}
-
-.summary_info {
-  // styling
-  padding: 0 1rem;
-  height: 0;
-  visibility: hidden;
-  opacity: 0;
-  // positioning
-  grid-column: 1 / 3;
-  overflow: scroll;
-  transition: var(--opacity-transition);
 }
 
 .summary {
@@ -700,11 +741,11 @@
   }
   
   &_episodes {
-    background-color: var(--eps-button);
+    background-color: var(--episodes-button);
     transition: var(--button-transition);
 
     &:hover, &:active {
-      color: var(--eps-button);
+      color: var(--episodes-button);
     }
   }
 
@@ -733,7 +774,7 @@
     color: var(--summary-button);
   }
   &:is(.button_episodes) {
-    color: var(--eps-button);
+    color: var(--episodes-button);
   }
 }
 
@@ -743,6 +784,7 @@
   background-color: var(--clr-dark-grey-1);
   // positioning
   grid-area: footer;
+  position: relative;
   z-index: 2;
   width: 100%;
   min-height: 10rem;

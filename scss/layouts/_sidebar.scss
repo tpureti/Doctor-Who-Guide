@@ -124,13 +124,18 @@
   background-color: var(--clr-dark-grey-2);
   // positioning
   grid-area: sidebar;
+  grid-row: 3 / 4;
   width: min(26.875rem, 100%);
-  height: 80%;
+  height: 100%;
   padding: 0 4rem;
   position: fixed;
-  top: 15rem;
-  // left: 4rem;
-  overflow-y: scroll;
+  top: 3rem;
+  bottom: 2rem;
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  justify-content: flex-end;
+  overflow-y: auto;
   scrollbar-width: thin;
   scrollbar-color: var(--clr-light-blue) var(--clr-dark-grey-2);
 

@@ -184,6 +184,11 @@
     </div>
   </div>
 
+  <!-- SCROLL UP/DOWN -->
+  <div class="scroll_buttons">
+    <!-- <div class="jump_to_top"><i class="fa-solid fa-circle-chevron-up"></i></div> -->
+    <div class="jump_to_bottom"><i class="fa-solid fa-circle-chevron-down"></i></div>
+  </div>
 
   <!-- MAIN -->  
   <main id="container">
@@ -206,7 +211,7 @@
     </div>
   </div>
   <!-- SHOWS NUMBER OF RESULTS -->
-  <div class="stories_displayed">Showing <span class="number_of_results"></span> Stories</div>
+  <div class="stories_displayed"><span class="number_of_results"></span> Stories</div>
 
   <div id="stories_container">
     <!-- STORY ENTRY -->
@@ -239,7 +244,7 @@
         </div>
         <div class="production_info" data-columns="">
           <!-- BASIC INFO: SEASON/EPISODES/RUNTIME/AIRED/COMPANIONS -->
-          <div class="basic_info">
+          <div class="basic_info" data-tab="basic">
             <div class="info_divs">
               <!-- SEASON -->
               <div class="season_area">
@@ -281,7 +286,7 @@
         <!-- END BASIC INFO  -->
         </div>
         <!-- CAST & CREW INFO -->
-            <div class="castcrew_info">
+            <div class="castcrew_info" data-tab="castcrew">
               <!-- CREW -->
               <div class="info_divs">
                 <!-- DIRECTOR -->
@@ -319,13 +324,17 @@
             <!-- END CAST/CREW INFO -->
     
           </div>
-        <!-- SUMMARY -->
-        <div class="summary_info">
-          <h3 class="summary_title">Summary</h3>
-          <div class="summary"></div>
+        <!-- SUMMARY INFO -->
+        <div class="summary_info" data-tab="summary">
+          <div class="info_divs">
+            <h3 class="summary_title">Summary</h3>
+            <div class="summary"></div>
+          </div>
         </div>
+        <!-- END SUMMARY INFO -->
+
         <!-- EPISODE INFO  -->
-        <div class="episodes_info">
+        <div class="episodes_info" data-tab="episodes">
           <div class="info_divs">
             <div class="eps_area">
               <div class="ep_info">
@@ -340,17 +349,18 @@
           </div>
         </div>
         <!-- END EPISODE INFO  -->
+
       </div>
        <!-- BUTTONS -->
        <div class="button_area">
-        <button class="button button_essential">★</button>
-        <button class="button button_castcrew">Cast & Crew</button>
-        <button class="button button_summary">Summary</button>
-        <button class="button button_episodes">Episodes</button>
+        <button class="button button_essential" data-tab="essential">★</button>
+        <button class="button button_castcrew" data-tab="castcrew">Cast & Crew</button>
+        <button class="button button_summary" data-tab="summary">Summary</button>
+        <button class="button button_episodes" data-tab="episodes">Episodes</button>
        </div>
       </div>
      <!-- CONTAINER FOR ESSENTIAL -->
-    <div class="essential_area">
+    <div class="essential_area" data-tab="essential">
       <div class="arrow_area"><span class="arrow"></span></div>
       <div class="essential_reason"></div>
     </div>

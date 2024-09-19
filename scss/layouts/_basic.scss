@@ -19,7 +19,7 @@
   --essential-button: var(--clr-dark-yellow);
   --castcrew-button: var(--clr-bright-orange);
   --summary-button: var(--clr-pale-red);
-  --eps-button: #f674c2;
+  --episodes-button: var(--clr-pale-pink);
   --opacity-transition: opacity .5s ease-in-out;
   --button-transition: .5s ease-in-out;
 }
@@ -62,13 +62,13 @@ button {
 .wrapper {
   width: 100%;
   display: grid;
-  grid-template-columns: 25rem auto;
+  grid-template-columns: 25rem auto 10rem;
   grid-template-rows:  auto auto 1fr auto;
   grid-template-areas: 
-  "header header"
-  "filters filters"
-  "sidebar container"
-  "footer footer";
+  "header header header"
+  "filters filters filters"
+  "sidebar container scroll-buttons"
+  "footer footer footer";
   align-items: start;
 
   @media ($tablet) {

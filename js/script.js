@@ -81,6 +81,7 @@ const header = document.querySelector("#header");
 const sidebar = document.querySelector(".sidebar");
 
 const num_of_results = document.querySelector(".number_of_results");
+const scroll_buttons = document.querySelector(".scroll_buttons");
 
 
 // map that tracks which buttons are clicked
@@ -102,9 +103,10 @@ getJSON()
     populateAllButtons(data);
     showFilteredStories(data);
     mainSearch();
+    openSidebar();
     closeSidebar();
     shrinkHeader();
-    openSidebar();
+    scrollButtons();
     // 
     allowTransitions();
 })
@@ -1915,10 +1917,54 @@ function cloneStoryContainer() {
       addClick(button, info, btns);
     }
   }
+  // add close buttons for each info area
+  closeInfoTab(info, btns);
+}
+
+function closeInfoTab(info, btns) {
+  // get basic info tab
+  let basic = info[0];
+  // slice array so basic isn't included
+  info = Array.from(info);
+  info = info.slice(1);
+
+  btns = Array.from(btns);
+  
+  info.forEach((area, index) => {
+    // get area name
+    // let area_name = area.classList[0].replace("_info", "");
+    let area_name = area.dataset.tab;
+
+    // create close tab button
+    const close_button = document.createElement("button");
+    close_button.classList.add("close_tab");
+    close_button.innerHTML = '<i class="fa-solid fa-xmark"></i>';
+    // close_button.innerHTML = 'close';
+    close_button.style.color = "var(--" + area_name + "-button";
+
+    // add close button to each tab
+    area.prepend(close_button);
+
+    // event listener to close info tabs
+    close_button.addEventListener("click", () => {
+      area.classList.toggle("show");
+      basic.classList.toggle("hide");
+
+      // go through all buttons
+      btns.forEach(button => {
+        let button_name = button.dataset.tab;
+        // toggle off active button
+        if (area_name.match(button_name)) {
+          button.classList.toggle("active_button");
+        }
+      });
+    });
+  });
 }
 
 function addClick(button, info, btns) {
-  let button_name = button.classList[1].replace("button_", "");
+  // let button_name = button.classList[1].replace("button_", "");
+  let button_name = button.dataset.tab;
 
   button.addEventListener("click", () => {
     // if button is ACTIVE and CLICKED
@@ -1926,7 +1972,7 @@ function addClick(button, info, btns) {
 
       // go through areas
       for (let area of info) {
-        let area_name = area.classList[0].replace("_info", "");
+        let area_name = area.dataset.tab;
         // if button and area are MATCHING
         if (area_name.search(button_name) !== -1) {
           // HIDE matching info to button
@@ -1945,7 +1991,7 @@ function addClick(button, info, btns) {
 
       // go through buttons
       for (let btn of btns) {
-        let buttons = btn.classList[1].replace("button_", "");
+        let buttons = btn.dataset.tab;
         // if button name MATCHES
         if (buttons.search(button_name) !== -1) {
           // remove "active button" css from all buttons
@@ -1962,7 +2008,7 @@ function addClick(button, info, btns) {
     else {
       // go through areas
       for (let area of info) {
-        let area_name = area.classList[0].replace("_info", "");
+        let area_name = area.dataset.tab;
         // if button and area are MATCHING
         if (area_name.search(button_name) !== -1) {
           // SHOW matching info
@@ -1982,7 +2028,7 @@ function addClick(button, info, btns) {
 
       // go through buttons
       for (let btn of btns) {
-        let buttons = btn.classList[1].replace("button_", "");
+        let buttons = btn.dataset.tab;
         // if button name MATCHES
         if (buttons.search(button_name) !== -1) {
           // add "active button" css to MATCHING button
@@ -2096,11 +2142,34 @@ function shrinkHeader() {
         button.classList.remove("scroll");
       });
     }
+
+    let pageHeight = document.documentElement.offsetHeight - window.innerHeight;
+    pageHeight = pageHeight - footer.offsetHeight;
+    // console.log(document.documentElement.scrollTop);
+
+    if (document.documentElement.scrollTop > pageHeight) {
+      console.log(true);
+      scroll_buttons.style.position = "sticky";
+      sidebar.style.top = 0;
+      sidebar.style.position = "sticky";
+    }
   }
 }
 
+// function scrollButtons() {
+//   window.onscroll = () => {
+//     let pageHeight = document.documentElement.offsetHeight - window.innerHeight;
+//     pageHeight = pageHeight - footer.offsetHeight;
+//     // console.log(document.documentElement.offsetHeight);
+
+//     if (document.documentElement.scrollTop > pageHeight) {
+//       scroll_buttons.style.position = "sticky";
+//     }
+//   }
+// }
+
 /**
- * function which allows transitions AFTER page loads
+ *function which allows transitions AFTER page loads
  */
 function allowTransitions() {
   document.onreadystatechange = () => {
