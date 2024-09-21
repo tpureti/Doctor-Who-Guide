@@ -126,17 +126,17 @@
   grid-area: sidebar;
   grid-row: 3 / 4;
   width: min(26.875rem, 100%);
-  height: 100%;
+  height: 80%;
   padding: 0 4rem;
   position: fixed;
-  top: 3rem;
-  bottom: 2rem;
+  top: 15rem;
   display: flex;
   flex-direction: column;
+  justify-content: flex-start;
   align-items: stretch;
-  justify-content: flex-end;
   overflow-y: auto;
   scrollbar-width: thin;
+  z-index: 4;
   scrollbar-color: var(--clr-light-blue) var(--clr-dark-grey-2);
 
   h2 {

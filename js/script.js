@@ -2089,6 +2089,7 @@ function shrinkHeader() {
     if (document.documentElement.scrollTop > header.offsetHeight) {
       // get current scroll height
       let currentScroll = window.scrollY;
+
       // make header smaller
       header.classList.add("scroll");
 
@@ -2128,6 +2129,13 @@ function shrinkHeader() {
         clicked_filters.style.borderBottom = "1px solid var(--clr-med-grey)";
       }
 
+      // get height of header + filters if they're active
+      let fullheader_height = header.offsetHeight + clicked_filters.offsetHeight;
+      console.log(fullheader_height);
+
+      // set sidebar to just below it
+      sidebar.style.top = fullheader_height + 16 + "px";
+
       // 
       prevScroll = currentScroll;
     }
@@ -2143,30 +2151,69 @@ function shrinkHeader() {
       });
     }
 
+    // get full page height minus footer
     let pageHeight = document.documentElement.offsetHeight - window.innerHeight;
     pageHeight = pageHeight - footer.offsetHeight;
-    // console.log(document.documentElement.scrollTop);
 
+    const top = scroll_buttons.querySelector(".jump_to_top");
+    const bottom = scroll_buttons.querySelector(".jump_to_bottom");
+
+    // if scrolled down more than one page's worth, show scroll to bottom button
+    if (document.documentElement.scrollTop >= window.innerHeight && !top.classList.contains("active")) {
+      console.log(window.innerHeight);
+      top.style.opacity = 1;
+      top.classList.add("active");
+    }
+    // if scroll less than one page, remove button
+    if (document.documentElement.scrollTop < window.innerHeight && top.classList.contains("active")) {
+      top.style.opacity = 0;
+    }
+    // remove top button after it transitions away
+    top.addEventListener("transitionend", (e) => {
+      // console.log(e);
+      if (top.classList.contains("active") && document.documentElement.scrollTop < window.innerHeight) {
+        console.log(true);
+        top.classList.remove("active");
+      }
+    });
+
+    // if we're at the bottom of the page
     if (document.documentElement.scrollTop > pageHeight) {
-      console.log(true);
-      scroll_buttons.style.position = "sticky";
+      // set scroll buttons and sidebar above footer
+      scroll_buttons.style.bottom = footer.offsetHeight + 16 + "px";
       sidebar.style.top = 0;
-      sidebar.style.position = "sticky";
+      // sidebar.style.bottom = "2rem";
+    }
+    else {
+      scroll_buttons.style.bottom = "revert-layer";
+      sidebar.style.top = "revert-layer";
     }
   }
 }
 
-// function scrollButtons() {
-//   window.onscroll = () => {
-//     let pageHeight = document.documentElement.offsetHeight - window.innerHeight;
-//     pageHeight = pageHeight - footer.offsetHeight;
-//     // console.log(document.documentElement.offsetHeight);
+function scrollButtons() {
+  // console.log(scroll_buttons.querySelector(".jump_to_bottom"));
+  const top = scroll_buttons.querySelector(".jump_to_top");
+  const bottom = scroll_buttons.querySelector(".jump_to_bottom");
 
-//     if (document.documentElement.scrollTop > pageHeight) {
-//       scroll_buttons.style.position = "sticky";
-//     }
-//   }
-// }
+  // go to top if clicked
+  top.addEventListener("click", () => {
+    window.scroll({
+      top: 0,
+      behavior: "smooth",
+    });
+  });
+
+  // go to bottom if clicked
+  bottom.addEventListener("click", () => {
+    let height = document.documentElement.offsetHeight;
+    window.scrollTo({
+      top: height,
+      left: 0,
+      behavior: "smooth",
+    });
+  });
+}
 
 /**
  *function which allows transitions AFTER page loads

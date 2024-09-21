@@ -58,136 +58,124 @@
 
     <!-- SIDEBAR -->
   <div class="sidebar">
-    <!-- <h2 class="filter_title">Advanced Filters</h2> -->
-    <!-- BUTTON GROUP -->
-    <div class="sidebar_buttons">
-      <!-- CLEAR BUTTON -->
-      <button class="clear_filters" aria-disabled="true" disabled><i class="fa-solid fa-rotate-right"></i> reset all</button>
-      <!-- CLOSE BUTTON -->
-      <button class="close_filters"><i class="fa-solid fa-xmark"></i></button>
-    </div>
-
-    <!-- BOOLEAN FILTERS -->
-    <div class="boolean_filters">
-      <div class="boolean_filter_wrapper">
-        <button class="filter boolean_filter" data-category="boolean" data-filter="Essential" aria-pressed="false">Essential</button>
+    <!-- <div class="container"> -->
+      <!-- <h2 class="filter_title">Advanced Filters</h2> -->
+      <!-- BUTTON GROUP -->
+      <div class="sidebar_buttons">
+        <!-- CLEAR BUTTON -->
+        <button class="clear_filters" aria-disabled="true" disabled><i class="fa-solid fa-rotate-right"></i> reset all</button>
+        <!-- CLOSE BUTTON -->
+        <button class="close_filters"><i class="fa-solid fa-xmark"></i></button>
       </div>
-      <div class="boolean_filter_wrapper">
-        <button class="filter boolean_filter" data-category="boolean" data-filter="MissingEpisodes" aria-pressed="false">Missing</button>
+      <!-- BOOLEAN FILTERS -->
+      <div class="boolean_filters">
+        <div class="boolean_filter_wrapper">
+          <button class="filter boolean_filter" data-category="boolean" data-filter="Essential" aria-pressed="false">Essential</button>
+        </div>
+        <div class="boolean_filter_wrapper">
+          <button class="filter boolean_filter" data-category="boolean" data-filter="MissingEpisodes" aria-pressed="false">Missing</button>
+        </div>
+        <div class="boolean_filter_wrapper">
+          <button class="filter boolean_filter" data-category="boolean" data-filter="Animated" aria-pressed="false">Animated</button>
+        </div>
+        <!-- <div class="boolean_filter_wrapper">
+          <button class="filter boolean_filter" data-category="boolean" data-filter="Favorite" aria-pressed="false">Favorites</button>
+        </div> -->
       </div>
-      <div class="boolean_filter_wrapper">
-        <button class="filter boolean_filter" data-category="boolean" data-filter="Animated" aria-pressed="false">Animated</button>
+      <!-- SORTING FILTERS -->
+      <div class="sorting_filters">
+        <button id="sort_button" class="filter sort_button"
+        aria-labelledby="sort_button"
+        aria-controls="sort_dropdown"
+        aria-pressed="false">
+          <span>Sort By</span>
+          <span id="selected_filter" class="selected_filter"></span>
+        </button>
+        <!-- SORT FILTERS DROP DOWN MENU -->
+        <ul id="sort_dropdown" class="sort_dropdown"
+        aria-expanded="false"
+        aria-hidden="true">
+            <button id="number-sort" class="filter sort_filter"
+            data-category="sort"
+            data-filter="Number" aria-pressed="false">Default (Number)<i></i></button>
+            <button id="title-sort" class="filter sort_filter"
+            data-category="sort"
+            data-filter="Title" aria-pressed="false">Title (A-Z) <i></i></button>
+            <button id="imdbrating-sort" class="filter sort_filter"
+            data-category="sort"
+            data-filter="IMDBRating" aria-pressed="false">Rating (IMDB) <i></i></button>
+            <button id="totalviewers-sort" class="filter sort_filter" data-category="sort" data-filter="TotalViewers" aria-pressed="false">Viewership (UK) <i></i></button>
+        </ul>
       </div>
-      <!-- <div class="boolean_filter_wrapper">
-        <button class="filter boolean_filter" data-category="boolean" data-filter="Favorite" aria-pressed="false">Favorites</button>
-      </div> -->
-    </div>
-
-    <!-- SORTING FILTERS -->
-    <div class="sorting_filters">
-      <button id="sort_button" class="filter sort_button"
-      aria-labelledby="sort_button" 
-      aria-controls="sort_dropdown"
-      aria-pressed="false">
-        <span>Sort By</span>
-        <span id="selected_filter" class="selected_filter"></span>
-      </button>
-      <!-- SORT FILTERS DROP DOWN MENU -->
-      <ul id="sort_dropdown" class="sort_dropdown"
-      aria-expanded="false"
-      aria-hidden="true">
-          <button id="number-sort" class="filter sort_filter"
-          data-category="sort"
-          data-filter="Number" aria-pressed="false">Default (Number)<i></i></button>
-
-          <button id="title-sort" class="filter sort_filter"
-          data-category="sort"
-          data-filter="Title" aria-pressed="false">Title (A-Z) <i></i></button>
-
-          <button id="imdbrating-sort" class="filter sort_filter"
-          data-category="sort"
-          data-filter="IMDBRating" aria-pressed="false">Rating (IMDB) <i></i></button>
-
-          <button id="totalviewers-sort" class="filter sort_filter" data-category="sort" data-filter="TotalViewers" aria-pressed="false">Viewership (UK) <i></i></button>
-      </ul>
-    </div>
-    <!-- MULTI FILTERS -->
-    <div class="multi_filters">
-      <h3>Filter by...</h2>
-      <!-- MULTI FILTER BUTTONS -->
-      <button id="doctor-filters_button" class="filter multi_filter" data-category="Doctor" 
-      aria-pressed="false" aria-controls="doctor-filters" aria-label="Filter by Doctor">
-        <span class="category_name">Doctor<span class="current_filters_number"></span>
-        </span>
-        <span class="arrow">
-          <i class="fa-solid fa-angle-up"></i>
-        </span>
-      </button>
-
-      <button id="season-filters_button" class="filter multi_filter" data-category="Season" 
-      aria-pressed="false" aria-controls="season-filters"
-      aria-label="Filter by season">
-        <span class="category_name">Season<span class="current_filters_number"></span>
-        </span>
-        <span class="arrow"><i class="fa-solid fa-angle-up"></i></span>
-      </button>
-
-      <button id="companion-filters_button" class="filter multi_filter" data-category="Companion" aria-pressed="false" aria-controls="companion-filters"
-      aria-label="Filter by companion">
-        <span class="category_name">Companion<span class="current_filters_number"></span>
-        </span>
-        <span class="arrow"><i class="fa-solid fa-angle-up"></i></span>
-      </button>
-
-      <button id="villain-filters_button" class="filter multi_filter" data-category="Villain" aria-pressed="false" aria-controls="villain-filters"
-      aria-label="Filter by villain">
-        <span class="category_name">Villain<span class="current_filters_number"></span>
-        </span>
-        <span class="arrow"><i class="fa-solid fa-angle-up"></i></span>
-      </button>
-
-      <button id="producer-filters_button" class="filter multi_filter" data-category="Producer" aria-pressed="false" aria-controls="producer-filters"
-      aria-label="Filter by producer">
-        <span class="category_name">Producer<span class="current_filters_number"></span>
-        </span>
-        <span class="arrow"><i class="fa-solid fa-angle-up"></i></span>
-      </button>
-
-      <button id="Writer-filters_button" class="filter multi_filter" data-category="Writer" aria-pressed="false" aria-controls="Writer-filters"
-      aria-label="Filter by Writer">
-        <span class="category_name">Writer<span class="current_filters_number"></span>
-        </span>
-        <span class="arrow"><i class="fa-solid fa-angle-up"></i></span>
-      </button>
-
-      <button id="director-filters_button" class="filter multi_filter" data-category="Director" aria-pressed="false" aria-controls="director-filters"
-      aria-label="Filter by director">
-        <span class="category_name">Director<span class="current_filters_number"></span>
-        </span>
-        <span class="arrow"><i class="fa-solid fa-angle-up"></i></span>
-      </button>
-
-      <button id="scripteditor-filters_button" class="filter multi_filter" data-category="ScriptEditor" aria-pressed="false" aria-controls="scripteditor-filters"
-      aria-label="Filter by script editor">
-        <span class="category_name">Script Editor<span class="current_filters_number"></span>
-        </span>
-        <span class="arrow"><i class="fa-solid fa-angle-up"></i></span>
-      </button>
-
-      <button id="composer-filters_button" class="filter multi_filter" data-category="Composer" aria-pressed="false" aria-controls="composer-filters"
-      aria-label="Filter by composer">
-        <span class="category_name">Composer<span class="current_filters_number"></span>
-        </span>
-        <span class="arrow"><i class="fa-solid fa-angle-up"></i></span>
-      </button>
-
-    </div>
+      <!-- MULTI FILTERS -->
+      <div class="multi_filters">
+        <h3>Filter by...</h2>
+        <!-- MULTI FILTER BUTTONS -->
+        <button id="doctor-filters_button" class="filter multi_filter" data-category="Doctor"
+        aria-pressed="false" aria-controls="doctor-filters" aria-label="Filter by Doctor">
+          <span class="category_name">Doctor<span class="current_filters_number"></span>
+          </span>
+          <span class="arrow">
+            <i class="fa-solid fa-angle-up"></i>
+          </span>
+        </button>
+        <button id="season-filters_button" class="filter multi_filter" data-category="Season"
+        aria-pressed="false" aria-controls="season-filters"
+        aria-label="Filter by season">
+          <span class="category_name">Season<span class="current_filters_number"></span>
+          </span>
+          <span class="arrow"><i class="fa-solid fa-angle-up"></i></span>
+        </button>
+        <button id="companion-filters_button" class="filter multi_filter" data-category="Companion" aria-pressed="false" aria-controls="companion-filters"
+        aria-label="Filter by companion">
+          <span class="category_name">Companion<span class="current_filters_number"></span>
+          </span>
+          <span class="arrow"><i class="fa-solid fa-angle-up"></i></span>
+        </button>
+        <button id="villain-filters_button" class="filter multi_filter" data-category="Villain" aria-pressed="false" aria-controls="villain-filters"
+        aria-label="Filter by villain">
+          <span class="category_name">Villain<span class="current_filters_number"></span>
+          </span>
+          <span class="arrow"><i class="fa-solid fa-angle-up"></i></span>
+        </button>
+        <button id="producer-filters_button" class="filter multi_filter" data-category="Producer" aria-pressed="false" aria-controls="producer-filters"
+        aria-label="Filter by producer">
+          <span class="category_name">Producer<span class="current_filters_number"></span>
+          </span>
+          <span class="arrow"><i class="fa-solid fa-angle-up"></i></span>
+        </button>
+        <button id="Writer-filters_button" class="filter multi_filter" data-category="Writer" aria-pressed="false" aria-controls="Writer-filters"
+        aria-label="Filter by Writer">
+          <span class="category_name">Writer<span class="current_filters_number"></span>
+          </span>
+          <span class="arrow"><i class="fa-solid fa-angle-up"></i></span>
+        </button>
+        <button id="director-filters_button" class="filter multi_filter" data-category="Director" aria-pressed="false" aria-controls="director-filters"
+        aria-label="Filter by director">
+          <span class="category_name">Director<span class="current_filters_number"></span>
+          </span>
+          <span class="arrow"><i class="fa-solid fa-angle-up"></i></span>
+        </button>
+        <button id="scripteditor-filters_button" class="filter multi_filter" data-category="ScriptEditor" aria-pressed="false" aria-controls="scripteditor-filters"
+        aria-label="Filter by script editor">
+          <span class="category_name">Script Editor<span class="current_filters_number"></span>
+          </span>
+          <span class="arrow"><i class="fa-solid fa-angle-up"></i></span>
+        </button>
+        <button id="composer-filters_button" class="filter multi_filter" data-category="Composer" aria-pressed="false" aria-controls="composer-filters"
+        aria-label="Filter by composer">
+          <span class="category_name">Composer<span class="current_filters_number"></span>
+          </span>
+          <span class="arrow"><i class="fa-solid fa-angle-up"></i></span>
+        </button>
+      </div>
+    <!-- </div> -->
   </div>
 
   <!-- SCROLL UP/DOWN -->
   <div class="scroll_buttons">
-    <!-- <div class="jump_to_top"><i class="fa-solid fa-circle-chevron-up"></i></div> -->
-    <div class="jump_to_bottom"><i class="fa-solid fa-circle-chevron-down"></i></div>
+    <div class="jump_to_top"><i class="fa-solid fa-circle-chevron-up"></i></div>
+    <div class="jump_to_bottom" style="display: none;"><i class="fa-solid fa-circle-chevron-down"></i></div>
   </div>
 
   <!-- MAIN -->  

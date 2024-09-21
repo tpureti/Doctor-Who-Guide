@@ -10,7 +10,7 @@
   grid-column: 3 / 4;
   grid-row: 3 / 4;
   // positioning
-  z-index: 4;
+  z-index: 3;
   position: fixed;
   height: 100%;
   right: 4rem;
@@ -21,12 +21,32 @@
   justify-content: flex-end;
   gap: 1rem;
 
+  @media ($tablet) {
+    right: 1rem;
+    bottom: 1rem;
+  }
+
   i {
-    font-size: var(--fs-5xl);
+    font-size: 3rem;
     font-weight: 600;
     color: var(--clr-light-blue);
     background-color: var(--clr-dark-grey-2);
     border-radius: 100%;
+  }
+
+  .jump_to_top, .jump_to_bottom {
+    // positioning
+    cursor: pointer;
+    scroll-behavior: smooth;
+    visibility: hidden;
+    opacity: 0;
+    transition: opacity .3s;
+
+    &.active {
+      visibility: visible;
+      opacity: 1;
+      transition: opacity .3s;
+    }
   }
 }
 
@@ -789,4 +809,5 @@
   width: 100%;
   min-height: 10rem;
   margin-top: 2.5rem;
+  bottom: 0;
 }

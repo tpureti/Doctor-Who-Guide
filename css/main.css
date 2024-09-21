@@ -138,6 +138,7 @@ body {
   background-color: var(--bg);
   color: var(--clr-text);
   line-height: 1.25;
+  scroll-behavior: smooth;
 }
 
 /*
@@ -179,11 +180,11 @@ button {
 }
 @media (max-width: 1365px) {
   .wrapper {
-    -ms-grid-columns: auto auto;
-    grid-template-columns: auto auto;
+    -ms-grid-columns: auto auto 8rem;
+    grid-template-columns: auto auto 8rem;
     -ms-grid-rows: auto auto 1fr auto;
     grid-template-rows: auto auto 1fr auto;
-        grid-template-areas: "header header" "filters filters" "sidebar container" "footer footer";
+        grid-template-areas: "header header header" "filters filters header" "sidebar container side-buttons" "footer footer footer";
   }
 }
 @media (max-width: 1025px) {
@@ -232,12 +233,17 @@ h1.title {
   position: sticky;
   top: -50px;
   top: 0px;
-  z-index: 3;
+  z-index: 5;
   -webkit-transition: 0.3s ease;
   transition: 0.3s ease;
 }
 #header.scroll {
   padding: 0.75rem 0.5rem;
+}
+@media (max-width: 1365px) {
+  #header {
+    z-index: 3;
+  }
 }
 @media (max-width: 1025px) {
   #header {
@@ -371,7 +377,7 @@ h1.title {
       -ms-flex-pack: center;
           justify-content: center;
   position: sticky;
-  z-index: 2;
+  z-index: 5;
   -webkit-transition: 0.3s ease;
   transition: 0.3s ease;
 }
@@ -380,6 +386,7 @@ h1.title {
     -webkit-box-pack: justify;
         -ms-flex-pack: justify;
             justify-content: space-between;
+    z-index: 2;
   }
 }
 .clicked_filters .container {
@@ -627,11 +634,10 @@ h1.title {
   -ms-grid-row-span: 1;
   grid-row: 3/4;
   width: min(26.875rem, 100%);
-  height: 100%;
+  height: 80%;
   padding: 0 4rem;
   position: fixed;
-  top: 3rem;
-  bottom: 2rem;
+  top: 15rem;
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
@@ -639,14 +645,15 @@ h1.title {
   -webkit-box-direction: normal;
       -ms-flex-direction: column;
           flex-direction: column;
+  -webkit-box-pack: start;
+      -ms-flex-pack: start;
+          justify-content: flex-start;
   -webkit-box-align: stretch;
       -ms-flex-align: stretch;
           align-items: stretch;
-  -webkit-box-pack: end;
-      -ms-flex-pack: end;
-          justify-content: flex-end;
   overflow-y: auto;
   scrollbar-width: thin;
+  z-index: 4;
   scrollbar-color: var(--clr-light-blue) var(--clr-dark-grey-2);
 }
 .sidebar h2 {
@@ -1079,7 +1086,7 @@ h1.title {
   -ms-grid-row: 3;
   -ms-grid-row-span: 1;
   grid-row: 3/4;
-  z-index: 4;
+  z-index: 3;
   position: fixed;
   height: 100%;
   right: 4rem;
@@ -1099,12 +1106,32 @@ h1.title {
           justify-content: flex-end;
   gap: 1rem;
 }
+@media (max-width: 1365px) {
+  .scroll_buttons {
+    right: 1rem;
+    bottom: 1rem;
+  }
+}
 .scroll_buttons i {
-  font-size: var(--fs-5xl);
+  font-size: 3rem;
   font-weight: 600;
   color: var(--clr-light-blue);
   background-color: var(--clr-dark-grey-2);
   border-radius: 100%;
+}
+.scroll_buttons .jump_to_top, .scroll_buttons .jump_to_bottom {
+  cursor: pointer;
+  scroll-behavior: smooth;
+  visibility: hidden;
+  opacity: 0;
+  -webkit-transition: opacity 0.3s;
+  transition: opacity 0.3s;
+}
+.scroll_buttons .jump_to_top.active, .scroll_buttons .jump_to_bottom.active {
+  visibility: visible;
+  opacity: 1;
+  -webkit-transition: opacity 0.3s;
+  transition: opacity 0.3s;
 }
 
 .stories_displayed {
@@ -1959,13 +1986,15 @@ h1.title {
   width: 100%;
   min-height: 10rem;
   margin-top: 2.5rem;
+  bottom: 0;
 }
 
 @media (max-width: 1365px){
   #header {
     -ms-grid-row: 1;
+    -ms-grid-row-span: 2;
     -ms-grid-column: 1;
-    -ms-grid-column-span: 2;
+    -ms-grid-column-span: 3;
   }
   .clicked_filters {
     -ms-grid-row: 2;
@@ -1983,13 +2012,14 @@ h1.title {
   #footer {
     -ms-grid-row: 4;
     -ms-grid-column: 1;
-    -ms-grid-column-span: 2;
+    -ms-grid-column-span: 3;
   }
 }
 
 @media (max-width: 1025px){
   #header {
     -ms-grid-row: 1;
+    -ms-grid-row-span: 1;
     -ms-grid-column: 1;
     -ms-grid-column-span: 1;
   }

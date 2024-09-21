@@ -40,11 +40,15 @@ h1.title {
   position: sticky;
   top: -50px;
   top: 0px;
-  z-index: 3;
+  z-index: 5;
   transition: .3s ease;
 
   &.scroll {
     padding: .75rem .5rem;
+  }
+
+  @media ($tablet) {
+    z-index: 3;
   }
 
   @media ($mobile) {
@@ -171,12 +175,13 @@ h1.title {
   justify-content: center;
   // position: relative; 
   position: sticky;
-  z-index: 2;
+  z-index: 5;
   // top: 0px;
   transition: .3s ease;
 
   @media ($tablet) {
     justify-content: space-between;
+    z-index: 2;
   }
   
   .container {

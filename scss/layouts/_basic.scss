@@ -33,6 +33,7 @@ body {
   background-color: var(--bg);
   color: var(--clr-text);
   line-height: 1.25;
+  scroll-behavior: smooth;
 }
 
 /*
@@ -72,13 +73,13 @@ button {
   align-items: start;
 
   @media ($tablet) {
-    grid-template-columns: auto auto;
+    grid-template-columns: auto auto 8rem;
     grid-template-rows:  auto auto 1fr auto;
     grid-template-areas: 
-    "header header"
-    "filters filters"
-    "sidebar container"
-    "footer footer";
+    "header header header"
+    "filters filters header"
+    "sidebar container side-buttons"
+    "footer footer footer";
   }
 
   @media ($mobile) {
