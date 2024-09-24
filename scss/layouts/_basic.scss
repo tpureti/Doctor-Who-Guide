@@ -64,21 +64,23 @@ button {
   width: 100%;
   display: grid;
   grid-template-columns: 25rem auto 10rem;
-  grid-template-rows:  auto auto 1fr auto;
+  grid-template-rows:  auto auto 1fr auto auto;
   grid-template-areas: 
   "header header header"
   "filters filters filters"
   "sidebar container scroll-buttons"
+  "pagination pagination pagination"
   "footer footer footer";
   align-items: start;
 
   @media ($tablet) {
     grid-template-columns: auto auto 8rem;
-    grid-template-rows:  auto auto 1fr auto;
+    grid-template-rows:  auto auto 1fr auto auto;
     grid-template-areas: 
     "header header header"
     "filters filters header"
     "sidebar container side-buttons"
+    "pagination pagination pagination"
     "footer footer footer";
   }
 
@@ -90,6 +92,7 @@ button {
     "filters"
     "sidebar"
     "container"
+    "pagination"
     "footer";
   }
 }

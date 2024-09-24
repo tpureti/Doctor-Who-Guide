@@ -78,6 +78,9 @@ const clear_filters = document.querySelectorAll(".clear_filters");
 const open_filters = document.querySelector(".open_filters");
 
 const header = document.querySelector("#header");
+const main_search = document.querySelector(".main_search");
+const clear_input = document.querySelector(".clear_input");
+
 const sidebar = document.querySelector(".sidebar");
 
 const num_of_results = document.querySelector(".number_of_results");
@@ -87,8 +90,9 @@ const scroll_buttons = document.querySelector(".scroll_buttons");
 // map that tracks which buttons are clicked
 let filtersAndCategories = new Map();
 let filters = [];
-// results
-let results = [];
+// results from filters and searchbar
+let filterResults = [];
+let searchedStories = [];
 
 // fetch json data
 async function getJSON() {
@@ -101,8 +105,8 @@ async function getJSON() {
 getJSON()
   .then(data => {
     populateAllButtons(data);
-    showFilteredStories(data);
-    mainSearch();
+    Promise.resolve(showFilteredStories(data)).then(() => createPagination());
+    mainSearch(data);
     openSidebar();
     closeSidebar();
     shrinkHeader();
@@ -152,7 +156,7 @@ function openSidebar() {
   }
 
   if (clientWidth >= 1356) {
-    console.log("meow");
+    // console.log("meow");
   }
 
 }
@@ -1000,8 +1004,6 @@ function showActiveFilters() {
 
   // if there's more than one active filter
   if (active_filters.childElementCount > 0) {
-
-
     // apply to both clear buttons
     clear_filters.forEach(button => {
       // active class to clear filter button
@@ -1016,7 +1018,7 @@ function showActiveFilters() {
   else {
     console.log(true);
     // disable reset button
-    // clear_filters[1].removeEventListener("click", () => {});
+    clicked_filters.style.borderBottom = 0;
 
     // apply to both clear buttons
     clear_filters.forEach(button => {
@@ -1092,11 +1094,11 @@ function clearFilters(clear_filters, data) {
     showActiveMultiFilterButtons();
     // clear filters clicked
     filtersAndCategories.clear();
-    // set filteredStories to default data
-    results = data;
+    // set filteredResults to default data
+    filterResults = data;
     // post default page
     container.innerHTML = '';
-    postData(data);
+    createPagination();
   })
 }
 
@@ -1136,6 +1138,16 @@ function showActiveMultiFilterButtons() {
 function showFilteredStories(data) {
   // create array of categories
   let categories = Array.from(filtersAndCategories.keys());
+
+  // if there is something in the search bar
+  if (searchedStories.length) {
+    // remove active class on search clear input
+    clear_input.classList.remove("active");
+    // reset to empty search bar
+    main_search.value = '';
+    // clear searchedStories
+    searchedStories = [];
+  }
 
   // array of stories to be pushed
   let filteredStories = [];
@@ -1299,15 +1311,11 @@ function showFilteredStories(data) {
 
   console.log(filteredStories);
   // add filtered stories to global results container
-  results = [];
-  results = results.concat(filteredStories);
+  filterResults = [];
+  filterResults = filterResults.concat(filteredStories);
 }
 
-function mainSearch() {
-  // get search bar
-  const main_search = document.querySelector(".main_search");
-  // get clear_input
-  const clear_input = document.querySelector(".clear_input");
+function mainSearch(data) {
   const search_tips = document.querySelector(".search_tips");
 
   let debounceTimer;
@@ -1341,7 +1349,7 @@ function mainSearch() {
       search_tips.classList.add("active");
     }
     // handle search queries
-    debounce(() => handleSearches(input, results), 500);
+    debounce(() => handleSearches(input, filterResults), 500);
   });
 
   // function that filters search inputs
@@ -1459,7 +1467,12 @@ function mainSearch() {
     postData(searchResults);
     // show number of results
     num_of_results.textContent = searchResults.length;
-    console.log(searchResults);
+    // add search results to global array
+    searchedStories = [];
+    searchedStories = searchedStories.concat(searchResults);
+
+    // create Pagination
+    createPagination();
   }
 
   // add event listener to "clear" button
@@ -1468,8 +1481,18 @@ function mainSearch() {
     clear_input.classList.remove("active");
     // reset to previous results
     main_search.value = '';
+    // clear searchedStories
+    searchedStories = [];
+    // clear results
     container.innerHTML = '';
-    postData(results);
+    // if there are filters selected
+    if (filterResults.length) {
+      // use filtered stories
+      createPagination(filterResults, 1)
+    }
+    else {
+      createPagination(data, 1);
+    }
   });
 }
 
@@ -1822,8 +1845,7 @@ function postData(data) {
       ep_area.innerHTML = ep_names;
 
       // show number of results by default
-      // const num_of_results = document.querySelector(".number_of_results");
-      num_of_results.textContent = data.length;
+      // num_of_results.textContent = data.length;
       
       // duplicate elements
       cloneStoryContainer();
@@ -2131,7 +2153,6 @@ function shrinkHeader() {
 
       // get height of header + filters if they're active
       let fullheader_height = header.offsetHeight + clicked_filters.offsetHeight;
-      console.log(fullheader_height);
 
       // set sidebar to just below it
       sidebar.style.top = fullheader_height + 16 + "px";
@@ -2160,7 +2181,6 @@ function shrinkHeader() {
 
     // if scrolled down more than one page's worth, show scroll to bottom button
     if (document.documentElement.scrollTop >= window.innerHeight && !top.classList.contains("active")) {
-      console.log(window.innerHeight);
       top.style.opacity = 1;
       top.classList.add("active");
     }
@@ -2172,7 +2192,6 @@ function shrinkHeader() {
     top.addEventListener("transitionend", (e) => {
       // console.log(e);
       if (top.classList.contains("active") && document.documentElement.scrollTop < window.innerHeight) {
-        console.log(true);
         top.classList.remove("active");
       }
     });
@@ -2212,6 +2231,102 @@ function scrollButtons() {
       left: 0,
       behavior: "smooth",
     });
+  });
+}
+
+const entries_per_page = 10;
+const prev_button = document.querySelector("#prev");
+const next_button = document.querySelector("#next");
+const page_links = document.querySelectorAll(".page_link");
+let page = 1;
+let total_pages = null;
+let postedStories;
+
+function createPagination() {
+  console.log(filterResults.length);
+  console.log(searchedStories.length);
+
+  // if there are search results, use that total
+  if (searchedStories.length) {
+    total_pages = Math.ceil(searchedStories.length / entries_per_page);
+    postedStories = searchedStories;
+  }
+  // else use default or filtered results
+  else {
+    total_pages = Math.ceil(filterResults.length / entries_per_page);
+    postedStories = filterResults;
+  }
+
+  // for (let i = 0; i < total_pages; i++) {
+  //   // create pagination links
+  //   let link = document.createElement("a");
+  //   link.href = '#';
+  //   link.classList.add("page_link");
+  //   link.textContent = i + 1;
+  //   link.dataset.page = i + 1;
+  //   // place links after prev and before next buttons
+  //   next_button.before(link);
+  // }
+
+
+  // show results for current page
+  
+  displayPage(postedStories, page);
+  updatePagination(postedStories, total_pages);
+}
+
+function displayPage(postedStories, page) {
+    let startIndex = (page - 1) * entries_per_page;
+    let endIndex = startIndex + entries_per_page;
+    // display number of stories
+    num_of_results.textContent = postedStories.length;
+
+    // get slice of stories
+    postedStories = postedStories.slice(startIndex, endIndex);
+    // reset container
+    container.innerHTML = '';
+    // display stories of specific page
+    postData(postedStories);
+}
+
+function updatePagination(postedStories) {
+  // if on first page, do not show prev button
+  if (page === 1) {
+    prev_button.style.display = "none";
+  }
+  else if (page === total_pages) {
+    next_button.style.display = "none";
+  }
+  else {
+    prev_button.style.display = "block";
+    next_button.style.display = "block";
+  }
+  
+
+  page_links.forEach(link => {
+    // show clicked page as active
+    let page_num = link.dataset.page;
+    page_num = parseInt(page_num);
+    // if page number is page selected, set to active
+    if (page_num === page) {
+      link.classList.add("active");
+    }
+    else {
+      link.classList.remove("active");
+    }
+
+    // add eventlistener to page links
+    link.addEventListener("click", () => {
+      // 
+      page = page_num;
+      displayPage(postedStories, page);
+      updatePagination(postedStories);
+
+      if (total_pages > 3 && page_num > 2) {
+        console.log(total_pages);
+      }
+    });
+
   });
 }
 
