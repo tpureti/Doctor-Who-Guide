@@ -806,6 +806,7 @@
   padding: 1rem;
   display: flex;
   justify-content: center;
+  align-items: flex-end;
   gap: .5rem;
 
   @media ($tablet) {
@@ -826,6 +827,12 @@
       transition: .2s linear;
       border-bottom: 2px solid var(--clr-dark-yellow);
     }
+  }
+
+  .dots {
+    font-size: .5rem;
+    padding: .5rem;
+    color: var(--clr-light-blue);
   }
 }
 

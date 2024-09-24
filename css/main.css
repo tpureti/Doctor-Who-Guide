@@ -1992,6 +1992,9 @@ h1.title {
   -webkit-box-pack: center;
       -ms-flex-pack: center;
           justify-content: center;
+  -webkit-box-align: end;
+      -ms-flex-align: end;
+          align-items: flex-end;
   gap: 0.5rem;
 }
 @media (max-width: 1365px) {
@@ -2015,6 +2018,11 @@ h1.title {
   -webkit-transition: 0.2s linear;
   transition: 0.2s linear;
   border-bottom: 2px solid var(--clr-dark-yellow);
+}
+#pagination .dots {
+  font-size: 0.5rem;
+  padding: 0.5rem;
+  color: var(--clr-light-blue);
 }
 
 #footer {

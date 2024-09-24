@@ -105,7 +105,7 @@ async function getJSON() {
 getJSON()
   .then(data => {
     populateAllButtons(data);
-    Promise.resolve(showFilteredStories(data)).then(() => createPagination());
+    showFilteredStories(data);
     mainSearch(data);
     openSidebar();
     closeSidebar();
@@ -1313,6 +1313,8 @@ function showFilteredStories(data) {
   // add filtered stories to global results container
   filterResults = [];
   filterResults = filterResults.concat(filteredStories);
+  // 
+  createPagination();
 }
 
 function mainSearch(data) {
@@ -2238,9 +2240,12 @@ const entries_per_page = 10;
 const prev_button = document.querySelector("#prev");
 const next_button = document.querySelector("#next");
 const page_links = document.querySelectorAll(".page_link");
+const first_page = document.querySelector("#first_page");
+const last_page = document.querySelector("#last_page");
+const dots = document.querySelectorAll(".dots");
 let page = 1;
 let total_pages = null;
-let postedStories;
+let combinedResults;
 
 function createPagination() {
   console.log(filterResults.length);
@@ -2249,12 +2254,12 @@ function createPagination() {
   // if there are search results, use that total
   if (searchedStories.length) {
     total_pages = Math.ceil(searchedStories.length / entries_per_page);
-    postedStories = searchedStories;
+    combinedResults = searchedStories;
   }
   // else use default or filtered results
   else {
     total_pages = Math.ceil(filterResults.length / entries_per_page);
-    postedStories = filterResults;
+    combinedResults = filterResults;
   }
 
   // for (let i = 0; i < total_pages; i++) {
@@ -2271,25 +2276,27 @@ function createPagination() {
 
   // show results for current page
   
-  displayPage(postedStories, page);
-  updatePagination(postedStories, total_pages);
+  displayPage(page);
+  updatePagination(total_pages);
 }
 
-function displayPage(postedStories, page) {
+function displayPage(page) {
     let startIndex = (page - 1) * entries_per_page;
     let endIndex = startIndex + entries_per_page;
     // display number of stories
-    num_of_results.textContent = postedStories.length;
+    num_of_results.textContent = combinedResults.length;
 
     // get slice of stories
-    postedStories = postedStories.slice(startIndex, endIndex);
+    let currStories = combinedResults.slice(startIndex, endIndex);
+
     // reset container
     container.innerHTML = '';
     // display stories of specific page
-    postData(postedStories);
+    postData(currStories);
 }
 
-function updatePagination(postedStories) {
+function updatePagination() {
+
   // if on first page, do not show prev button
   if (page === 1) {
     prev_button.style.display = "none";
@@ -2301,8 +2308,44 @@ function updatePagination(postedStories) {
     prev_button.style.display = "block";
     next_button.style.display = "block";
   }
-  
 
+  console.log(page);
+
+  // if there are more than 3 pages and not on the last page, shift page numbers
+  if (total_pages > 3 && page > 2 && page < total_pages) {
+      let prev_num = page - 1;
+      let next_num = page + 1;
+      // previous page
+      page_links[0].textContent = prev_num;
+      page_links[0].dataset.page = prev_num;
+      // current page
+      page_links[1].textContent = page;
+      page_links[1].dataset.page = page;
+      // next page
+      page_links[2].textContent = next_num;
+      page_links[2].dataset.page = next_num;
+
+      // show first and final pages
+      first_page.style.display = "block";
+      last_page.textContent = total_pages;
+      last_page.dataset.page = total_pages;
+      last_page.style.display = "block";
+
+      dots.forEach(span => {
+        span.style.display = "block";
+      });
+    }
+    else {
+      // hide first and final pages
+      first_page.style.display = "none";
+      last_page.style.display = "none";
+
+      dots.forEach(span => {
+        span.style.display = "none";
+      });
+    }
+  
+  // get each page
   page_links.forEach(link => {
     // show clicked page as active
     let page_num = link.dataset.page;
@@ -2314,21 +2357,50 @@ function updatePagination(postedStories) {
     else {
       link.classList.remove("active");
     }
-
-    // add eventlistener to page links
-    link.addEventListener("click", () => {
-      // 
-      page = page_num;
-      displayPage(postedStories, page);
-      updatePagination(postedStories);
-
-      if (total_pages > 3 && page_num > 2) {
-        console.log(total_pages);
-      }
-    });
-
   });
 }
+
+prev_button.addEventListener("click", () => {
+  if (page > 1) {
+    page--;
+    displayPage(page);
+    updatePagination();
+  }
+});
+
+next_button.addEventListener("click", () => {
+  if (page < total_pages) {
+    page++;
+    displayPage(page);
+    updatePagination();
+  }
+});
+
+page_links.forEach(link => {
+  link.addEventListener("click", (e) => {
+    e.preventDefault();
+    // 
+    let page_num = link.dataset.page;
+    page_num = parseInt(page_num);
+    if (page_num !== page) {
+      page = page_num;
+      displayPage(page);
+      updatePagination();
+    }
+  });
+});
+
+first_page.addEventListener("click", () => {
+  page = 1;
+  displayPage(page);
+  updatePagination();
+});
+
+last_page.addEventListener("click", () => {
+  page = total_pages;
+  displayPage(total_pages);
+  updatePagination();
+});
 
 /**
  *function which allows transitions AFTER page loads
