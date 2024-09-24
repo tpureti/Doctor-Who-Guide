@@ -1989,6 +1989,8 @@ h1.title {
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
+  -ms-flex-wrap: wrap;
+      flex-wrap: wrap;
   -webkit-box-pack: center;
       -ms-flex-pack: center;
           justify-content: center;
@@ -1997,7 +1999,7 @@ h1.title {
           align-items: flex-end;
   gap: 0.5rem;
 }
-@media (max-width: 1365px) {
+@media (max-width: 1025px) {
   #pagination {
     -ms-grid-column: 1;
     grid-column: 1/1;
@@ -2019,10 +2021,19 @@ h1.title {
   transition: 0.2s linear;
   border-bottom: 2px solid var(--clr-dark-yellow);
 }
+@media (max-width: 1025px) {
+  #pagination a {
+    font-size: var(--fs-2xl);
+  }
+}
+#pagination #first_page, #pagination #last_page {
+  display: none;
+}
 #pagination .dots {
   font-size: 0.5rem;
   padding: 0.5rem;
   color: var(--clr-light-blue);
+  display: none;
 }
 
 #footer {

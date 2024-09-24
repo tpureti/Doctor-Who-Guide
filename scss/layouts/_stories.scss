@@ -805,12 +805,16 @@
   width: 100%;
   padding: 1rem;
   display: flex;
+  flex-wrap: wrap;
   justify-content: center;
   align-items: flex-end;
   gap: .5rem;
 
-  @media ($tablet) {
-    grid-column: 1 / 1;
+  @media ($mobile) {
+    grid-column: 1 / 1;    
+    // a:nth-child(4), a:nth-child(6) {
+    //   display: none;
+    // }
   }
 
   a {
@@ -827,12 +831,21 @@
       transition: .2s linear;
       border-bottom: 2px solid var(--clr-dark-yellow);
     }
+    
+    @media ($mobile) {
+      font-size: var(--fs-2xl);
+    }
+  }
+
+  #first_page, #last_page {
+    display: none;
   }
 
   .dots {
     font-size: .5rem;
     padding: .5rem;
     color: var(--clr-light-blue);
+    display: none;
   }
 }
 

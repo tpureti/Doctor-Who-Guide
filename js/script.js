@@ -1098,7 +1098,7 @@ function clearFilters(clear_filters, data) {
     filterResults = data;
     // post default page
     container.innerHTML = '';
-    createPagination();
+    createPagination(1);
   })
 }
 
@@ -1314,7 +1314,7 @@ function showFilteredStories(data) {
   filterResults = [];
   filterResults = filterResults.concat(filteredStories);
   // 
-  createPagination();
+  createPagination(1);
 }
 
 function mainSearch(data) {
@@ -1474,7 +1474,7 @@ function mainSearch(data) {
     searchedStories = searchedStories.concat(searchResults);
 
     // create Pagination
-    createPagination();
+    createPagination(1);
   }
 
   // add event listener to "clear" button
@@ -1490,10 +1490,10 @@ function mainSearch(data) {
     // if there are filters selected
     if (filterResults.length) {
       // use filtered stories
-      createPagination(filterResults, 1)
+      createPagination(1)
     }
     else {
-      createPagination(data, 1);
+      createPagination(1);
     }
   });
 }
@@ -2247,7 +2247,7 @@ let page = 1;
 let total_pages = null;
 let combinedResults;
 
-function createPagination() {
+function createPagination(page) {
   console.log(filterResults.length);
   console.log(searchedStories.length);
 
@@ -2273,11 +2273,7 @@ function createPagination() {
   //   next_button.before(link);
   // }
 
-
-  // show results for current page
-  
-  displayPage(page);
-  updatePagination(total_pages);
+  goToFirstPage();
 }
 
 function displayPage(page) {
@@ -2296,47 +2292,108 @@ function displayPage(page) {
 }
 
 function updatePagination() {
-
+  console.log(page);
   // if on first page, do not show prev button
   if (page === 1) {
+    // hide previous button
     prev_button.style.display = "none";
+    // show next button
+    next_button.style.display = "block";
+
+    // reset to first 3 pages
+    // previous page
+    page_links[0].textContent = 1;
+    page_links[0].dataset.page = 1;
+    // current page
+    page_links[1].textContent = 2;
+    page_links[1].dataset.page = 2;
+    // next page
+    page_links[2].textContent = 3;
+    page_links[2].dataset.page = 3;
   }
   else if (page === total_pages) {
+    // hide next button
     next_button.style.display = "none";
+    // show prev button
+    prev_button.style.display = "block";
+    // show first page
+    first_page.style.display = "block";
+    dots[0].style.display = "block";
+
+    // show last 3 pages
+    // previous page
+    page_links[0].textContent = total_pages - 2;
+    page_links[0].dataset.page = total_pages - 2;
+    // current page
+    page_links[1].textContent = total_pages - 1;
+    page_links[1].dataset.page = total_pages - 1;
+    // next page
+    page_links[2].textContent = total_pages;
+    page_links[2].dataset.page = total_pages;
   }
   else {
     prev_button.style.display = "block";
     next_button.style.display = "block";
   }
 
-  console.log(page);
-
   // if there are more than 3 pages and not on the last page, shift page numbers
-  if (total_pages > 3 && page > 2 && page < total_pages) {
-      let prev_num = page - 1;
-      let next_num = page + 1;
-      // previous page
-      page_links[0].textContent = prev_num;
-      page_links[0].dataset.page = prev_num;
-      // current page
-      page_links[1].textContent = page;
-      page_links[1].dataset.page = page;
-      // next page
-      page_links[2].textContent = next_num;
-      page_links[2].dataset.page = next_num;
+  if (total_pages > 3) {
+      if (page !== 1 && page !== total_pages) {
+        let prev_num = page - 1;
+        let next_num = page + 1;
+        // previous page
+        page_links[0].textContent = prev_num;
+        page_links[0].dataset.page = prev_num;
+        // current page
+        page_links[1].textContent = page;
+        page_links[1].dataset.page = page;
+        // next page
+        page_links[2].textContent = next_num;
+        page_links[2].dataset.page = next_num;
+      }
 
-      // show first and final pages
-      first_page.style.display = "block";
-      last_page.textContent = total_pages;
-      last_page.dataset.page = total_pages;
-      last_page.style.display = "block";
+      // if on first two page
+      if (page < 3) {
+        // show last page
+        last_page.textContent = total_pages;
+        last_page.dataset.page = total_pages;
+        last_page.style.display = "block";
+        // show dots leading to last page
+        dots[1].style.display = "block";
 
-      dots.forEach(span => {
-        span.style.display = "block";
-      });
+        // hide first page
+        first_page.style.display = "none";
+        // hide dots leading to first page
+        dots[0].style.display = "none";
+      }
+      // if in middle pages
+      else if (page > 2 && page < total_pages - 1) {
+        // show first and final pages
+        first_page.style.display = "block";
+        last_page.textContent = total_pages;
+        last_page.dataset.page = total_pages;
+        last_page.style.display = "block";
+  
+        // show dots in middle pages
+        dots.forEach(span => {
+          span.style.display = "block";
+        });
+      }
+      // if on second to last page
+      else if (page >= total_pages - 1) {
+        // hide last page
+        last_page.style.display = "none";
+        // do not show dots leading to last page
+        dots[1].style.display = "none";
+      }
+      else if (page === total_pages) {
+        // // show first page
+        // first_page.style.display = "block";
+        // dots[0].style.display = "block";
+      }
     }
+    // if there are 3 pages or less
     else {
-      // hide first and final pages
       first_page.style.display = "none";
       last_page.style.display = "none";
 
@@ -2395,6 +2452,12 @@ first_page.addEventListener("click", () => {
   displayPage(page);
   updatePagination();
 });
+
+function goToFirstPage() {
+  page = 1;
+  displayPage(page);
+  updatePagination();
+}
 
 last_page.addEventListener("click", () => {
   page = total_pages;
