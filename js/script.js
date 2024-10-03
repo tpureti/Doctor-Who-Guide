@@ -2262,17 +2262,6 @@ function createPagination(page) {
     combinedResults = filterResults;
   }
 
-  // for (let i = 0; i < total_pages; i++) {
-  //   // create pagination links
-  //   let link = document.createElement("a");
-  //   link.href = '#';
-  //   link.classList.add("page_link");
-  //   link.textContent = i + 1;
-  //   link.dataset.page = i + 1;
-  //   // place links after prev and before next buttons
-  //   next_button.before(link);
-  // }
-
   goToFirstPage();
 }
 
@@ -2292,53 +2281,42 @@ function displayPage(page) {
 }
 
 function updatePagination() {
-  console.log(page);
-  // if on first page, do not show prev button
-  if (page === 1) {
-    // hide previous button
-    prev_button.style.display = "none";
-    // show next button
-    next_button.style.display = "block";
-
-    // reset to first 3 pages
-    // previous page
-    page_links[0].textContent = 1;
-    page_links[0].dataset.page = 1;
-    // current page
-    page_links[1].textContent = 2;
-    page_links[1].dataset.page = 2;
-    // next page
-    page_links[2].textContent = 3;
-    page_links[2].dataset.page = 3;
-  }
-  else if (page === total_pages) {
-    // hide next button
-    next_button.style.display = "none";
-    // show prev button
-    prev_button.style.display = "block";
-    // show first page
-    first_page.style.display = "block";
-    dots[0].style.display = "block";
-
-    // show last 3 pages
-    // previous page
-    page_links[0].textContent = total_pages - 2;
-    page_links[0].dataset.page = total_pages - 2;
-    // current page
-    page_links[1].textContent = total_pages - 1;
-    page_links[1].dataset.page = total_pages - 1;
-    // next page
-    page_links[2].textContent = total_pages;
-    page_links[2].dataset.page = total_pages;
-  }
-  else {
-    prev_button.style.display = "block";
-    next_button.style.display = "block";
-  }
+  // console.log(total_pages);
+  let first_page_number = document.querySelector(".page_number").querySelector(".first");
+  let last_page_number = document.querySelector(".page_number").querySelector(".last");
+  
+  first_page_number.textContent = page;
+  last_page_number.textContent = total_pages;
 
   // if there are more than 3 pages and not on the last page, shift page numbers
-  if (total_pages > 3) {
+      if (total_pages > 3) {
+      // show all 3 page links
+      page_links.forEach(link => {
+        link.style.display = "block";
+      });
+      // if on first page
+      if (page === 1) {
+        // hide previous button
+        prev_button.style.display = "none";
+        // show next button
+        next_button.style.display = "block";
+
+        // reset to first 3 pages
+        // previous page
+        page_links[0].textContent = 1;
+        page_links[0].dataset.page = 1;
+        // current page
+        page_links[1].textContent = 2;
+        page_links[1].dataset.page = 2;
+        // next page
+        page_links[2].textContent = 3;
+        page_links[2].dataset.page = 3;
+      }
       if (page !== 1 && page !== total_pages) {
+        // show prev and next buttons
+        prev_button.style.display = "block";
+        next_button.style.display = "block";
+        // adjust page numbers, increasing by one
         let prev_num = page - 1;
         let next_num = page + 1;
         // previous page
@@ -2367,7 +2345,7 @@ function updatePagination() {
         dots[0].style.display = "none";
       }
       // if in middle pages
-      else if (page > 2 && page < total_pages - 1) {
+      if (page > 2 && page < total_pages - 1) {
         // show first and final pages
         first_page.style.display = "block";
         last_page.textContent = total_pages;
@@ -2380,25 +2358,55 @@ function updatePagination() {
         });
       }
       // if on second to last page
-      else if (page >= total_pages - 1) {
+      if (page >= total_pages - 1) {
         // hide last page
         last_page.style.display = "none";
         // do not show dots leading to last page
         dots[1].style.display = "none";
       }
-      else if (page === total_pages) {
-        // // show first page
-        // first_page.style.display = "block";
-        // dots[0].style.display = "block";
+      if (page === total_pages) {
+        // hide next button
+        next_button.style.display = "none";
+        // show prev button
+        prev_button.style.display = "block";
+        // show first page
+        first_page.style.display = "block";
+        dots[0].style.display = "block";
+
+        // show last 3 pages
+        // previous page
+        page_links[0].textContent = total_pages - 2;
+        page_links[0].dataset.page = total_pages - 2;
+        // current page
+        page_links[1].textContent = total_pages - 1;
+        page_links[1].dataset.page = total_pages - 1;
+        // next page
+        page_links[2].textContent = total_pages;
+        page_links[2].dataset.page = total_pages;
       }
     }
     // if there are 3 pages or less
     else {
+      // hide previous button
+      prev_button.style.display = "none";
+      // show next button
+      next_button.style.display = "none";
+      // remove first and last pages
       first_page.style.display = "none";
       last_page.style.display = "none";
-
+      // hide dots
       dots.forEach(span => {
         span.style.display = "none";
+      });
+      // remove extra page links
+      page_links.forEach((link, index) => {
+        if (index > total_pages - 1) {
+          link.style.display = "none";
+        }
+        else {
+          link.textContent = index + 1;
+          link.dataset.page = index + 1;
+        }
       });
     }
   

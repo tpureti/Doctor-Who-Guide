@@ -1146,6 +1146,11 @@ h1.title {
   font-weight: 700;
   color: var(--clr-bright-yellow);
 }
+.stories_displayed .page_number {
+  font-size: var(--fs-lg);
+  font-weight: 500;
+  color: var(--clr-light-grey);
+}
 
 .blurb {
   width: min(55rem, 100%);
