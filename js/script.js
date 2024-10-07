@@ -2265,7 +2265,22 @@ function createPagination(page) {
   goToFirstPage();
 }
 
+window.addEventListener("hashchange", () => {
+    // get url and change display if back or forward spacing
+    let url = window.location.hash;
+    url = url.slice(1);
+  
+    page = parseInt(url);
+    displayPage(page);
+    updatePagination();
+});
+
 function displayPage(page) {
+    // scroll to top
+    window.scroll(0, 0);
+    // add pages visited to history
+    history.replaceState({}, "", "#" + page);
+
     let startIndex = (page - 1) * entries_per_page;
     let endIndex = startIndex + entries_per_page;
     // display number of stories
@@ -2288,29 +2303,89 @@ function updatePagination() {
   first_page_number.textContent = page;
   last_page_number.textContent = total_pages;
 
-  // if there are more than 3 pages and not on the last page, shift page numbers
-      if (total_pages > 3) {
+  // same in both views
+  if (page === 1) {
+    // hide previous button
+    prev_button.style.display = "none";
+    // show next button
+    next_button.style.display = "block";
+  }
+  else if (page === total_pages) {
+    // hide next button
+    next_button.style.display = "none";
+    // show prev button
+    prev_button.style.display = "block";
+  }
+
+  // if in mobile view
+  if (window.innerWidth < 565) {
+    // change appearance of first and last pages
+    first_page.innerHTML = '<i class="fa-solid fa-angles-left"></i>';
+    last_page.innerHTML = '<i class="fa-solid fa-angles-right"></i>';
+    first_page.style.color = "var(--clr-light-grey)";
+    last_page.style.color = "var(--clr-light-grey)";
+
+    // move them before and after next and prev buttons
+    prev_button.before(first_page);
+    next_button.after(last_page);
+
+    // next_button.innerHTML = '<i class="fa-solid fa-angle-right"></i>';
+    // prev_button.innerHTML = '<i class="fa-solid fa-angle-left"></i>';
+    // hide every link except first
+    page_links.forEach((link, index) => {
+      if (index > 0) {
+        link.style.display = "none";
+      }
+      else {
+        link.textContent = page;
+        link.dataset.page = page;
+        link.href = "#" + page;
+      }
+    });
+
+    if (page !== 1 && page !== total_pages) {
+      // show prev button
+      prev_button.style.display = "block";
+      // show next button
+      next_button.style.display = "block";
+
+      // show first page
+      first_page.style.display = "flex";
+      // show last page
+      last_page.style.display = "flex";
+    }
+    else if (page === 1) {
+      // show last page
+      last_page.style.display = "flex";
+      // hide first page
+      first_page.style.display = "none";
+    }
+    else if (page === total_pages) {
+      // show first page
+      first_page.style.display = "flex";
+      // hide last page
+      last_page.style.display = "none";
+    }
+  }
+
+  // if not in mobile view
+  else {
+    // if there are more than 3 pages and not on the last page, shift page numbers
+    if (total_pages > 3) {
       // show all 3 page links
       page_links.forEach(link => {
         link.style.display = "block";
       });
       // if on first page
       if (page === 1) {
-        // hide previous button
-        prev_button.style.display = "none";
-        // show next button
-        next_button.style.display = "block";
-
+        let i = 1;
         // reset to first 3 pages
-        // previous page
-        page_links[0].textContent = 1;
-        page_links[0].dataset.page = 1;
-        // current page
-        page_links[1].textContent = 2;
-        page_links[1].dataset.page = 2;
-        // next page
-        page_links[2].textContent = 3;
-        page_links[2].dataset.page = 3;
+        page_links.forEach(link => {
+          link.textContent = i;
+          link.dataset.page = i;
+          link.href = "#" + i;
+          i++;
+        });
       }
       if (page !== 1 && page !== total_pages) {
         // show prev and next buttons
@@ -2322,14 +2397,17 @@ function updatePagination() {
         // previous page
         page_links[0].textContent = prev_num;
         page_links[0].dataset.page = prev_num;
+        page_links[0].href = "#" + prev_num;
         // current page
         page_links[1].textContent = page;
         page_links[1].dataset.page = page;
+        page_links[1].href = "#" + page;
         // next page
         page_links[2].textContent = next_num;
         page_links[2].dataset.page = next_num;
+        page_links[2].href = "#" + next_num;
       }
-
+  
       // if on first two page
       if (page < 3) {
         // show last page
@@ -2338,7 +2416,7 @@ function updatePagination() {
         last_page.style.display = "block";
         // show dots leading to last page
         dots[1].style.display = "block";
-
+  
         // hide first page
         first_page.style.display = "none";
         // hide dots leading to first page
@@ -2365,24 +2443,23 @@ function updatePagination() {
         dots[1].style.display = "none";
       }
       if (page === total_pages) {
-        // hide next button
-        next_button.style.display = "none";
-        // show prev button
-        prev_button.style.display = "block";
         // show first page
         first_page.style.display = "block";
         dots[0].style.display = "block";
-
+  
         // show last 3 pages
         // previous page
         page_links[0].textContent = total_pages - 2;
         page_links[0].dataset.page = total_pages - 2;
+        page_links[0].href = "#" + (total_pages - 2);
         // current page
         page_links[1].textContent = total_pages - 1;
         page_links[1].dataset.page = total_pages - 1;
+        page_links[1].href = "#" + (total_pages - 1);
         // next page
         page_links[2].textContent = total_pages;
         page_links[2].dataset.page = total_pages;
+        page_links[2].href = "#" + total_pages;
       }
     }
     // if there are 3 pages or less
@@ -2400,16 +2477,20 @@ function updatePagination() {
       });
       // remove extra page links
       page_links.forEach((link, index) => {
+        let page_num = index + 1;
         if (index > total_pages - 1) {
           link.style.display = "none";
         }
         else {
-          link.textContent = index + 1;
-          link.dataset.page = index + 1;
+          link.textContent = page_num;
+          link.dataset.page = page_num;
+          link.href = "#" + page_num;
         }
       });
     }
-  
+  }
+
+
   // get each page
   page_links.forEach(link => {
     // show clicked page as active
@@ -2418,6 +2499,7 @@ function updatePagination() {
     // if page number is page selected, set to active
     if (page_num === page) {
       link.classList.add("active");
+      link.href = "#" + page;
     }
     else {
       link.classList.remove("active");
@@ -2425,17 +2507,23 @@ function updatePagination() {
   });
 }
 
-prev_button.addEventListener("click", () => {
+prev_button.addEventListener("click", (e) => {
   if (page > 1) {
     page--;
+    e.preventDefault();
+    window.location.href = "#" + page;
+
     displayPage(page);
     updatePagination();
   }
 });
 
-next_button.addEventListener("click", () => {
+next_button.addEventListener("click", (e) => {
   if (page < total_pages) {
     page++;
+    e.preventDefault();
+    window.location.href = "#" + page;
+
     displayPage(page);
     updatePagination();
   }
@@ -2449,29 +2537,45 @@ page_links.forEach(link => {
     page_num = parseInt(page_num);
     if (page_num !== page) {
       page = page_num;
+      e.preventDefault();
+      window.location.href = "#" + page;
+
       displayPage(page);
       updatePagination();
+
     }
   });
 });
 
-first_page.addEventListener("click", () => {
+first_page.addEventListener("click", (e) => {
   page = 1;
+  e.preventDefault();
+  window.location.href = "#" + page;
+
   displayPage(page);
   updatePagination();
+
 });
 
 function goToFirstPage() {
   page = 1;
+  window.location.href = "#" + page;
+
   displayPage(page);
   updatePagination();
+
 }
 
-last_page.addEventListener("click", () => {
+last_page.addEventListener("click", (e) => {
   page = total_pages;
+  e.preventDefault();
+  window.location.href = "#" + page;
+
   displayPage(total_pages);
   updatePagination();
 });
+
+
 
 /**
  *function which allows transitions AFTER page loads

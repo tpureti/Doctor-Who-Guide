@@ -1109,7 +1109,7 @@ h1.title {
 }
 @media (max-width: 1365px) {
   .scroll_buttons {
-    right: 1rem;
+    right: 1.5rem;
     bottom: 1rem;
   }
 }
@@ -1999,9 +1999,9 @@ h1.title {
   -webkit-box-pack: center;
       -ms-flex-pack: center;
           justify-content: center;
-  -webkit-box-align: end;
-      -ms-flex-align: end;
-          align-items: flex-end;
+  -webkit-box-align: stretch;
+      -ms-flex-align: stretch;
+          align-items: stretch;
   gap: 0.5rem;
 }
 @media (max-width: 1025px) {
@@ -2033,6 +2033,9 @@ h1.title {
 }
 #pagination #first_page, #pagination #last_page {
   display: none;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
 }
 #pagination .dots {
   font-size: 0.5rem;

@@ -22,7 +22,7 @@
   gap: 1rem;
 
   @media ($tablet) {
-    right: 1rem;
+    right: 1.5rem;
     bottom: 1rem;
   }
 
@@ -813,14 +813,11 @@
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
-  align-items: flex-end;
+  align-items: stretch;
   gap: .5rem;
 
   @media ($mobile) {
     grid-column: 1 / 1;    
-    // a:nth-child(4), a:nth-child(6) {
-    //   display: none;
-    // }
   }
 
   a {
@@ -845,6 +842,7 @@
 
   #first_page, #last_page {
     display: none;
+    align-items: center;
   }
 
   .dots {
