@@ -85,6 +85,7 @@ const sidebar = document.querySelector(".sidebar");
 
 const num_of_results = document.querySelector(".number_of_results");
 const scroll_buttons = document.querySelector(".scroll_buttons");
+const top = scroll_buttons.querySelector(".jump_to_top");
 
 
 // map that tracks which buttons are clicked
@@ -2178,9 +2179,6 @@ function shrinkHeader() {
     let pageHeight = document.documentElement.offsetHeight - window.innerHeight;
     pageHeight = pageHeight - footer.offsetHeight;
 
-    const top = scroll_buttons.querySelector(".jump_to_top");
-    const bottom = scroll_buttons.querySelector(".jump_to_bottom");
-
     // if scrolled down more than one page's worth, show scroll to bottom button
     if (document.documentElement.scrollTop >= window.innerHeight && !top.classList.contains("active")) {
       top.style.opacity = 1;
@@ -2201,7 +2199,8 @@ function shrinkHeader() {
     // if we're at the bottom of the page
     if (document.documentElement.scrollTop > pageHeight) {
       // set scroll buttons and sidebar above footer
-      scroll_buttons.style.bottom = footer.offsetHeight + 16 + "px";
+      let height = footer.offsetHeight - 16;
+      scroll_buttons.style.bottom = height + "px";
       sidebar.style.top = 0;
       // sidebar.style.bottom = "2rem";
     }
@@ -2278,6 +2277,7 @@ window.addEventListener("hashchange", () => {
 function displayPage(page) {
     // scroll to top
     window.scroll(0, 0);
+    top.classList.remove("active");
     // add pages visited to history
     history.replaceState({}, "", "#" + page);
 
@@ -2322,15 +2322,17 @@ function updatePagination() {
     // change appearance of first and last pages
     first_page.innerHTML = '<i class="fa-solid fa-angles-left"></i>';
     last_page.innerHTML = '<i class="fa-solid fa-angles-right"></i>';
-    first_page.style.color = "var(--clr-light-grey)";
-    last_page.style.color = "var(--clr-light-grey)";
+    // first_page.style.color = "var(--clr-light-grey)";
+    // last_page.style.color = "var(--clr-light-grey)";
 
     // move them before and after next and prev buttons
     prev_button.before(first_page);
     next_button.after(last_page);
 
-    // next_button.innerHTML = '<i class="fa-solid fa-angle-right"></i>';
-    // prev_button.innerHTML = '<i class="fa-solid fa-angle-left"></i>';
+    // change prev and next buttons to arrows
+    next_button.innerHTML = '<i class="fa-solid fa-angle-right"></i>';
+    prev_button.innerHTML = '<i class="fa-solid fa-angle-left"></i>';
+
     // hide every link except first
     page_links.forEach((link, index) => {
       if (index > 0) {
@@ -2345,9 +2347,9 @@ function updatePagination() {
 
     if (page !== 1 && page !== total_pages) {
       // show prev button
-      prev_button.style.display = "block";
+      prev_button.style.display = "flex";
       // show next button
-      next_button.style.display = "block";
+      next_button.style.display = "flex";
 
       // show first page
       first_page.style.display = "flex";

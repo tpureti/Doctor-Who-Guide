@@ -815,6 +815,7 @@
   justify-content: center;
   align-items: stretch;
   gap: .5rem;
+  z-index: 4;
 
   @media ($mobile) {
     grid-column: 1 / 1;    
@@ -840,7 +841,7 @@
     }
   }
 
-  #first_page, #last_page {
+  #first_page, #last_page, #prev, #next {
     display: none;
     align-items: center;
   }
@@ -850,6 +851,7 @@
     padding: .5rem;
     color: var(--clr-light-blue);
     display: none;
+    align-content: flex-end;
   }
 }
 
