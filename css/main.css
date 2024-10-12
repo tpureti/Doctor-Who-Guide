@@ -2043,8 +2043,8 @@ h1.title {
   padding: 0.5rem;
   color: var(--clr-light-blue);
   display: none;
-  -ms-flex-line-pack: end;
-      align-content: flex-end;
+  -ms-flex-line-pack: center;
+      align-content: center;
 }
 
 #footer {

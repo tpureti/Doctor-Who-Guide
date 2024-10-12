@@ -2097,19 +2097,15 @@ function shrinkHeader() {
   // 
   let prevScroll = window.scrollY;
 
-  let scrollCountTimer;
-  let scrollCount = 0;
-
   window.onscroll = () => {
-
-    // if (scrollCountTimer) {
-    //   clearTimeout(scrollCountTimer)
-    // }
-    // scrollCountTimer = setTimeout(() => {
-    //   scrollCount++
-    // }, 500);
-
     const buttons = clicked_filters.querySelectorAll("button");
+
+    // create debounce timer
+    let timer;
+    const debounce = (callback, time) => {
+      window.clearTimeout(timer);
+      timer = window.setTimeout(callback, time);
+    };
     
     if (document.documentElement.scrollTop > header.offsetHeight) {
       // get current scroll height
@@ -2117,30 +2113,33 @@ function shrinkHeader() {
 
       // make header smaller
       header.classList.add("scroll");
-
-      // header disappears if we scroll past header
-      if (prevScroll > currentScroll) {
-        header.style.top = "0";
-      }
-      // shows up if we scroll up
-      else {
-        header.style.top = "-" + header.offsetHeight + "px";
-      }
-
-      if (prevScroll > currentScroll) {
-        // fix clicked filters below header
-        clicked_filters.style.top = header.offsetHeight + "px";
-      }
-      else {
-        // fix clicked filters to top of screen
-        clicked_filters.style.top = "0";
-        open_filters.classList.add("scroll");
-      }
-
       // make buttons smaller on scroll
       buttons.forEach(button => {
         button.classList.add("scroll");
       });
+
+      // header shows up if scroll up
+      if (prevScroll > currentScroll) {        
+        const hideHeader = () => {
+          header.style.top = "0";
+          // fix clicked filters below header
+          clicked_filters.style.top = header.offsetHeight + "px";
+        }
+        // delay header showing
+        debounce(() => hideHeader(), 100);
+      }
+      // header disappears
+      else {
+        const showHeader = () => {
+          header.style.top = "-" + header.offsetHeight + "px";
+          
+          // fix clicked filters to top of screen
+          clicked_filters.style.top = "0";
+          open_filters.classList.add("scroll");
+        }
+        // delay hiding header
+        debounce(() => showHeader(), 100);
+      }
 
       // if there are no filters selected
       if (active_filters.childElementCount === 0) {
