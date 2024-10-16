@@ -54,10 +54,10 @@ const essential = document.querySelector(".essential_reason");
 // episode info
 const ep_area = document.querySelector(".eps_area");
 const ep_info = document.querySelector(".ep_info");
-const ep_name = document.querySelector(".episode_name");
-const ep_number = document.querySelector(".ep_number");
-const ep_date = document.querySelector(".ep_date");
-const ep_runtime = document.querySelector(".ep_runtime");
+const ep_name = document.querySelector("span.ep_name");
+const ep_number = document.querySelector("span.ep_number");
+const ep_date = document.querySelector("span.ep_date");
+const ep_runtime = document.querySelector("span.ep_runtime");
 const ep_viewers = document.querySelector(".ep_viewers");
 const ep_rating = document.querySelector(".ep_rating");
 
@@ -1864,8 +1864,8 @@ function loopThroughEpisodes(story_episodes) {
     const date = new Date(info.EpisodeDate).toLocaleDateString({ year: 'numeric', month: '2-digit', day: '2-digit' });
     ep_date.textContent = date;
     ep_runtime.textContent = info.EpisodeRuntime;
-    ep_viewers.textContent = info.EpisodeViewers;
-    ep_rating.textContent = info.EpisodeRating;
+    // ep_viewers.textContent = info.EpisodeViewers;
+    // ep_rating.textContent = info.EpisodeRating;
     let epn = ep_info.cloneNode(true);
     div += epn.outerHTML;
   });
@@ -1875,8 +1875,13 @@ function loopThroughEpisodes(story_episodes) {
 function displayCastCrew(results, category, story, div, currentArea) {
   // display the result in correct div
   if (results.hasOwnProperty(category)) {
-    const name = loopThroughArray(story);
-    div.innerHTML = name;
+    if (Array.isArray(story)) {
+      const name = loopThroughArray(story);
+      div.innerHTML = name;
+    }
+    else {
+      div.innerHTML = '<span>' + story + '<span>';
+    }
     currentArea.style.display = "block";
   }
   else {
@@ -2111,9 +2116,15 @@ function shrinkHeader() {
       // get current scroll height
       let currentScroll = window.scrollY;
 
+      // get height of header + filters if they're active
+      let fullheader_height = header.offsetHeight + clicked_filters.offsetHeight;
+      // set sidebar to just below it
+      sidebar.style.top = fullheader_height + "px";
+
       // make header smaller
       header.classList.add("scroll");
       // make buttons smaller on scroll
+
       buttons.forEach(button => {
         button.classList.add("scroll");
       });
@@ -2148,16 +2159,11 @@ function shrinkHeader() {
       }
       // if there are filters
       else {
+        // clicked_filters.style.visibility = "visible";
         container.style.border = "none";
         // clicked_filters.style.backgroundColor = "rgb(22, 22, 22, 0.5)";
         clicked_filters.style.borderBottom = "1px solid var(--clr-med-grey)";
       }
-
-      // get height of header + filters if they're active
-      let fullheader_height = header.offsetHeight + clicked_filters.offsetHeight;
-
-      // set sidebar to just below it
-      sidebar.style.top = fullheader_height + 16 + "px";
 
       // 
       prevScroll = currentScroll;

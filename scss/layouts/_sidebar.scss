@@ -135,8 +135,8 @@
   justify-content: flex-start;
   align-items: stretch;
   overflow-y: auto;
-  scrollbar-width: thin;
   z-index: 4;
+  scrollbar-width: thin;
   scrollbar-color: var(--clr-light-blue) var(--clr-dark-grey-2);
 
   h2 {

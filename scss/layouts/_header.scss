@@ -236,6 +236,7 @@ h1.title {
     transition: var(--button-transition);
 
     &.scroll {
+      transition: 0;
       font-size: var(--fs-lg);
       padding: .25rem .5rem;
     }
